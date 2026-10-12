@@ -420,6 +420,7 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stro
 #mx{display:none;position:fixed;top:calc(12px + env(safe-area-inset-top,0px));right:14px;width:40px;height:40px;min-height:40px;padding:0;z-index:16;place-items:center;font-size:14px;border-radius:var(--r2)}
 body.mdt #mx{display:grid;animation:fi .25s}
 body.mdt header .hr{visibility:hidden}
+.sb[data-mp]{cursor:pointer;transition:background .2s}.sb[data-mp]:hover{background:rgba(var(--wh),.08)}
 /* ---------- keyframes ---------- */
 @keyframes up{from{opacity:0;transform:translateY(12px)}}
 @keyframes fi{from{opacity:0}}
@@ -701,9 +702,9 @@ function extraHtml(x,E){const I=E.info||{},S=E.stadium||{},T=E.timeline||[],ST=E
  return{top,bot}}
 function matchHtml(x,R,E){const X=E?extraHtml(x,E):{top:"",bot:""},side=n=>R.filter(p=>p.pl_team===n),xi=r=>{r=[...r].sort((a,b)=>b.mins-a.mins);const k=r.find(p=>p.pl_pos==="GK"),s=k?[k,...r.filter(p=>p!==k).slice(0,10)]:r.slice(0,11);return[s,r.filter(p=>!s.includes(p))]};
  const best=R.filter(p=>p.rate!=null).sort((a,b)=>b.rate-a.rate)[0],mine=R.filter(p=>p.pts_user!=null),tot=mine.reduce((a,p)=>a+Number(p.pts_user),0);
- const chip=p=>`<div class="pc${p.pts_user!=null?" mine":""}"><b class="rt ${rg(p.rate)}">${rf(p.rate)}</b>${p.is_cap?'<i class="cp">C</i>':""}<span>${esc(p.pl_name)}</span>${p.pts_user!=null?`<em class="pt">${sg(p.pts_user)}</em>`:""}</div>`;
+ const chip=p=>`<div class="pc${p.pts_user!=null?" mine":""}" data-mp="${p.pl_id}" data-mm="${x.id}"><b class="rt ${rg(p.rate)}">${rf(p.rate)}</b>${p.is_cap?'<i class="cp">C</i>':""}<span>${esc(p.pl_name)}</span>${p.pts_user!=null?`<em class="pt">${sg(p.pts_user)}</em>`:""}</div>`;
  const half=(n,gl,rev)=>{const s=xi(side(n))[0],L=["GK","DEF","MID","FWD"].map(q=>s.filter(p=>p.pl_pos===q));if(rev)L.reverse();const lab=`<div class="tl"><span data-team="${esc(n)}">${esc(n)}</span><span>${gl??""}</span></div>`,ln=L.map(a=>`<div class="line">${a.map(chip).join("")}</div>`).join("");return rev?ln+lab:lab+ln};
- const subs=n=>{const b=xi(side(n))[1];return b.length?`<h3 style="margin-top:12px"><span data-team="${esc(n)}">${esc(n)}</span> · замены</h3>`+b.map(p=>`<div class="sb"><span>${esc(p.pl_name)} <small>${p.pl_pos} · ${p.mins}'</small></span><span class="rr">${p.pts_user!=null?`<em class="pt">${sg(p.pts_user)}</em>`:""}<b class="rt ${rg(p.rate)}">${rf(p.rate)}</b></span></div>`).join(""):""},sb=R.length?subs(x.home)+subs(x.away):"";
+ const subs=n=>{const b=xi(side(n))[1];return b.length?`<h3 style="margin-top:12px"><span data-team="${esc(n)}">${esc(n)}</span> · замены</h3>`+b.map(p=>`<div class="sb" data-mp="${p.pl_id}" data-mm="${x.id}"><span>${esc(p.pl_name)} <small>${p.pl_pos} · ${p.mins}'</small></span><span class="rr">${p.pts_user!=null?`<em class="pt">${sg(p.pts_user)}</em>`:""}<b class="rt ${rg(p.rate)}">${rf(p.rate)}</b></span></div>`).join(""):""},sb=R.length?subs(x.home)+subs(x.away):"";
  return`<div class="box"><small>Тур ${x.round} · ${fmtD(x.kickoff)} ${fmtT(x.kickoff)} · ${x.finished||x.ft?"завершён":x.status==="live"?"идёт"+(x.minutes?" · "+x.minutes+"'":""):"не начался"}</small>${mrow(x,1)}${R.length?`<div class="row"><small>${best?"Лучший: "+esc(best.pl_name)+" "+rf(best.rate):""}</small><small>${mine.length?"Мои очки: <b>"+sg(tot)+"</b>":""}</small></div>`:""}</div>`+X.top+(R.length?`<div class="pitch">${half(x.home,x.home_goals,0)}<div class="mid"></div>${half(x.away,x.away_goals,1)}</div>`+(sb?`<div class="box">${sb}</div>`:""):`<div class="box"><small>Составы и оценки появятся, когда матч начнётся.</small></div>`)+X.bot}
 async function mdetail(id,q){const m=$("#m"),x=MT.find(v=>v.id===id),bk="",back=()=>{};
  if(!q){m.className="";void m.offsetWidth;m.className="in";m.innerHTML=fxShell(bk+LOAD);back();news();if(!x.finished)watchMatch(id)}
@@ -879,7 +880,7 @@ async function pinfo(id,name){modal('<div class="mw na">'+LOAD+'</div>');
  try{const st=await rpc("player_stats",{p_id:p.id});if(st)for(const[k,v]of Object.entries(st))if(p[k]==null&&v!=null)p[k]=v}catch(x){}
  const rows=Object.entries(PIL).filter(([k])=>p[k]!=null).map(([k,l])=>`<div class="row"><span>${l}</span><b>${esc(p[k])}</b></div>`).join("");
  modal(`<div class="mw"><div class="cards" style="justify-content:center"><div class="cd r${rar(p.rating)}" style="width:120px;height:168px">${phImg(p)}<div class="o" style="font-size:40px">${p.rating}</div><div class="n" style="font-size:13px">${esc(p.name)}</div><div class="c" style="font-size:10px">${p.position} · ${bdg(p.team,1)}${esc(p.team)}</div></div></div><div class="box" style="margin-top:12px"><h3>${esc(p.name)}</h3><div class="row"><span>Позиция</span><b>${p.position}</b></div><div class="row"><span>Клуб</span><b data-team="${esc(p.team)}" style="display:flex;align-items:center;gap:6px">${bdg(p.team)}${esc(p.team)}</b></div><div class="row"><span>Рейтинг</span><b>${p.rating}${p.last_change?" ("+(p.last_change>0?"+":"")+p.last_change+")":""}</b></div>${rows||"<small>Статистики пока нет.</small>"}</div></div>`)}
-document.addEventListener("click",e=>{const t=e.target.closest("#col .cd,.pc,#lst .st,#lup .pl,#ldw .pl");if(!t)return;
+document.addEventListener("click",e=>{const mp=e.target.closest("[data-mp]");if(mp&&mp.dataset.mm)return pmatch(+mp.dataset.mm,+mp.dataset.mp);const t=e.target.closest("#col .cd,.pc,#lst .st,#lup .pl,#ldw .pl");if(!t)return;
  if(t.dataset.id)return pinfo(+t.dataset.id);
  pinfo(0,t.classList.contains("pc")?t.querySelector("span").textContent:t.querySelectorAll("div")[1].textContent)});
 // ---------- статистика в игре ----------
@@ -887,6 +888,18 @@ async function stats(){const m=$("#m");m.innerHTML=LOAD;
  try{LD=await rpc("landing_data");
   m.innerHTML='<div class="box fw"><h3>Игра в цифрах</h3><div class="stats" id="lcn"></div></div><div id="lfan" style="display:none"></div><div class="box"><h3>Растут</h3><div id="lup"></div></div><div class="box"><h3>Падают</h3><div id="ldw"></div></div><div class="box fw"><h3>Статистика сезона</h3><div class="tabs" id="ltb"></div><div id="lst"></div></div><div class="box fw"><h3>Статистика команд</h3><div class="tabs" id="ttb"></div><div id="tms">'+LOAD+'</div></div><div class="box fw"><h3>Лиги сообщества</h3><div id="llg"></div></div>';
   fillL(LD);teamStats()}catch(e){m.innerHTML=esc(e.message)}}
+const PMS=[["minutes","Минуты",0],["rating","Оценка",0],["goals","Голы",0],["assists","Ассисты",0],["xg","xG (ожидаемые голы)",1],["xa","xA (ожидаемые ассисты)",1],["saves","Сейвы",2],["goals_conceded","Пропущено",2],["xgc","xGC",3],["tackles","Отборы",1],["cbi","Выносы, блоки, перехваты",1],["recoveries","Подборы",1],["yellow_cards","Жёлтые",1],["red_cards","Красные",1],["own_goals","Автоголы",1],["pen_saved","Отбитые пенальти",1],["pen_missed","Незабитые пенальти",1],["bonus","Бонусные очки",1],["bps","BPS",1]];
+async function pmatch(mid,pid){const md=$("#md"),open=md.style.display==="flex",pv=NAVB;
+ if(open&&LMID){const id=LMID;LMID=null;unwatchMatch();NAVB=()=>{NAVB=pv;lmatch(id)}}
+ modal('<div class="mw na">'+LOAD+'</div>');
+ try{const[a,b]=await Promise.all([sb.from("player_match_ratings").select("*").eq("match_id",mid).eq("player_id",pid).maybeSingle(),sb.from("players").select("id,name,team,position,rating,photo").eq("id",pid).maybeSingle()]);
+  if(a.error)throw a.error;const r=a.data,p=b.data||PL[pid],x=MT&&MT.find(v=>v.id===mid);
+  if(!p||!r){modal('<div class="mw box"><small>Нет данных за этот матч</small></div>');return}
+  const fin=x&&(x.finished||x.ft),rate=fin?r.rating:(r.live_rating??r.rating),gk=p.position==="GK",def=p.position==="DEF",
+   v=k=>k==="rating"?rate:r[k],
+   rows=PMS.filter(([k,,m])=>{const n=v(k);if(n==null)return false;if(m===0)return true;if(m===2)return gk||Number(n)>0;if(m===3)return (gk||def)&&n!=null;return Number(n)>0}).map(([k,l])=>{const n=v(k);return`<div class="row"><span>${l}</span>${k==="rating"?`<b class="rt ${rg(n)}">${rf(n)}</b>`:`<b>${/^x/.test(k)?Number(n).toFixed(2):esc(n)}</b>`}</div>`}).join("");
+  modal(`<div class="mw"><div class="cards" style="justify-content:center"><div class="cd r${rar(p.rating)}" style="width:120px;height:168px">${phImg(p)}<div class="o" style="font-size:40px">${rf(rate)}</div><div class="n" style="font-size:13px">${esc(p.name)}</div><div class="c" style="font-size:10px">${p.position} · ${bdg(p.team,1)}${esc(p.team)}</div></div></div><small style="display:block;text-align:center;margin-top:8px">Оценка за этот матч</small><div class="box" style="margin-top:12px"><h3>${esc(p.name)}</h3>${x?`<div class="row"><span>Матч</span><b>${esc(x.home)} ${x.home_goals??"-"}:${x.away_goals??"-"} ${esc(x.away)}</b></div><div class="row"><span>Тур</span><b>${x.round}</b></div>`:""}<div class="row"><span>В стартовом составе</span><b>${r.starts>0?"Да":"Нет"}</b></div>${rows}</div></div>`)}
+ catch(e){modal('<div class="mw box"><small>'+esc(e.message)+'</small></div>')}}
 let TSB="tbl";
 async function teamStats(){if(!MT)await patchMT();const e=$("#tms");if(!e)return;
  const tb=tstand();if(!tb.length){e.innerHTML="<small class='emp'>Пока нет сыгранных матчей</small>";return}

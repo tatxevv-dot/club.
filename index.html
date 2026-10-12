@@ -687,6 +687,40 @@ async function mdetail(id,q){const m=$("#m"),x=MT.find(v=>v.id===id),bk=`<div cl
  if(!q){m.innerHTML=fxShell(bk+LOAD);back();news();if(!x.finished)watchMatch(id)}
  try{const [R,E]=await Promise.all([rpc("match_detail",{p_match:id}),rpc("match_extra",{p_match:id}).catch(()=>null)]);if(tab!=="fx"||FXM!==id)return;m.innerHTML=fxShell(bk+matchHtml(x,R,E));back();news()}catch(e){m.innerHTML=fxShell(bk+esc(e.message));back();news()}}
 async function lmatch(id,q){const x=MT.find(v=>v.id===id);if(!q){LMID=id;modal('<div class="mw">'+LOAD+'</div>');if(!x.finished)watchMatch(id)}try{const [R,E]=await Promise.all([rpc("match_detail",{p_match:id}),rpc("match_extra",{p_match:id}).catch(()=>null)]);if(LMID!==id)return;modal(`<div class="mw">${matchHtml(MT.find(v=>v.id===id),R,E)}</div>`)}catch(e){if(LMID===id)modal('<div class="mw">'+esc(e.message)+'</div>')}}
+// ---------- страница команды ----------
+function tstand(){const T={};(MT||[]).forEach(x=>{if(!(x.finished||x.ft)||x.home_goals==null||x.away_goals==null)return;
+ [[x.home,x.home_goals,x.away_goals],[x.away,x.away_goals,x.home_goals]].forEach(([t,f,a])=>{const s=T[t]??={n:t,p:0,w:0,d:0,l:0,gf:0,ga:0,pts:0};s.p++;s.gf+=f;s.ga+=a;if(f>a){s.w++;s.pts+=3}else if(f===a){s.d++;s.pts++}else s.l++})});
+ return Object.values(T).sort((a,b)=>b.pts-a.pts||(b.gf-b.ga)-(a.gf-a.ga)||b.gf-a.gf)}
+async function teamPage(n){const pv=NAVB;TMN=n;
+ modal('<div class="mw tp">'+LOAD+'</div>');
+ if(!MT)await patchMT();
+ if(TMN!==n)return;
+ if(!MT){modal('<div class="mw tp box"><small>Не удалось загрузить данные команды</small></div>');return}
+ let pls=Object.values(PL).filter(p=>p.team===n);
+ if(!pls.length){try{const{data}=await sb.from("players").select("id,name,team,position,rating,last_change,photo").eq("team",n).order("rating",{ascending:false}).limit(30);pls=data||[]}catch(e){}}
+ if(TMN!==n)return;
+ pls=[...pls].sort((a,b)=>b.rating-a.rating).slice(0,12);
+ const all=MT.filter(x=>x.home===n||x.away===n).sort((a,b)=>new Date(a.kickoff)-new Date(b.kickoff)),
+  done=all.filter(x=>(x.finished||x.ft)&&x.home_goals!=null),
+  next=all.filter(x=>!(x.finished||x.ft)).slice(0,4),
+  last=done.slice(-5).reverse(),
+  tb=tstand(),pos=tb.findIndex(s=>s.n===n),S=tb[pos]||{p:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+  res=x=>{const h=x.home===n,f=h?x.home_goals:x.away_goals,a=h?x.away_goals:x.home_goals;return f>a?["В","g"]:f===a?["Н","m"]:["П","l"]},
+  frm=done.slice(-5).map(x=>{const r=res(x);return`<b class="rt ${r[1]}" data-mid="${x.id}" title="${esc(x.home)} ${x.home_goals}:${x.away_goals} ${esc(x.away)}">${r[0]}</b>`}).join("");
+ const html=`<div class="mw tp"><div class="box"><div class="th"><div class="thc">${bdg(n)}</div><div><h2>${esc(n)}</h2><small>${pos>=0?"Место "+(pos+1)+" · ":""}${S.pts} очк. · ${S.p} матч.</small></div></div>${frm?`<div class="row" style="margin-top:14px"><small>Форма</small><div class="frm">${frm}</div></div>`:""}</div>
+<div class="box"><h3>Сезон</h3><div class="stats"><div class="stat"><b>${pos>=0?pos+1:"-"}</b><span>место</span></div><div class="stat"><b>${S.pts}</b><span>очков</span></div><div class="stat"><b>${S.w}-${S.d}-${S.l}</b><span>В-Н-П</span></div><div class="stat"><b>${S.gf}:${S.ga}</b><span>голы (${S.gf-S.ga>0?"+":""}${S.gf-S.ga})</span></div></div></div>
+${next.length?`<div class="box"><h3>Ближайшие матчи</h3>${next.map(x=>mrow(x)).join("")}</div>`:""}
+${last.length?`<div class="box"><h3>Последние результаты</h3>${last.map(x=>mrow(x)).join("")}</div>`:""}
+<div class="box"><h3>Лучшие игроки</h3>${pls.length?pls.map(p=>`<div class="pl" data-pid="${p.id}"><b class="rb r${rar(p.rating)}">${p.rating}</b><div class="pi"><div>${esc(p.name)}</div><small>${p.position}</small></div>${p.last_change?`<span class="dp ${p.last_change>0?"up":"dw"}">${ico(p.last_change>0?"up":"dn")}${Math.abs(p.last_change)}</span>`:""}</div>`).join(""):"<small>Игроков пока нет</small>"}</div></div>`;
+ const m=modal(html),back=f=>{NAVB=()=>{LMID=null;unwatchMatch();NAVB=pv;teamPage(n)};f()};
+ m.querySelectorAll(".mt").forEach(e=>e.onclick=()=>back(()=>lmatch(+e.dataset.id)));
+ m.querySelectorAll("[data-mid]").forEach(e=>e.onclick=()=>back(()=>lmatch(+e.dataset.mid)));
+ m.querySelectorAll("[data-pid]").forEach(e=>e.onclick=()=>back(()=>pinfo(+e.dataset.pid)))}
+document.addEventListener("click",e=>{const t=e.target.closest("[data-team]");if(!t||t.closest("#tov"))return;
+ e.stopPropagation();e.preventDefault();const n=t.dataset.team,md=$("#md"),open=md.style.display==="flex",pv=NAVB;
+ if(open&&LMID){const id=LMID;LMID=null;unwatchMatch();NAVB=()=>{NAVB=pv;lmatch(id)}}
+ else if(open&&TMN&&TMN!==n){const p=TMN;NAVB=()=>{NAVB=pv;teamPage(p)}}
+ teamPage(n)},true);
 // ---------- главная для гостей ----------
 const IC={us:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 3-6 6.5-6s6.5 2.4 6.5 6M16 4.5a3.5 3.5 0 010 7M18 14c2.4.6 3.5 2.4 3.5 6"/>',cal:'<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/>',sh:'<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/>',tr:'<path d="M8 4h8v5a4 4 0 01-8 0zM8 6H4v1a4 4 0 004 4M16 6h4v1a4 4 0 01-4 4M12 13v4M8 21h8M10 17h4"/>',pk:'<rect x="5" y="3" width="14" height="18" rx="2.5"/><circle cx="12" cy="12" r="3.5"/>',sq:'<path d="M8 3L3 6l2 4 3-1v11h8V9l3 1 2-4-5-3a4 4 0 01-8 0z"/>',up:'<path d="M12 19V5M6 11l6-6 6 6"/>',dn:'<path d="M12 5v14M6 13l6 6 6-6"/>',ch:'<path d="M6 9l6 6 6-6"/>',ar:'<path d="M5 12h14M13 6l6 6-6 6"/>',bl:'<circle cx="12" cy="12" r="9"/><path d="M12 8l3.5 2.5-1.3 4h-4.4l-1.3-4zM12 3v5M15.5 10.5L20 9M14.2 14.5l2.8 3.8M9.8 14.5L7 18.3M8.5 10.5L4 9"/>'};
 const ico=n=>`<svg class="i" viewBox="0 0 24 24">${IC[n]}</svg>`;

@@ -257,6 +257,14 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stro
 .sb{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;background:rgba(var(--wh),.04)}.sb+.sb{margin-top:4px}
 .sb .rt{min-width:30px;height:30px;font-size:12px}.sb .rr{display:flex;align-items:center;gap:8px}
 
+/* ---------- team pages ---------- */
+[data-team]{cursor:pointer}b[data-team]:hover,span[data-team]:hover{color:var(--act)}
+.mw.tp{max-width:640px}
+.th{display:flex;align-items:center;gap:16px}.th h2{font-size:26px;line-height:1.1;letter-spacing:-.03em;font-weight:700;margin:0 0 4px}
+.thc{flex:none;display:grid;place-items:center}.thc .tlg,.thc .tb{width:64px;height:64px}.thc .tb{font-size:17px}
+.frm{display:flex;gap:6px}.frm .rt{width:40px;height:40px;cursor:pointer;font:700 14px var(--f)}
+.tp .pl{cursor:pointer}.tp .pl:hover{background:rgba(var(--wh),.08)}
+.modal .bk2{right:auto;left:14px}
 /* ---------- match extras (ESPN) ---------- */
 .box summary{font-size:15px;font-weight:600;cursor:pointer;list-style:none}.box summary::-webkit-details-marker{display:none}.box summary::after{content:"▾";float:right;color:var(--mu)}
 .evh2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px;font-size:13px;color:var(--tx2)}.evh2 b:last-child{text-align:right}
@@ -500,8 +508,10 @@ addEventListener("load",e=>{const t=e.target;if(t.classList&&t.classList.contain
 const card=(id,ex="")=>{const p=PL[id];return `<div class="cd r${rar(p.rating)} ${ex}" data-id="${id}">${phImg(p)}${QTY[id]>1?`<i class="qt">×${QTY[id]}</i>`:""}<div class="o">${p.rating}${tr(p)}</div><div class="n">${esc(p.name)}</div><div class="c">${p.position} · ${bdg(p.team,1)}${esc(p.team)}</div></div>`};
 const msg=e=>({"not enough coins":"Не хватает монет","nickname must be 2-20 chars":"Ник: от 2 до 20 символов","duplicate players":"Игрок указан дважды","no open round":"Нет открытого тура","league not found":"Лига с таким кодом не найдена","max level":"Максимальный уровень","daily pack limit":"Лимит этого пака на сегодня исчерпан","contract needs 5 cards":"Для контракта нужно ровно 5 карточек","cards not owned":"Этих карточек у тебя нет"}[e.message]||(/profiles_nick_uq/.test(e.message)?"Этот ник уже занят":e.message));
 async function rpc(fn,args){const {data,error}=await sb.rpc(fn,args);if(error)throw new Error(error.message);return data}
-function modal(html){const m=$("#md");m.className="modal";m.style.display="flex";m.innerHTML=html+'<button class="x" aria-label="Закрыть">✕</button>';m.querySelector(".x").onclick=closeM;return m}
-let RVT;const closeM=()=>{clearTimeout(RVT);$("#md").style.display="none";if(LMID){LMID=null;unwatchMatch()}};
+let NAVB=null,TMN=null;
+function modal(html){const m=$("#md");m.className="modal";m.style.display="flex";m.innerHTML=html+'<button class="x" aria-label="Закрыть">✕</button>';m.querySelector(".x").onclick=closeM;
+ if(NAVB){const b=document.createElement("button");b.className="x bk2";b.setAttribute("aria-label","Назад");b.textContent="←";b.onclick=()=>{const f=NAVB;NAVB=null;f&&f()};m.appendChild(b)}return m}
+let RVT;const closeM=()=>{clearTimeout(RVT);NAVB=null;TMN=null;$("#md").style.display="none";if(LMID){LMID=null;unwatchMatch()}};
 
 // ---------- вход ----------
 const closeAuth=()=>{const A=$("#au");A.style.display="none";A.innerHTML=""};
@@ -614,16 +624,16 @@ let MT=null,FXR=null,FXM=null;
 const TCODE={"Arsenal":[3,57],"Aston Villa":[7,58],"Bournemouth":[91,1044],"Brentford":[94,402],"Brighton":[36,397],"Chelsea":[8,61],"Coventry City":[9,1076],"Crystal Palace":[31,354],"Everton":[11,62],"Fulham":[54,63],"Hull City":[88,322],"Ipswich Town":[40,349],"Leeds":[2,341],"Liverpool":[14,64],"Man City":[43,65],"Man Utd":[1,66],"Newcastle":[4,67],"Nott'm Forest":[17,351],"Spurs":[6,73],"Sunderland":[56,71]};
 const BU=[t=>`https://crests.football-data.org/${t[1]}.png`,t=>`https://crests.football-data.org/${t[1]}.svg`,t=>`https://resources.premierleague.com/premierleague25/badges/70/t${t[0]}.png`,t=>`https://resources.premierleague.com/premierleague/badges/70/t${t[0]}.png`,t=>`https://resources.premierleague.com/premierleague/badges/t${t[0]}.png`];let BPI=0;
 const bUrl=(n,i)=>BU[i](TCODE[n]);
-const tchip=n=>{let h=0;for(const c of n)h=(h*31+c.charCodeAt(0))%360;const w=n.split(" ");return`<i class="tb">${esc((w.length>1?w.map(x=>x[0]).join(""):n.slice(0,3)).toUpperCase())}</i>`};
-const bdg=(n,s)=>TCODE[n]?`<img class="tlg${s?" s":""}" referrerpolicy="no-referrer" loading="lazy" decoding="async" alt="" src="${bUrl(n,BPI)}" data-i="${BPI}" data-n="${esc(n)}"${s?' data-s="1"':""}>`:s?"":tchip(n);
-addEventListener("error",e=>{const t=e.target;if(!t.classList||!t.classList.contains("tlg"))return;const i=+t.dataset.i+1;if(i<BU.length){t.dataset.i=i;t.src=bUrl(t.dataset.n,i)}else if(t.dataset.s)t.remove();else t.outerHTML=tchip(t.dataset.n)},true);
+const tchip=(n,l)=>{const w=n.split(" ");return`<i class="tb"${l?` data-team="${esc(n)}"`:""}>${esc((w.length>1?w.map(x=>x[0]).join(""):n.slice(0,3)).toUpperCase())}</i>`};
+const bdg=(n,s,l)=>TCODE[n]?`<img class="tlg${s?" s":""}" referrerpolicy="no-referrer" loading="lazy" decoding="async" alt="" src="${bUrl(n,BPI)}" data-i="${BPI}" data-n="${esc(n)}"${s?' data-s="1"':""}${l?` data-team="${esc(n)}"`:""}>`:s?"":tchip(n,l);
+addEventListener("error",e=>{const t=e.target;if(!t.classList||!t.classList.contains("tlg"))return;const i=+t.dataset.i+1;if(i<BU.length){t.dataset.i=i;t.src=bUrl(t.dataset.n,i)}else if(t.dataset.s)t.remove();else t.outerHTML=tchip(t.dataset.n,t.hasAttribute("data-team"))},true);
 addEventListener("load",e=>{const t=e.target;if(t.classList&&t.classList.contains("tlg"))BPI=+t.dataset.i},true);
 const rg=v=>v==null?"n":v>=8?"h":v>=7?"g":v>=6?"m":"l",rf=v=>v==null?"-":Number(v).toFixed(1),sg=v=>(v>0?"+":"")+Number(v).toFixed(1);
 const fmtD=d=>d?new Date(d).toLocaleDateString("ru-RU",{weekday:"short",day:"numeric",month:"short"}):"Дата уточняется",fmtT=d=>d?new Date(d).toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"}):"";
 const curR=()=>{const r=MT.filter(x=>!x.finished).map(x=>x.round);return r.length?Math.min(...r):38};
 const mst=x=>x.finished?"fin":(x.ft||x.status==="ft")?"ft":x.status==="live"?"live":"sch";
 const scr=x=>{const q=mst(x);return q==="sch"||(x.home_goals==null&&q!=="live")?`<span class="sc t">${fmtT(x.kickoff)||"-"}</span>`:`<span class="sc${q==="live"?" liv":""}">${x.home_goals??0} : ${x.away_goals??0}${q==="live"&&x.minutes?`<i class="mn">${x.minutes}'</i>`:q==="ft"?'<i class="mn f">FT</i>':""}</span>`};
-const mrow=(x,c)=>`<div class="mt" data-id="${x.id}"${c?' style="cursor:default;border:0"':""}><span><b>${esc(x.home)}</b>${bdg(x.home)}</span>${scr(x)}<span>${bdg(x.away)}<b>${esc(x.away)}</b></span></div>`;
+const mrow=(x,c)=>`<div class="mt" data-id="${x.id}"${c?' style="cursor:default;border:0"':""}><span><b data-team="${esc(x.home)}">${esc(x.home)}</b>${bdg(x.home,0,1)}</span>${scr(x)}<span>${bdg(x.away,0,1)}<b data-team="${esc(x.away)}">${esc(x.away)}</b></span></div>`;
 const NWS='<aside class="box nws"><h3>Последние новости</h3><div id="nws">'+LOAD+'</div></aside>';
 const fxShell=h=>`<div class="fxw"><div id="fxl">${h}</div>${NWS}</div>`;
 let NW=null;
@@ -658,20 +668,20 @@ function extraHtml(x,E){const I=E.info||{},S=E.stadium||{},T=E.timeline||[],ST=E
    default:continue}
   const goal=e.home_goals!=null,cell=e.side==="home"?`<div class="ev h"><span>${inn}</span>${ic}</div>`:`<div class="ev a">${ic}<span>${inn}</span></div>`,mid=`<div class="evm">${m}${goal?`<small>${e.home_goals}:${e.away_goals}</small>`:""}</div>`;
   ev.push(`<div class="evr">${e.side==="home"?cell+mid+"<div></div>":"<div></div>"+mid+cell}</div>`)}
- if(ev.length)top+=`<div class="box"><h3>Хронология</h3><div class="evh2"><b>${esc(x.home)}</b><b>${esc(x.away)}</b></div>${ev.join("")}</div>`;
+ if(ev.length)top+=`<div class="box"><h3>Хронология</h3><div class="evh2"><b data-team="${esc(x.home)}">${esc(x.home)}</b><b data-team="${esc(x.away)}">${esc(x.away)}</b></div>${ev.join("")}</div>`;
  if(ST.home&&ST.away){const sr=SN.map(([k,l])=>{const hv=ST.home[k],av=ST.away[k];if(!hv||!av)return"";const hn=parseFloat(hv.value),an=parseFloat(av.value);if(!isFinite(hn)||!isFinite(an)||(!hn&&!an))return"";
    return`<div class="sr"><b>${sfmt(k,hv.value)}</b><span>${l}</span><b>${sfmt(k,av.value)}</b></div><div class="sbar"><i class="${hn>=an?"w":""}" style="flex:${hn+.001}"></i><i class="${an>=hn?"w":""}" style="flex:${an+.001}"></i></div>`}).join("");
-  if(sr)top+=`<div class="box"><h3>Статистика</h3><div class="evh2"><b>${esc(x.home)}</b><b>${esc(x.away)}</b></div>${sr}</div>`}
+  if(sr)top+=`<div class="box"><h3>Статистика</h3><div class="evh2"><b data-team="${esc(x.home)}">${esc(x.home)}</b><b data-team="${esc(x.away)}">${esc(x.away)}</b></div>${sr}</div>`}
  const lu=s=>{const L=LU.filter(p=>p.side===s),f=I["formation_"+s];if(!L.length)return"";
   const row=p=>`<div class="sb"><span><small>${esc(p.shirt??"")}</small> ${esc(p.name)} <small>${esc(p.pos??"")}</small></span><span class="rr">${p.sub_out!=null?`<small style="color:var(--bad)">▼ ${p.sub_out}'</small>`:""}${p.sub_in!=null?`<small style="color:var(--ok)">▲ ${p.sub_in}'</small>`:""}</span></div>`;
-  return`<h3 style="margin:14px 0 8px">${esc(s==="home"?x.home:x.away)}${f?" · "+esc(f):""}</h3>`+L.filter(p=>p.starter).map(row).join("")+`<div class="dl">Запасные</div>`+L.filter(p=>!p.starter).map(row).join("")};
+  return`<h3 style="margin:14px 0 8px"><span data-team="${esc(s==="home"?x.home:x.away)}">${esc(s==="home"?x.home:x.away)}</span>${f?" · "+esc(f):""}</h3>`+L.filter(p=>p.starter).map(row).join("")+`<div class="dl">Запасные</div>`+L.filter(p=>!p.starter).map(row).join("")};
  if(LU.length)bot+=`<details class="box"><summary>Заявка на матч</summary>${lu("home")}${lu("away")}</details>`;
  return{top,bot}}
 function matchHtml(x,R,E){const X=E?extraHtml(x,E):{top:"",bot:""},side=n=>R.filter(p=>p.pl_team===n),xi=r=>{r=[...r].sort((a,b)=>b.mins-a.mins);const k=r.find(p=>p.pl_pos==="GK"),s=k?[k,...r.filter(p=>p!==k).slice(0,10)]:r.slice(0,11);return[s,r.filter(p=>!s.includes(p))]};
  const best=R.filter(p=>p.rate!=null).sort((a,b)=>b.rate-a.rate)[0],mine=R.filter(p=>p.pts_user!=null),tot=mine.reduce((a,p)=>a+Number(p.pts_user),0);
  const chip=p=>`<div class="pc${p.pts_user!=null?" mine":""}"><b class="rt ${rg(p.rate)}">${rf(p.rate)}</b>${p.is_cap?'<i class="cp">C</i>':""}<span>${esc(p.pl_name)}</span>${p.pts_user!=null?`<em class="pt">${sg(p.pts_user)}</em>`:""}</div>`;
- const half=(n,gl,rev)=>{const s=xi(side(n))[0],L=["GK","DEF","MID","FWD"].map(q=>s.filter(p=>p.pl_pos===q));if(rev)L.reverse();const lab=`<div class="tl"><span>${esc(n)}</span><span>${gl??""}</span></div>`,ln=L.map(a=>`<div class="line">${a.map(chip).join("")}</div>`).join("");return rev?ln+lab:lab+ln};
- const subs=n=>{const b=xi(side(n))[1];return b.length?`<h3 style="margin-top:12px">${esc(n)} · замены</h3>`+b.map(p=>`<div class="sb"><span>${esc(p.pl_name)} <small>${p.pl_pos} · ${p.mins}'</small></span><span class="rr">${p.pts_user!=null?`<em class="pt">${sg(p.pts_user)}</em>`:""}<b class="rt ${rg(p.rate)}">${rf(p.rate)}</b></span></div>`).join(""):""},sb=R.length?subs(x.home)+subs(x.away):"";
+ const half=(n,gl,rev)=>{const s=xi(side(n))[0],L=["GK","DEF","MID","FWD"].map(q=>s.filter(p=>p.pl_pos===q));if(rev)L.reverse();const lab=`<div class="tl"><span data-team="${esc(n)}">${esc(n)}</span><span>${gl??""}</span></div>`,ln=L.map(a=>`<div class="line">${a.map(chip).join("")}</div>`).join("");return rev?ln+lab:lab+ln};
+ const subs=n=>{const b=xi(side(n))[1];return b.length?`<h3 style="margin-top:12px"><span data-team="${esc(n)}">${esc(n)}</span> · замены</h3>`+b.map(p=>`<div class="sb"><span>${esc(p.pl_name)} <small>${p.pl_pos} · ${p.mins}'</small></span><span class="rr">${p.pts_user!=null?`<em class="pt">${sg(p.pts_user)}</em>`:""}<b class="rt ${rg(p.rate)}">${rf(p.rate)}</b></span></div>`).join(""):""},sb=R.length?subs(x.home)+subs(x.away):"";
  return`<div class="box"><small>Тур ${x.round} · ${fmtD(x.kickoff)} ${fmtT(x.kickoff)} · ${x.finished||x.ft?"завершён":x.status==="live"?"идёт"+(x.minutes?" · "+x.minutes+"'":""):"не начался"}</small>${mrow(x,1)}${R.length?`<div class="row"><small>${best?"Лучший: "+esc(best.pl_name)+" "+rf(best.rate):""}</small><small>${mine.length?"Мои очки: <b>"+sg(tot)+"</b>":""}</small></div>`:""}</div>`+X.top+(R.length?`<div class="pitch">${half(x.home,x.home_goals,0)}<div class="mid"></div>${half(x.away,x.away_goals,1)}</div>`+(sb?`<div class="box">${sb}</div>`:""):`<div class="box"><small>Составы и оценки появятся, когда матч начнётся.</small></div>`)+X.bot}
 async function mdetail(id,q){const m=$("#m"),x=MT.find(v=>v.id===id),bk=`<div class="tb2"><button class="g bk" aria-label="Закрыть матч">✕</button></div>`,back=()=>document.querySelectorAll(".bk").forEach(b=>b.onclick=()=>{FXM=null;fixtures()});
  if(!q){m.innerHTML=fxShell(bk+LOAD);back();news();if(!x.finished)watchMatch(id)}
@@ -704,11 +714,11 @@ function fillL(D){if(!D||!$("#lcn"))return;const c=D.counts||{},nf=v=>v==null?"-
  $("#lfan").innerHTML=(D.stars||[]).map(p=>`<div class="cd r${rar(p.rating)}">${phImg(p)}<div class="o">${p.rating}</div><div class="n">${esc(p.name)}</div><div class="c">${p.position} · ${bdg(p.team,1)}${esc(p.team)}</div></div>`).join("");
  $("#lcn").innerHTML=[[c.users,"клубов в игре"],[c.players,"игроков в базе"],[c.played,"матчей сыграно"],[c.leagues,"лиг сообщества"]].map(a=>`<div class="stat"><b>${nf(a[0])}</b><span>${a[1]}</span></div>`).join("");
  $("#llg").innerHTML=(D.leagues||[]).length?`<div class="box">${D.leagues.map((l,i)=>`<div class="pl"><b class="rb r0">${i+1}</b><div class="pi"><div>${esc(l.name)}</div><small>Лидер: ${esc(l.leader||"-")} · ${Math.round(l.pts||0)} очк.</small></div><span class="dp">${ico("us")}${l.members}</span></div>`).join("")}</div>`:'<div class="box"><small>Активных лиг пока нет. Создай первую и позови друзей.</small></div>';
- const pl=p=>`<div class="pl"><b class="rb r${rar(p.rating)}">${p.rating}</b><div class="pi"><div>${esc(p.name)}</div><small>${p.position} · ${bdg(p.team,1)}${esc(p.team)}</small></div><span class="dp ${p.last_change>0?"up":"dw"}">${ico(p.last_change>0?"up":"dn")}${Math.abs(p.last_change)}</span></div>`;
+ const pl=p=>`<div class="pl"><b class="rb r${rar(p.rating)}">${p.rating}</b><div class="pi"><div>${esc(p.name)}</div><small>${p.position} · <span data-team="${esc(p.team)}">${bdg(p.team,1)}${esc(p.team)}</span></small></div><span class="dp ${p.last_change>0?"up":"dw"}">${ico(p.last_change>0?"up":"dn")}${Math.abs(p.last_change)}</span></div>`;
  $("#lup").innerHTML=lst(D.risers,pl);$("#ldw").innerHTML=lst(D.fallers,pl);
  const T={scorers:["Бомбардиры",10],assists:["Ассистенты",10],avg:["Средняя оценка",10]},a=D[STB]||[],mx=STB==="avg"?10:Math.max(1,...a.map(x=>+x.v));
  $("#ltb").innerHTML=Object.entries(T).map(([k,v])=>`<button class="rc${k===STB?" on":""}" data-k="${k}">${v[0]}</button>`).join("");
- $("#lst").innerHTML=lst(a,(x,i)=>`<div class="st"><i style="width:${x.v/mx*100}%"></i><span class="rk">${i+1}</span><div style="flex:1;min-width:0"><div>${esc(x.name)}</div><small>${esc(x.team)}</small></div><b>${x.v}</b></div>`);
+ $("#lst").innerHTML=lst(a,(x,i)=>`<div class="st"><i style="width:${x.v/mx*100}%"></i><span class="rk">${i+1}</span><div style="flex:1;min-width:0"><div>${esc(x.name)}</div><small><span data-team="${esc(x.team)}">${esc(x.team)}</span></small></div><b>${x.v}</b></div>`);
  $("#ltb").querySelectorAll(".rc").forEach(b=>b.onclick=()=>{STB=b.dataset.k;fillL(D)})}
 async function league(){const m=$("#m");m.innerHTML=LOAD;
  try{const [g,mine]=await Promise.all([rpc("global_table"),rpc("my_leagues")]);LG=mine;const tbs=await Promise.all(mine.map(l=>rpc("league_table",{p_league:l.id})));
@@ -811,7 +821,7 @@ async function pinfo(id,name){modal('<div class="mw">'+LOAD+'</div>');
  if(!p){modal('<div class="mw box"><small>Игрок не найден</small></div>');return}
  try{const st=await rpc("player_stats",{p_id:p.id});if(st)for(const[k,v]of Object.entries(st))if(p[k]==null&&v!=null)p[k]=v}catch(x){}
  const rows=Object.entries(PIL).filter(([k])=>p[k]!=null).map(([k,l])=>`<div class="row"><span>${l}</span><b>${esc(p[k])}</b></div>`).join("");
- modal(`<div class="mw"><div class="cards" style="justify-content:center"><div class="cd r${rar(p.rating)}" style="width:120px;height:168px">${phImg(p)}<div class="o" style="font-size:40px">${p.rating}</div><div class="n" style="font-size:13px">${esc(p.name)}</div><div class="c" style="font-size:10px">${p.position} · ${bdg(p.team,1)}${esc(p.team)}</div></div></div><div class="box" style="margin-top:12px"><h3>${esc(p.name)}</h3><div class="row"><span>Позиция</span><b>${p.position}</b></div><div class="row"><span>Клуб</span><b style="display:flex;align-items:center;gap:6px">${bdg(p.team)}${esc(p.team)}</b></div><div class="row"><span>Рейтинг</span><b>${p.rating}${p.last_change?" ("+(p.last_change>0?"+":"")+p.last_change+")":""}</b></div>${rows||"<small>Статистики пока нет.</small>"}</div></div>`)}
+ modal(`<div class="mw"><div class="cards" style="justify-content:center"><div class="cd r${rar(p.rating)}" style="width:120px;height:168px">${phImg(p)}<div class="o" style="font-size:40px">${p.rating}</div><div class="n" style="font-size:13px">${esc(p.name)}</div><div class="c" style="font-size:10px">${p.position} · ${bdg(p.team,1)}${esc(p.team)}</div></div></div><div class="box" style="margin-top:12px"><h3>${esc(p.name)}</h3><div class="row"><span>Позиция</span><b>${p.position}</b></div><div class="row"><span>Клуб</span><b data-team="${esc(p.team)}" style="display:flex;align-items:center;gap:6px">${bdg(p.team)}${esc(p.team)}</b></div><div class="row"><span>Рейтинг</span><b>${p.rating}${p.last_change?" ("+(p.last_change>0?"+":"")+p.last_change+")":""}</b></div>${rows||"<small>Статистики пока нет.</small>"}</div></div>`)}
 document.addEventListener("click",e=>{const t=e.target.closest("#col .cd,.pc,#lst .st,#lup .pl,#ldw .pl");if(!t)return;
  if(t.dataset.id)return pinfo(+t.dataset.id);
  pinfo(0,t.classList.contains("pc")?t.querySelector("span").textContent:t.querySelectorAll("div")[1].textContent)});

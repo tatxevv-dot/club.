@@ -400,6 +400,26 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stro
 .ft .fb{max-width:380px;display:flex;flex-direction:column;gap:12px}.ft .fc{display:flex;gap:4px}
 .rvl{opacity:0;transform:translateY(16px);transition:opacity .7s var(--ease),transform .7s var(--ease)}.rvl.in{opacity:1;transform:none}
 
+/* ---------- brand loader ---------- */
+.bl{--s:52px;display:flex;justify-content:center;align-items:center;padding:40px 0}
+.bl .mk{width:var(--s);height:var(--s);border-radius:calc(var(--s)*.31);animation:blp 1.4s ease-in-out infinite}
+.bl .mk::before{inset:calc(var(--s)*.23);border-width:calc(var(--s)*.077)}
+.bl .mk::after{left:calc(var(--s)*.154);right:calc(var(--s)*.154);top:calc(50% - var(--s)*.0385);height:calc(var(--s)*.077);animation:bll 1.4s ease-in-out infinite}
+@keyframes blp{50%{transform:scale(.9)}}
+@keyframes bll{to{transform:rotate(180deg)}}
+#bs{position:fixed;inset:0;z-index:50;display:grid;place-items:center;background:var(--bg);transition:opacity .3s}
+#bs.out{opacity:0;pointer-events:none}#bs .bl{--s:72px}
+.nws .bl{--s:34px;padding:16px 0}.fan .bl{--s:64px}
+.aov{position:absolute;inset:0;z-index:4;display:grid;place-items:center;background:rgba(var(--ab),.78);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);animation:fi .15s}
+.aov .bl{padding:0}
+/* ---------- motion ---------- */
+.mw:not(.na)>*{animation:up .38s var(--ease) both}.mw:not(.na)>:nth-child(2){animation-delay:.05s}.mw:not(.na)>:nth-child(3){animation-delay:.1s}.mw:not(.na)>:nth-child(4){animation-delay:.15s}.mw:not(.na)>:nth-child(n+5){animation-delay:.2s}
+.mt,.pl,.st{transition:background .2s,transform .15s var(--ease)}
+.mt:active,.tp .pl:active,#lup .pl:active,#ldw .pl:active,#lst .st:active,.st[data-team]:active{transform:scale(.985)}
+.st .tlg,.st .tb{width:24px;height:24px}.st .tb{font-size:8px}
+#mx{display:none;position:fixed;top:calc(12px + env(safe-area-inset-top,0px));right:14px;width:40px;height:40px;min-height:40px;padding:0;z-index:16;place-items:center;font-size:14px;border-radius:var(--r2)}
+body.mdt #mx{display:grid;animation:fi .25s}
+body.mdt header .hr{visibility:hidden}
 /* ---------- keyframes ---------- */
 @keyframes up{from{opacity:0;transform:translateY(12px)}}
 @keyframes fi{from{opacity:0}}
@@ -455,9 +475,9 @@ html[data-theme=light] .modal button.g{color:var(--tx)!important;border-color:va
 html[data-theme=light] .sb .rt.h{color:#3d6200}html[data-theme=light] .sb .rt.g{color:#0d6b46}html[data-theme=light] .sb .rt.m{color:#7a5200}html[data-theme=light] .sb .rt.l{color:#a3231d}
 html[data-theme=light] button.b{box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 1px 2px rgba(16,22,36,.25),0 10px 20px -12px rgba(16,22,36,.45)}
 html[data-theme=light] .tst,html[data-theme=light] #ttp{box-shadow:inset 0 1px 0 var(--hi),0 18px 40px -10px rgba(16,22,36,.35)}
-</style></head><body>
+</style></head><body><div id="bs"><div class="bl" role="status" aria-label="Загрузка"><i class="mk"></i></div></div><script>setTimeout(function(){var e=document.getElementById("bs");e&&e.remove()},12000)</script>
 <header style="display:none"><div class="lgo"><i class="mk"></i><span id="pt"></span></div><div class="hr"><button id="th" data-th></button><button id="hp" aria-label="Обучение" title="Обучение">?</button><button id="hl" title="Выйти из аккаунта"></button><span id="co" aria-label="Монеты"></span></div></header>
-<main id="m"></main>
+<main id="m"></main><button id="mx" class="g" aria-label="Закрыть матч">✕</button>
 <nav id="nv" style="display:none" aria-label="Разделы игры"><div class="nb"><i class="mk"></i>Club</div><button data-t="st"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="8" rx="9" ry="4"/><path d="M3 8v8c0 2.2 4 4 9 4s9-1.8 9-4V8"/></svg>Стадион</button><button data-t="pk"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2.5"/><circle cx="12" cy="12" r="3.5"/></svg>Паки</button><button data-t="sq"><svg viewBox="0 0 24 24"><path d="M8 3L3 6l2 4 3-1v11h8V9l3 1 2-4-5-3a4 4 0 01-8 0z"/></svg>Состав</button><button data-t="fx"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Туры</button><button data-t="lg"><svg viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 01-8 0zM8 6H4v1a4 4 0 004 4M16 6h4v1a4 4 0 01-4 4M12 13v4M8 21h8M10 17h4"/></svg>Лига</button><button data-t="ss"><svg viewBox="0 0 24 24"><path d="M5 20V10M12 20V4M19 20v-7"/></svg>Статистика</button></nav>
 <div id="lp"></div>
 <div class="modal" id="md" role="dialog" aria-modal="true"></div>
@@ -468,7 +488,7 @@ html[data-theme=light] .tst,html[data-theme=light] #ttp{box-shadow:inset 0 1px 0
 const SB_URL="https://pvocjvvzkvzhckilhokx.supabase.co";
 const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB2b2NqdnZ6a3Z6aGNraWxob2t4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEzMjEyNzEsImV4cCI6MjEwNjg5NzI3MX0.UkWtFCI0LME9DBx6ZRGuzB_BnvBKlEVLynIgzWmRdUg";
 const sb=supabase.createClient(SB_URL,SB_KEY);
-const LOAD='<div class="skl" role="status" aria-label="Загрузка"><i></i><i></i><i></i></div>';
+const LOAD='<div class="bl" role="status" aria-label="Загрузка"><i class="mk"></i></div>';
 ['gesturestart','gesturechange','gestureend'].forEach(n=>document.addEventListener(n,e=>e.preventDefault(),{passive:false}));
 addEventListener('wheel',e=>{if(e.ctrlKey)e.preventDefault()},{passive:false});
 const TI={sun:'<svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',moon:'<svg class="i" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 019.5 4a8 8 0 1010.5 10.5z"/></svg>'};
@@ -524,7 +544,7 @@ function authView(up){if($("#lp").style.display!=="block")landing();const A=$("#
  A.innerHTML=`<div class="ac" role="dialog" aria-modal="true" aria-labelledby="at"><button class="g ax" aria-label="Закрыть">✕</button><div class="al"><div class="lgo"><i class="mk"></i>Club</div><div class="sw" role="tablist"><button type="button" role="tab" data-m="0">Вход</button><button type="button" role="tab" data-m="1">Регистрация</button></div><h2 id="at"></h2><p id="ap"></p><div class="oa"><button class="g" data-p="google">${IG}Google</button><button class="g" data-p="facebook">${IF}Facebook</button><button class="g" data-p="apple">${IA}Apple</button></div><div class="or">или почтой</div><label class="fl"><span>Почта</span><input id="em" type="email" placeholder="name@example.com" autocomplete="email"></label><label class="fl"><span>Пароль</span><input id="pw" type="password" placeholder="От 6 символов" autocomplete="${up?"new-password":"current-password"}"></label><div class="sf"><div class="err" id="er" role="alert"></div><button class="b" id="sbm"></button></div><small>Входя, ты соглашаешься с правилами игры. Проект независимый.</small></div><div class="av"><div class="avc"><span class="ey">Что внутри</span>${perks.map(a=>`<div class="pl"><div class="ic">${ico(a[0])}</div><div class="pi"><div>${a[1]}</div><small>${a[2]}</small></div></div>`).join("")}</div></div></div>`;
  A.onclick=x=>{if(x.target===A)closeAuth()};A.querySelector(".ax").onclick=closeAuth;
  const go=async(up)=>{const email=$("#em").value.trim(),password=$("#pw").value;$("#er").style.color="";$("#er").textContent="";if(!email||password.length<6){$("#er").textContent="Введи почту и пароль от 6 символов";return}
-  const r=up?await sb.auth.signUp({email,password}):await sb.auth.signInWithPassword({email,password});
+  const ov=document.createElement("div");ov.className="aov";ov.innerHTML=LOAD;A.querySelector(".ac").appendChild(ov);let r;try{r=up?await sb.auth.signUp({email,password}):await sb.auth.signInWithPassword({email,password})}finally{ov.remove()}
   if(r.error){$("#er").textContent=r.error.message;return}
   if(up&&!r.data.session){$("#er").style.color="var(--ok)";$("#er").textContent="Мы отправили письмо. Подтверди почту и войди.";return}
   closeAuth();boot()};
@@ -537,7 +557,9 @@ function authView(up){if($("#lp").style.display!=="block")landing();const A=$("#
 
 
 // ---------- загрузка ----------
-async function boot(){
+async function boot(){try{await boot0()}finally{hideBS()}}
+function hideBS(){const e=document.getElementById("bs");if(e){e.classList.add("out");setTimeout(()=>e.remove(),350)}}
+async function boot0(){
  const {data:{session}}=await sb.auth.getSession();if(!session){landing();return}$("#lp").style.display="none";
  $("#m").innerHTML=LOAD;
  try{
@@ -561,7 +583,7 @@ async function onboard(){$("header").style.display="none";$("#nv").style.display
   try{await rpc("create_profile",{p_nick:nick,p_captain:+e.dataset.id});boot()}catch(x){$("#er").textContent=msg(x)}})}catch(e){$("#m").innerHTML=esc(e.message)}}
 
 // ---------- экраны ----------
-function view(){if(tab!=="fx")unwatchMatch();$("header").style.display="";$("#hl").textContent=PF.nickname;coins(PF.coins);setTitle();
+function view(){document.body.classList.remove("mdt");if(tab!=="fx")unwatchMatch();$("header").style.display="";$("#hl").textContent=PF.nickname;coins(PF.coins);setTitle();
  document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.t===tab));const m=$("#m");if(LT!==tab)m.scrollTop=0;m.className=LT!==tab?"in":"";LT=tab;
  if(tab==="st")return stad();if(0){const pe=pend(),mx=capH()*inc();
   m.innerHTML=`<div class="box"><h3>Касса стадиона</h3><div class="row"><b style="font-size:26px;letter-spacing:-1px">${CN}${pe}</b><button class="b" id="cl" ${pe<1?"disabled":""}>Забрать</button></div><div class="bar"><i style="width:${Math.min(100,pe/mx*100)}%"></i></div><small>Доход ${inc()}/ч · касса вмещает ${capH()} ч.</small></div><div class="box"><h3>Улучшения</h3>${[["Трибуны","Доход в час +50%","inc"],["Касса","Вместимость +0,5 ч","cap"],["Музей","Шанс редких в паках +10%","mus"]].map((u,k)=>`<div class="row"><div>${u[0]} · ур. ${PF.stadium[u[2]]}<br><small>${u[1]}</small></div><button class="b up" data-k="${u[2]}" data-c="${k}" ${PF.coins<costOf(k)?"disabled":""}>${CN}${costOf(k)}</button></div>`).join("")}</div>`;
@@ -639,7 +661,7 @@ const fxShell=h=>`<div class="fxw"><div id="fxl">${h}</div>${NWS}</div>`;
 let NW=null;
 async function news(){const dr=()=>{const e=$("#nws");if(e)e.innerHTML=NW.length?NW.map(n=>{const t=`<b>${esc(n.title)}</b><small>${esc(n.source||"Club")} · ${fmtD(n.published_at)}</small>`;return/^https?:\/\//.test(n.url||"")?`<a class="nw" href="${esc(n.url)}" target="_blank" rel="noopener">${t}</a>`:`<div class="nw">${t}</div>`}).join(""):"<small>Новостей пока нет</small>"};
  if(NW)return dr();try{const{data,error}=await sb.from("news").select("title,url,source,published_at").order("published_at",{ascending:false}).limit(8);if(error)throw error;NW=data}catch(x){NW=[]}dr()}
-const fixtures=()=>{const m=$("#m");if(FXM)return mdetail(FXM);unwatchMatch();m.innerHTML=fxShell("");fxList($("#fxl"),id=>{FXM=id;fixtures()});news()};
+const fixtures=()=>{const m=$("#m");document.body.classList.toggle("mdt",!!FXM);if(FXM)return mdetail(FXM);unwatchMatch();m.innerHTML=fxShell("");fxList($("#fxl"),id=>{FXM=id;fixtures()});news()};
 async function fxList(h,open){const live=()=>h.isConnected&&(h.id==="lfx"||tab==="fx"&&!FXM);
  const draw=()=>{if(!live()){FXD.delete(draw);return}FXD.add(draw);const cr=curR();FXR=FXR||cr;const g={};MT.filter(x=>x.round===FXR).forEach(x=>(g[fmtD(x.kickoff)]??=[]).push(x));
   h.innerHTML=`<div class="rs">${Array.from({length:38},(_,i)=>`<button class="rc${i+1===FXR?" on":""}${i+1===cr?" cur":""}" data-r="${i+1}">${i+1}</button>`).join("")}</div>`+lvStrip(h)+(Object.entries(g).map(([d,a])=>`<div class="dl">${d}</div><div class="${h.id==="lfx"?"":"box"}">${a.map(x=>mrow(x)).join("")}</div>`).join("")||"<p class='mu'>Матчей нет</p>");
@@ -683,16 +705,16 @@ function matchHtml(x,R,E){const X=E?extraHtml(x,E):{top:"",bot:""},side=n=>R.fil
  const half=(n,gl,rev)=>{const s=xi(side(n))[0],L=["GK","DEF","MID","FWD"].map(q=>s.filter(p=>p.pl_pos===q));if(rev)L.reverse();const lab=`<div class="tl"><span data-team="${esc(n)}">${esc(n)}</span><span>${gl??""}</span></div>`,ln=L.map(a=>`<div class="line">${a.map(chip).join("")}</div>`).join("");return rev?ln+lab:lab+ln};
  const subs=n=>{const b=xi(side(n))[1];return b.length?`<h3 style="margin-top:12px"><span data-team="${esc(n)}">${esc(n)}</span> · замены</h3>`+b.map(p=>`<div class="sb"><span>${esc(p.pl_name)} <small>${p.pl_pos} · ${p.mins}'</small></span><span class="rr">${p.pts_user!=null?`<em class="pt">${sg(p.pts_user)}</em>`:""}<b class="rt ${rg(p.rate)}">${rf(p.rate)}</b></span></div>`).join(""):""},sb=R.length?subs(x.home)+subs(x.away):"";
  return`<div class="box"><small>Тур ${x.round} · ${fmtD(x.kickoff)} ${fmtT(x.kickoff)} · ${x.finished||x.ft?"завершён":x.status==="live"?"идёт"+(x.minutes?" · "+x.minutes+"'":""):"не начался"}</small>${mrow(x,1)}${R.length?`<div class="row"><small>${best?"Лучший: "+esc(best.pl_name)+" "+rf(best.rate):""}</small><small>${mine.length?"Мои очки: <b>"+sg(tot)+"</b>":""}</small></div>`:""}</div>`+X.top+(R.length?`<div class="pitch">${half(x.home,x.home_goals,0)}<div class="mid"></div>${half(x.away,x.away_goals,1)}</div>`+(sb?`<div class="box">${sb}</div>`:""):`<div class="box"><small>Составы и оценки появятся, когда матч начнётся.</small></div>`)+X.bot}
-async function mdetail(id,q){const m=$("#m"),x=MT.find(v=>v.id===id),bk=`<div class="tb2"><button class="g bk" aria-label="Закрыть матч">✕</button></div>`,back=()=>document.querySelectorAll(".bk").forEach(b=>b.onclick=()=>{FXM=null;fixtures()});
- if(!q){m.innerHTML=fxShell(bk+LOAD);back();news();if(!x.finished)watchMatch(id)}
- try{const [R,E]=await Promise.all([rpc("match_detail",{p_match:id}),rpc("match_extra",{p_match:id}).catch(()=>null)]);if(tab!=="fx"||FXM!==id)return;m.innerHTML=fxShell(bk+matchHtml(x,R,E));back();news()}catch(e){m.innerHTML=fxShell(bk+esc(e.message));back();news()}}
-async function lmatch(id,q){const x=MT.find(v=>v.id===id);if(!q){LMID=id;modal('<div class="mw">'+LOAD+'</div>');if(!x.finished)watchMatch(id)}try{const [R,E]=await Promise.all([rpc("match_detail",{p_match:id}),rpc("match_extra",{p_match:id}).catch(()=>null)]);if(LMID!==id)return;modal(`<div class="mw">${matchHtml(MT.find(v=>v.id===id),R,E)}</div>`)}catch(e){if(LMID===id)modal('<div class="mw">'+esc(e.message)+'</div>')}}
+async function mdetail(id,q){const m=$("#m"),x=MT.find(v=>v.id===id),bk="",back=()=>{};
+ if(!q){m.className="";void m.offsetWidth;m.className="in";m.innerHTML=fxShell(bk+LOAD);back();news();if(!x.finished)watchMatch(id)}
+ try{const [R,E]=await Promise.all([rpc("match_detail",{p_match:id}),rpc("match_extra",{p_match:id}).catch(()=>null)]);if(tab!=="fx"||FXM!==id)return;if(q)m.className="";m.innerHTML=fxShell(bk+matchHtml(x,R,E));back();news()}catch(e){m.innerHTML=fxShell(bk+esc(e.message));back();news()}}
+async function lmatch(id,q){const x=MT.find(v=>v.id===id);if(!q){LMID=id;modal('<div class="mw na">'+LOAD+'</div>');if(!x.finished)watchMatch(id)}try{const [R,E]=await Promise.all([rpc("match_detail",{p_match:id}),rpc("match_extra",{p_match:id}).catch(()=>null)]);if(LMID!==id)return;modal(`<div class="mw${q?" na":""}">${matchHtml(MT.find(v=>v.id===id),R,E)}</div>`)}catch(e){if(LMID===id)modal('<div class="mw">'+esc(e.message)+'</div>')}}
 // ---------- страница команды ----------
 function tstand(){const T={};(MT||[]).forEach(x=>{if(!(x.finished||x.ft)||x.home_goals==null||x.away_goals==null)return;
- [[x.home,x.home_goals,x.away_goals],[x.away,x.away_goals,x.home_goals]].forEach(([t,f,a])=>{const s=T[t]??={n:t,p:0,w:0,d:0,l:0,gf:0,ga:0,pts:0};s.p++;s.gf+=f;s.ga+=a;if(f>a){s.w++;s.pts+=3}else if(f===a){s.d++;s.pts++}else s.l++})});
+ [[x.home,x.home_goals,x.away_goals],[x.away,x.away_goals,x.home_goals]].forEach(([t,f,a])=>{const s=T[t]??={n:t,p:0,w:0,d:0,l:0,gf:0,ga:0,pts:0,cs:0};s.p++;s.gf+=f;s.ga+=a;if(a===0)s.cs++;if(f>a){s.w++;s.pts+=3}else if(f===a){s.d++;s.pts++}else s.l++})});
  return Object.values(T).sort((a,b)=>b.pts-a.pts||(b.gf-b.ga)-(a.gf-a.ga)||b.gf-a.gf)}
 async function teamPage(n){const pv=NAVB;TMN=n;
- modal('<div class="mw tp">'+LOAD+'</div>');
+ modal('<div class="mw tp na">'+LOAD+'</div>');
  if(!MT)await patchMT();
  if(TMN!==n)return;
  if(!MT){modal('<div class="mw tp box"><small>Не удалось загрузить данные команды</small></div>');return}
@@ -716,18 +738,19 @@ ${last.length?`<div class="box"><h3>Последние результаты</h3>
  m.querySelectorAll(".mt").forEach(e=>e.onclick=()=>back(()=>lmatch(+e.dataset.id)));
  m.querySelectorAll("[data-mid]").forEach(e=>e.onclick=()=>back(()=>lmatch(+e.dataset.mid)));
  m.querySelectorAll("[data-pid]").forEach(e=>e.onclick=()=>back(()=>pinfo(+e.dataset.pid)))}
-document.addEventListener("click",e=>{const t=e.target.closest("[data-team]");if(!t||t.closest("#tov"))return;
+document.addEventListener("click",e=>{const t=e.target.closest("[data-team]");if(!t||t.closest("#tov"))return;const mt=t.closest(".mt");if(mt&&mt.style.cursor!=="default")return;
  e.stopPropagation();e.preventDefault();const n=t.dataset.team,md=$("#md"),open=md.style.display==="flex",pv=NAVB;
  if(open&&LMID){const id=LMID;LMID=null;unwatchMatch();NAVB=()=>{NAVB=pv;lmatch(id)}}
  else if(open&&TMN&&TMN!==n){const p=TMN;NAVB=()=>{NAVB=pv;teamPage(p)}}
  teamPage(n)},true);
+$("#mx").onclick=()=>{FXM=null;fixtures()};
 // ---------- главная для гостей ----------
 const IC={us:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 3-6 6.5-6s6.5 2.4 6.5 6M16 4.5a3.5 3.5 0 010 7M18 14c2.4.6 3.5 2.4 3.5 6"/>',cal:'<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/>',sh:'<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/>',tr:'<path d="M8 4h8v5a4 4 0 01-8 0zM8 6H4v1a4 4 0 004 4M16 6h4v1a4 4 0 01-4 4M12 13v4M8 21h8M10 17h4"/>',pk:'<rect x="5" y="3" width="14" height="18" rx="2.5"/><circle cx="12" cy="12" r="3.5"/>',sq:'<path d="M8 3L3 6l2 4 3-1v11h8V9l3 1 2-4-5-3a4 4 0 01-8 0z"/>',up:'<path d="M12 19V5M6 11l6-6 6 6"/>',dn:'<path d="M12 5v14M6 13l6 6 6-6"/>',ch:'<path d="M6 9l6 6 6-6"/>',ar:'<path d="M5 12h14M13 6l6 6-6 6"/>',bl:'<circle cx="12" cy="12" r="9"/><path d="M12 8l3.5 2.5-1.3 4h-4.4l-1.3-4zM12 3v5M15.5 10.5L20 9M14.2 14.5l2.8 3.8M9.8 14.5L7 18.3M8.5 10.5L4 9"/>'};
 const ico=n=>`<svg class="i" viewBox="0 0 24 24">${IC[n]}</svg>`;
 let LD,STB="scorers";
-function landing(){liveInit();$("#m").innerHTML="";const L=$("#lp");$("header").style.display="none";$("#nv").style.display="none";closeM();L.style.display="block";L.scrollTop=0;
+function landing(){document.body.classList.remove("mdt");liveInit();$("#m").innerHTML="";const L=$("#lp");$("header").style.display="none";$("#nv").style.display="none";closeM();L.style.display="block";L.scrollTop=0;
  const cta=`<button class="b" data-a="1">Начать играть${ico("ar")}</button><button class="g" data-a="0">Войти</button>`,
- sk=Array.from({length:3},()=>'<div class="cd sk"></div>').join(""),
+ sk=LOAD,
  ss=Array.from({length:4},()=>'<div class="stat"><b>&nbsp;</b><span>&nbsp;</span></div>').join("");
  L.innerHTML=`<div class="lb"><div class="lw"><div class="lgo"><i class="mk"></i>Club</div><div class="lnk"><button class="lk" data-go="how">Как это работает</button><button class="lk" data-go="leagues">Лиги</button><button class="lk" data-go="fixtures">Туры</button><button class="lk" data-go="stats-s">Статистика</button></div><div class="lbb"><button class="g tg" data-th aria-label="Тема">${thIco()}</button><button class="g" data-a="0">Войти</button><button class="b" data-a="1">Регистрация</button></div></div></div>
 <section class="lh"><div class="lw"><div class="lc"><span class="ey">Fantasy-футбол</span><h1>Собери клуб.<br><span class="dm">Выиграй тур.</span></h1><p class="lead">Fantasy-игра по Английской Премьер-лиге. Открывай паки, составляй команду из реальных игроков и соревнуйся с друзьями в лигах.</p><div class="ctas">${cta}</div><p class="cap">Бесплатно. Регистрация занимает минуту.</p></div><div class="stage"><div class="fan" id="lfan">${sk}</div><div class="stats" id="lcn">${ss}</div></div></div></section>
@@ -849,7 +872,7 @@ function upg(k){const i=["inc","cap","mus"].indexOf(k),u=UPG[i],c=costOf(i);
  $("#uu").onclick=()=>{closeM();act(()=>rpc("upgrade",{kind:k}))}}
 // ---------- карточка игрока ----------
 const PIL={age:"Возраст",foot:"Ведущая нога",height:"Рост",nationality:"Страна",appearances:"Матчи",minutes:"Минуты",goals:"Голы",assists:"Ассисты",clean_sheets:"Сухие матчи",yellow_cards:"Жёлтые",red_cards:"Красные",avg_rating:"Средняя оценка",value:"Стоимость"};
-async function pinfo(id,name){modal('<div class="mw">'+LOAD+'</div>');
+async function pinfo(id,name){modal('<div class="mw na">'+LOAD+'</div>');
  let q=sb.from("players").select("*");q=id?q.eq("id",id):q.eq("name",name);
  const{data}=await q.limit(1),p=data&&data[0]||PL[id];
  if(!p){modal('<div class="mw box"><small>Игрок не найден</small></div>');return}
@@ -862,8 +885,16 @@ document.addEventListener("click",e=>{const t=e.target.closest("#col .cd,.pc,#ls
 // ---------- статистика в игре ----------
 async function stats(){const m=$("#m");m.innerHTML=LOAD;
  try{LD=await rpc("landing_data");
-  m.innerHTML='<div class="box fw"><h3>Игра в цифрах</h3><div class="stats" id="lcn"></div></div><div id="lfan" style="display:none"></div><div class="box"><h3>Растут</h3><div id="lup"></div></div><div class="box"><h3>Падают</h3><div id="ldw"></div></div><div class="box fw"><h3>Статистика сезона</h3><div class="tabs" id="ltb"></div><div id="lst"></div></div><div class="box fw"><h3>Лиги сообщества</h3><div id="llg"></div></div>';
-  fillL(LD)}catch(e){m.innerHTML=esc(e.message)}}
+  m.innerHTML='<div class="box fw"><h3>Игра в цифрах</h3><div class="stats" id="lcn"></div></div><div id="lfan" style="display:none"></div><div class="box"><h3>Растут</h3><div id="lup"></div></div><div class="box"><h3>Падают</h3><div id="ldw"></div></div><div class="box fw"><h3>Статистика сезона</h3><div class="tabs" id="ltb"></div><div id="lst"></div></div><div class="box fw"><h3>Статистика команд</h3><div class="tabs" id="ttb"></div><div id="tms">'+LOAD+'</div></div><div class="box fw"><h3>Лиги сообщества</h3><div id="llg"></div></div>';
+  fillL(LD);teamStats()}catch(e){m.innerHTML=esc(e.message)}}
+let TSB="tbl";
+async function teamStats(){if(!MT)await patchMT();const e=$("#tms");if(!e)return;
+ const tb=tstand();if(!tb.length){e.innerHTML="<small class='emp'>Пока нет сыгранных матчей</small>";return}
+ const T={tbl:"Таблица",gf:"Атака",ga:"Защита",cs:"Сухие матчи"},val=x=>TSB==="tbl"?x.pts:TSB==="gf"?x.gf:TSB==="ga"?x.ga:x.cs,
+  a=[...tb].sort((x,y)=>TSB==="tbl"?0:TSB==="ga"?(val(x)-val(y)||y.pts-x.pts):(val(y)-val(x)||y.pts-x.pts)),mx=Math.max(1,...a.map(val));
+ $("#ttb").innerHTML=Object.entries(T).map(([k,v])=>`<button class="rc${k===TSB?" on":""}" data-k="${k}">${v}</button>`).join("");
+ e.innerHTML=a.map((x,i)=>{const v=val(x),w=TSB==="ga"?(mx-v)/mx*100:v/mx*100;return`<div class="st" data-team="${esc(x.n)}"><i style="width:${Math.max(4,w)}%"></i><span class="rk">${i+1}</span>${bdg(x.n)}<div style="flex:1;min-width:0"><div>${esc(x.n)}</div><small>${x.p} игр · ${x.w}-${x.d}-${x.l} · ${x.gf}:${x.ga}</small></div><b>${v}</b></div>`}).join("");
+ $("#ttb").querySelectorAll(".rc").forEach(b=>b.onclick=()=>{TSB=b.dataset.k;teamStats()})}
 // ---------- обучение ----------
 let TE=null;
 const TS=[

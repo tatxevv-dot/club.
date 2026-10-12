@@ -421,6 +421,15 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stro
 body.mdt #mx{display:grid;animation:fi .25s}
 body.mdt header .hr{visibility:hidden}
 .sb[data-mp]{cursor:pointer;transition:background .2s}.sb[data-mp]:hover{background:rgba(var(--wh),.08)}
+html[data-theme=light] .rt.h{background:rgba(120,190,20,.3);border-color:rgba(80,140,10,.65);color:#2e5200}
+html[data-theme=light] .rt.g{background:rgba(14,133,86,.2);border-color:rgba(14,133,86,.6);color:#0a5a3a}
+html[data-theme=light] .rt.m{background:rgba(240,182,74,.38);border-color:rgba(190,130,20,.65);color:#6b4600}
+html[data-theme=light] .rt.l{background:rgba(240,106,100,.26);border-color:rgba(201,53,46,.65);color:#8f1f19}
+html[data-theme=light] .rt.n{color:var(--tx2)}
+html[data-theme=light] .pitch .rt{background-color:rgba(255,255,255,.8)}
+.sr{grid-template-columns:72px 1fr 72px}.sr b small{display:block;font-weight:400;color:var(--mu);font-size:11px}
+.box summary+*{margin-top:12px}.box details[open]>summary::after,details.box[open]>summary::after{transform:rotate(180deg)}.box summary::after{transition:transform .2s}
+details.box{margin-bottom:8px}
 /* ---------- keyframes ---------- */
 @keyframes up{from{opacity:0;transform:translateY(12px)}}
 @keyframes fi{from{opacity:0}}
@@ -672,7 +681,7 @@ async function fxList(h,open){const live=()=>h.isConnected&&(h.id==="lfx"||tab==
  try{const {data,error}=await sb.from("matches").select(MC).order("kickoff");if(error)throw error;MT=data;liveDot();draw()}catch(e){if(!MT)h.innerHTML=esc(e.message)}}
 const SN=[["possessionPct","Владение"],["totalShots","Удары"],["shotsOnTarget","Удары в створ"],["blockedShots","Заблокированные"],["wonCorners","Угловые"],["foulsCommitted","Фолы"],["offsides","Офсайды"],["yellowCards","Жёлтые"],["redCards","Красные"],["saves","Сейвы"],["totalPasses","Передачи"],["accuratePasses","Точные передачи"],["passPct","Точность передач"],["totalCrosses","Навесы"],["accurateCrosses","Точные навесы"],["totalLongBalls","Длинные передачи"],["totalTackles","Отборы"],["interceptions","Перехваты"],["totalClearance","Выносы"]];
 const sfmt=(k,v)=>{const n=parseFloat(v);if(!isFinite(n))return v==null?"-":esc(v);return k==="possessionPct"?Math.round(n)+"%":/Pct$/.test(k)?Math.round(n*100)+"%":String(Math.round(n*10)/10)};
-function extraHtml(x,E){const I=E.info||{},S=E.stadium||{},T=E.timeline||[],ST=E.stats||{},LU=E.lineups||[];let top="",bot="";
+function extraHtml(x,E,XT){const I=E.info||{},S=E.stadium||{},T=E.timeline||[],ST=E.stats||{},LU=E.lineups||[];let top="",bot="";
  const cap=I.capacity||S.capacity,rows=[["Стадион",I.venue||S.stadium],["Город",I.city||S.city],["Вместимость",cap?Number(cap).toLocaleString("ru-RU"):null],["Зрителей",I.attendance?Number(I.attendance).toLocaleString("ru-RU"):null],["Судья",I.referee]].filter(r=>r[1]);
  if(rows.length)top+=`<div class="box"><h3>О матче</h3>${rows.map(r=>`<div class="row"><span>${r[0]}</span><b>${esc(r[1])}</b></div>`).join("")}</div>`;
  let h=0,a=0;const ev=[];
@@ -692,15 +701,27 @@ function extraHtml(x,E){const I=E.info||{},S=E.stadium||{},T=E.timeline||[],ST=E
   const goal=e.home_goals!=null,cell=e.side==="home"?`<div class="ev h"><span>${inn}</span>${ic}</div>`:`<div class="ev a">${ic}<span>${inn}</span></div>`,mid=`<div class="evm">${m}${goal?`<small>${e.home_goals}:${e.away_goals}</small>`:""}</div>`;
   ev.push(`<div class="evr">${e.side==="home"?cell+mid+"<div></div>":"<div></div>"+mid+cell}</div>`)}
  if(ev.length)top+=`<div class="box"><h3>Хронология</h3><div class="evh2"><b data-team="${esc(x.home)}">${esc(x.home)}</b><b data-team="${esc(x.away)}">${esc(x.away)}</b></div>${ev.join("")}</div>`;
- if(ST.home&&ST.away){const sr=SN.map(([k,l])=>{const hv=ST.home[k],av=ST.away[k];if(!hv||!av)return"";const hn=parseFloat(hv.value),an=parseFloat(av.value);if(!isFinite(hn)||!isFinite(an)||(!hn&&!an))return"";
-   return`<div class="sr"><b>${sfmt(k,hv.value)}</b><span>${l}</span><b>${sfmt(k,av.value)}</b></div><div class="sbar"><i class="${hn>=an?"w":""}" style="flex:${hn+.001}"></i><i class="${an>=hn?"w":""}" style="flex:${an+.001}"></i></div>`}).join("");
-  if(sr)top+=`<div class="box"><h3>Статистика</h3><div class="evh2"><b data-team="${esc(x.home)}">${esc(x.home)}</b><b data-team="${esc(x.away)}">${esc(x.away)}</b></div>${sr}</div>`}
+ if(ST.home&&ST.away){const g=(q,k)=>{const o=ST[q][k];if(!o)return null;const n=parseFloat(o.value);return isFinite(n)?n:null},
+  fr=(n,d)=>d>0?{n:n/d*100,t:Math.round(n/d*100)+"%",s:"("+n+"/"+d+")"}:null,
+  one=(q,k)=>{switch(k){
+   case"xg":case"xa":{const v=(XT&&XT[q]?XT[q][k]:0)||0;return{n:v,t:v.toFixed(2)}}
+   case"possessionPct":{const v=g(q,k);return v==null?null:{n:v,t:Math.round(v)+"%"}}
+   case"pass":return fr(g(q,"accuratePasses")||0,g(q,"totalPasses")||0);
+   case"long":return fr(g(q,"accurateLongBalls")||0,g(q,"totalLongBalls")||0);
+   case"cross":return fr(g(q,"accurateCrosses")||0,g(q,"totalCrosses")||0);
+   case"tackle":return fr(g(q,"effectiveTackles")||0,g(q,"totalTackles")||0);
+   case"offT":{const t=g(q,"totalShots"),o=g(q,"shotsOnTarget");if(t==null||o==null)return null;const v=Math.max(0,t-o-(g(q,"blockedShots")||0));return{n:v,t:String(v)}}
+   default:{const v=g(q,k);return v==null?null:{n:v,t:String(Math.round(v*10)/10)}}}},
+  srow=(l,k)=>{const h=one("home",k),a=one("away",k);if(!h||!a||(!h.n&&!a.n))return"";const hs=h.s?`<small>${h.s}</small>`:"",as=a.s?`<small>${a.s}</small>`:"";
+   return`<div class="sr"><b>${h.t}${hs}</b><span>${l}</span><b>${a.t}${as}</b></div><div class="sbar"><i class="${h.n>=a.n?"w":""}" style="flex:${h.n+.001}"></i><i class="${a.n>=h.n?"w":""}" style="flex:${a.n+.001}"></i></div>`},
+  secs=TSEC.map(([t,ks,o])=>{const r=ks.map(([k,l])=>srow(l,k)).join("");return r?`<details class="box"${o?" open":""}><summary>${t}</summary><div class="evh2"><b data-team="${esc(x.home)}">${esc(x.home)}</b><b data-team="${esc(x.away)}">${esc(x.away)}</b></div>${r}</details>`:""}).join("");
+  if(secs)top+=`<div class="dl">Статистика матча</div>`+secs}
  const lu=s=>{const L=LU.filter(p=>p.side===s),f=I["formation_"+s];if(!L.length)return"";
   const row=p=>`<div class="sb"><span><small>${esc(p.shirt??"")}</small> ${esc(p.name)} <small>${esc(p.pos??"")}</small></span><span class="rr">${p.sub_out!=null?`<small style="color:var(--bad)">▼ ${p.sub_out}'</small>`:""}${p.sub_in!=null?`<small style="color:var(--ok)">▲ ${p.sub_in}'</small>`:""}</span></div>`;
   return`<h3 style="margin:14px 0 8px"><span data-team="${esc(s==="home"?x.home:x.away)}">${esc(s==="home"?x.home:x.away)}</span>${f?" · "+esc(f):""}</h3>`+L.filter(p=>p.starter).map(row).join("")+`<div class="dl">Запасные</div>`+L.filter(p=>!p.starter).map(row).join("")};
  if(LU.length)bot+=`<details class="box"><summary>Заявка на матч</summary>${lu("home")}${lu("away")}</details>`;
  return{top,bot}}
-function matchHtml(x,R,E){const X=E?extraHtml(x,E):{top:"",bot:""},side=n=>R.filter(p=>p.pl_team===n),xi=r=>{r=[...r].sort((a,b)=>b.mins-a.mins);const k=r.find(p=>p.pl_pos==="GK"),s=k?[k,...r.filter(p=>p!==k).slice(0,10)]:r.slice(0,11);return[s,r.filter(p=>!s.includes(p))]};
+function matchHtml(x,R,E,XR){const XT={home:{xg:0,xa:0},away:{xg:0,xa:0}},tm={};R.forEach(p=>tm[p.pl_id]=p.pl_team);(XR||[]).forEach(r=>{const sd=tm[r.player_id]===x.home?"home":tm[r.player_id]===x.away?"away":null;if(sd){XT[sd].xg+=+r.xg||0;XT[sd].xa+=+r.xa||0}});const X=E?extraHtml(x,E,XT):{top:"",bot:""},side=n=>R.filter(p=>p.pl_team===n),xi=r=>{r=[...r].sort((a,b)=>b.mins-a.mins);const k=r.find(p=>p.pl_pos==="GK"),s=k?[k,...r.filter(p=>p!==k).slice(0,10)]:r.slice(0,11);return[s,r.filter(p=>!s.includes(p))]};
  const best=R.filter(p=>p.rate!=null).sort((a,b)=>b.rate-a.rate)[0],mine=R.filter(p=>p.pts_user!=null),tot=mine.reduce((a,p)=>a+Number(p.pts_user),0);
  const chip=p=>`<div class="pc${p.pts_user!=null?" mine":""}" data-mp="${p.pl_id}" data-mm="${x.id}"><b class="rt ${rg(p.rate)}">${rf(p.rate)}</b>${p.is_cap?'<i class="cp">C</i>':""}<span>${esc(p.pl_name)}</span>${p.pts_user!=null?`<em class="pt">${sg(p.pts_user)}</em>`:""}</div>`;
  const half=(n,gl,rev)=>{const s=xi(side(n))[0],L=["GK","DEF","MID","FWD"].map(q=>s.filter(p=>p.pl_pos===q));if(rev)L.reverse();const lab=`<div class="tl"><span data-team="${esc(n)}">${esc(n)}</span><span>${gl??""}</span></div>`,ln=L.map(a=>`<div class="line">${a.map(chip).join("")}</div>`).join("");return rev?ln+lab:lab+ln};
@@ -708,8 +729,8 @@ function matchHtml(x,R,E){const X=E?extraHtml(x,E):{top:"",bot:""},side=n=>R.fil
  return`<div class="box"><small>Тур ${x.round} · ${fmtD(x.kickoff)} ${fmtT(x.kickoff)} · ${x.finished||x.ft?"завершён":x.status==="live"?"идёт"+(x.minutes?" · "+x.minutes+"'":""):"не начался"}</small>${mrow(x,1)}${R.length?`<div class="row"><small>${best?"Лучший: "+esc(best.pl_name)+" "+rf(best.rate):""}</small><small>${mine.length?"Мои очки: <b>"+sg(tot)+"</b>":""}</small></div>`:""}</div>`+X.top+(R.length?`<div class="pitch">${half(x.home,x.home_goals,0)}<div class="mid"></div>${half(x.away,x.away_goals,1)}</div>`+(sb?`<div class="box">${sb}</div>`:""):`<div class="box"><small>Составы и оценки появятся, когда матч начнётся.</small></div>`)+X.bot}
 async function mdetail(id,q){const m=$("#m"),x=MT.find(v=>v.id===id),bk="",back=()=>{};
  if(!q){m.className="";void m.offsetWidth;m.className="in";m.innerHTML=fxShell(bk+LOAD);back();news();if(!x.finished)watchMatch(id)}
- try{const [R,E]=await Promise.all([rpc("match_detail",{p_match:id}),rpc("match_extra",{p_match:id}).catch(()=>null)]);if(tab!=="fx"||FXM!==id)return;if(q)m.className="";m.innerHTML=fxShell(bk+matchHtml(x,R,E));back();news()}catch(e){m.innerHTML=fxShell(bk+esc(e.message));back();news()}}
-async function lmatch(id,q){const x=MT.find(v=>v.id===id);if(!q){LMID=id;modal('<div class="mw na">'+LOAD+'</div>');if(!x.finished)watchMatch(id)}try{const [R,E]=await Promise.all([rpc("match_detail",{p_match:id}),rpc("match_extra",{p_match:id}).catch(()=>null)]);if(LMID!==id)return;modal(`<div class="mw${q?" na":""}">${matchHtml(MT.find(v=>v.id===id),R,E)}</div>`)}catch(e){if(LMID===id)modal('<div class="mw">'+esc(e.message)+'</div>')}}
+ try{const [R,E,XR]=await Promise.all([rpc("match_detail",{p_match:id}),rpc("match_extra",{p_match:id}).catch(()=>null),sb.from("player_match_ratings").select("player_id,xg,xa").eq("match_id",id).then(r=>r.data||[],()=>[])]);if(tab!=="fx"||FXM!==id)return;if(q)m.className="";m.innerHTML=fxShell(bk+matchHtml(x,R,E,XR));back();news()}catch(e){m.innerHTML=fxShell(bk+esc(e.message));back();news()}}
+async function lmatch(id,q){const x=MT.find(v=>v.id===id);if(!q){LMID=id;modal('<div class="mw na">'+LOAD+'</div>');if(!x.finished)watchMatch(id)}try{const [R,E,XR]=await Promise.all([rpc("match_detail",{p_match:id}),rpc("match_extra",{p_match:id}).catch(()=>null),sb.from("player_match_ratings").select("player_id,xg,xa").eq("match_id",id).then(r=>r.data||[],()=>[])]);if(LMID!==id)return;modal(`<div class="mw${q?" na":""}">${matchHtml(MT.find(v=>v.id===id),R,E,XR)}</div>`)}catch(e){if(LMID===id)modal('<div class="mw">'+esc(e.message)+'</div>')}}
 // ---------- страница команды ----------
 function tstand(){const T={};(MT||[]).forEach(x=>{if(!(x.finished||x.ft)||x.home_goals==null||x.away_goals==null)return;
  [[x.home,x.home_goals,x.away_goals],[x.away,x.away_goals,x.home_goals]].forEach(([t,f,a])=>{const s=T[t]??={n:t,p:0,w:0,d:0,l:0,gf:0,ga:0,pts:0,cs:0};s.p++;s.gf+=f;s.ga+=a;if(a===0)s.cs++;if(f>a){s.w++;s.pts+=3}else if(f===a){s.d++;s.pts++}else s.l++})});
@@ -888,17 +909,25 @@ async function stats(){const m=$("#m");m.innerHTML=LOAD;
  try{LD=await rpc("landing_data");
   m.innerHTML='<div class="box fw"><h3>Игра в цифрах</h3><div class="stats" id="lcn"></div></div><div id="lfan" style="display:none"></div><div class="box"><h3>Растут</h3><div id="lup"></div></div><div class="box"><h3>Падают</h3><div id="ldw"></div></div><div class="box fw"><h3>Статистика сезона</h3><div class="tabs" id="ltb"></div><div id="lst"></div></div><div class="box fw"><h3>Статистика команд</h3><div class="tabs" id="ttb"></div><div id="tms">'+LOAD+'</div></div><div class="box fw"><h3>Лиги сообщества</h3><div id="llg"></div></div>';
   fillL(LD);teamStats()}catch(e){m.innerHTML=esc(e.message)}}
-const PMS=[["minutes","Минуты",0],["rating","Оценка",0],["goals","Голы",0],["assists","Ассисты",0],["xg","xG (ожидаемые голы)",1],["xa","xA (ожидаемые ассисты)",1],["saves","Сейвы",2],["goals_conceded","Пропущено",2],["xgc","xGC",3],["tackles","Отборы",1],["cbi","Выносы, блоки, перехваты",1],["recoveries","Подборы",1],["yellow_cards","Жёлтые",1],["red_cards","Красные",1],["own_goals","Автоголы",1],["pen_saved","Отбитые пенальти",1],["pen_missed","Незабитые пенальти",1],["bonus","Бонусные очки",1],["bps","BPS",1]];
+const TSEC=[["Главное",[["xg","Ожидаемые голы (xG)"],["possessionPct","Владение мячом"],["totalShots","Всего ударов"],["shotsOnTarget","Удары в створ"],["wonCorners","Угловые"],["pass","Передачи"],["yellowCards","Жёлтые карточки"]],1],
+ ["Удары",[["xg","Ожидаемые голы (xG)"],["totalShots","Всего ударов"],["shotsOnTarget","Удары в створ"],["offT","Удары мимо"],["blockedShots","Удары заблокированы"]]],
+ ["Атака",[["wonCorners","Угловые"],["offsides","Офсайды"],["penaltyKickShots","Пенальти"]]],
+ ["Передачи",[["pass","Передачи"],["long","Длинные передачи"],["cross","Навесы"],["xa","Ожидаемые ассисты (xA)"]]],
+ ["Оборона",[["foulsCommitted","Фолы"],["tackle","Отборы"],["totalClearance","Выносы"],["interceptions","Перехваты"],["redCards","Красные карточки"]]],
+ ["Вратари",[["saves","Сейвы вратаря"]]]];
+const PCM=[["minutes","Минуты",1],["rating","Оценка",1],["starts","В стартовом составе",1],["goals","Голы",1],["assists","Ассисты",1],["bonus","Бонусные очки",0],["bps","BPS",0]],PCD=["Дисциплина",[["yellow_cards","Жёлтые карточки",0],["red_cards","Красные карточки",0],["own_goals","Автоголы",0]]];
+const PSEC=gk=>gk?[["Главное",PCM,1],["Вратарь",[["saves","Сейвы",1],["goals_conceded","Пропущено",1],["xgc","xGC (ожидаемо пропустить)",1],["pen_saved","Отбитые пенальти",0]]],PCD]
+ :[["Главное",PCM,1],["Удары",[["xg","xG (ожидаемые голы)",1],["pen_missed","Незабитые пенальти",0]]],["Создание моментов",[["xa","xA (ожидаемые ассисты)",1]]],["Оборона",[["tackles","Отборы",1],["cbi","Выносы, блоки, перехваты",1],["recoveries","Подборы",1]]],PCD];
 async function pmatch(mid,pid){const md=$("#md"),open=md.style.display==="flex",pv=NAVB;
  if(open&&LMID){const id=LMID;LMID=null;unwatchMatch();NAVB=()=>{NAVB=pv;lmatch(id)}}
  modal('<div class="mw na">'+LOAD+'</div>');
  try{const[a,b]=await Promise.all([sb.from("player_match_ratings").select("*").eq("match_id",mid).eq("player_id",pid).maybeSingle(),sb.from("players").select("id,name,team,position,rating,photo").eq("id",pid).maybeSingle()]);
   if(a.error)throw a.error;const r=a.data,p=b.data||PL[pid],x=MT&&MT.find(v=>v.id===mid);
   if(!p||!r){modal('<div class="mw box"><small>Нет данных за этот матч</small></div>');return}
-  const fin=x&&(x.finished||x.ft),rate=fin?r.rating:(r.live_rating??r.rating),gk=p.position==="GK",def=p.position==="DEF",
-   v=k=>k==="rating"?rate:r[k],
-   rows=PMS.filter(([k,,m])=>{const n=v(k);if(n==null)return false;if(m===0)return true;if(m===2)return gk||Number(n)>0;if(m===3)return (gk||def)&&n!=null;return Number(n)>0}).map(([k,l])=>{const n=v(k);return`<div class="row"><span>${l}</span>${k==="rating"?`<b class="rt ${rg(n)}">${rf(n)}</b>`:`<b>${/^x/.test(k)?Number(n).toFixed(2):esc(n)}</b>`}</div>`}).join("");
-  modal(`<div class="mw"><div class="cards" style="justify-content:center"><div class="cd r${rar(p.rating)}" style="width:120px;height:168px">${phImg(p)}<div class="o" style="font-size:40px">${rf(rate)}</div><div class="n" style="font-size:13px">${esc(p.name)}</div><div class="c" style="font-size:10px">${p.position} · ${bdg(p.team,1)}${esc(p.team)}</div></div></div><small style="display:block;text-align:center;margin-top:8px">Оценка за этот матч</small><div class="box" style="margin-top:12px"><h3>${esc(p.name)}</h3>${x?`<div class="row"><span>Матч</span><b>${esc(x.home)} ${x.home_goals??"-"}:${x.away_goals??"-"} ${esc(x.away)}</b></div><div class="row"><span>Тур</span><b>${x.round}</b></div>`:""}<div class="row"><span>В стартовом составе</span><b>${r.starts>0?"Да":"Нет"}</b></div>${rows}</div></div>`)}
+  const fin=x&&(x.finished||x.ft),rate=fin?r.rating:(r.live_rating??r.rating),gk=p.position==="GK",v=k=>k==="rating"?rate:r[k],
+   fm=(k,n)=>k==="rating"?`<b class="rt ${rg(n)}">${rf(n)}</b>`:k==="starts"?`<b>${n>0?"Да":"Нет"}</b>`:`<b>${/^x/.test(k)?Number(n).toFixed(2):esc(n)}</b>`,
+   secs=PSEC(gk).map(([t,ks,o])=>{const rows=ks.filter(([k,,al])=>{const n=v(k);return n!=null&&(al||Number(n)>0)}).map(([k,l])=>`<div class="row"><span>${l}</span>${fm(k,v(k))}</div>`).join("");return rows?`<details class="box"${o?" open":""}><summary>${t}</summary>${rows}</details>`:""}).join("");
+  modal(`<div class="mw"><div class="cards" style="justify-content:center"><div class="cd r${rar(p.rating)}" style="width:120px;height:168px">${phImg(p)}<div class="o" style="font-size:40px">${rf(rate)}</div><div class="n" style="font-size:13px">${esc(p.name)}</div><div class="c" style="font-size:10px">${p.position} · ${bdg(p.team,1)}${esc(p.team)}</div></div></div><small style="display:block;text-align:center;margin-top:8px">Оценка за этот матч</small><div class="box" style="margin-top:12px"><h3>${esc(p.name)}</h3>${x?`<div class="row"><span>Матч</span><b>${esc(x.home)} ${x.home_goals??"-"}:${x.away_goals??"-"} ${esc(x.away)}</b></div><div class="row"><span>Тур</span><b>${x.round}</b></div>`:""}</div>${secs}</div>`)}
  catch(e){modal('<div class="mw box"><small>'+esc(e.message)+'</small></div>')}}
 let TSB="tbl";
 async function teamStats(){if(!MT)await patchMT();const e=$("#tms");if(!e)return;

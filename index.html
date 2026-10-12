@@ -91,6 +91,7 @@ main.in>*{animation:up .45s var(--ease) both}main.in>:nth-child(2){animation-del
 #nv button.lvd::after{content:"";position:absolute;top:7px;left:calc(50% + 8px);width:7px;height:7px;border-radius:50%;background:var(--lv);animation:pls 1.4s ease-in-out infinite}
 
 @media(min-width:900px){
+ body.app::before{left:var(--sb)}
  header .mk{display:none}
  header .lgo{font-size:19px}
  #nv{left:0;top:0;bottom:0;transform:none;width:var(--sb);flex-direction:column;gap:4px;padding:22px 14px;border-radius:0;border-width:0 1px 0 0;box-shadow:inset -1px 0 0 rgba(var(--wh),.02)}
@@ -578,7 +579,7 @@ async function boot0(){
   if(!Object.keys(PL).length){const {data,error}=await sb.from("players").select("id,name,team,position,rating,last_change,photo,updated_at");if(error)throw error;data.forEach(p=>PL[p.id]=p)}
   const {data:pf}=await sb.from("profiles").select("*").maybeSingle();
   if(!pf){onboard();return}
-  PF=pf;await refresh();$("#nv").style.display="flex";view();tourAuto();liveInit();scoreInit()
+  PF=pf;await refresh();$("#nv").style.display="flex";document.body.classList.add("app");view();tourAuto();liveInit();scoreInit()
  }catch(e){$("#m").innerHTML=`<div class="box"><h3>Ошибка</h3>${esc(e.message)}<br><button class="b" id="rt" style="margin-top:8px">Повторить</button></div>`;$("#rt").onclick=boot}}
 async function refresh(){
  const [pf,cd,pp,sc,lu,nr,ps]=await Promise.all([sb.from("profiles").select("*").single(),sb.from("user_cards").select("*"),sb.from("pending_packs").select("*").order("id"),sb.from("round_scores").select("round,points").order("round",{ascending:false}),sb.from("lineups").select("*").order("round",{ascending:false}).limit(1),rpc("next_round"),rpc("pack_status").catch(()=>null)]);
@@ -587,7 +588,7 @@ async function refresh(){
  const l=lu.data&&lu.data[0];LU=l?{xi:l.xi.map(x=>x==null?null:Number(x)),bn:[0,1,2].map(i=>l.bench[i]!=null?Number(l.bench[i]):null),cap:l.captain_id!=null?Number(l.captain_id):PF.captain_id}:{xi:Array(11).fill(null),bn:[null,null,null],cap:PF.captain_id}}
 
 // ---------- первый вход ----------
-async function onboard(){$("header").style.display="none";$("#nv").style.display="none";
+async function onboard(){document.body.classList.remove("app");$("header").style.display="none";$("#nv").style.display="none";
  try{const opts=await rpc("captain_options");opts.forEach(p=>PL[p.id]=PL[p.id]||p);
  $("#m").innerHTML=`<div class="lgo ob"><i class="mk"></i>Club</div><div class="box"><h3>Создай клуб</h3><input id="nk" placeholder="Ник (виден в лигах)" maxlength="20"><div class="err" id="er"></div></div><div class="box"><h3>Выбери капитана</h3><small>Очки капитана в каждом туре ×2. Дополнительно получишь 15 игроков.</small><div class="cards" style="justify-content:center;margin-top:10px">${opts.map(p=>card(p.id)).join("")}</div></div><button class="g" id="lo">Выйти</button>`;
  $("#lo").onclick=async()=>{await sb.auth.signOut();landing()};
@@ -772,7 +773,7 @@ $("#mx").onclick=()=>{FXM=null;fixtures()};
 const IC={us:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 3-6 6.5-6s6.5 2.4 6.5 6M16 4.5a3.5 3.5 0 010 7M18 14c2.4.6 3.5 2.4 3.5 6"/>',cal:'<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/>',sh:'<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/>',tr:'<path d="M8 4h8v5a4 4 0 01-8 0zM8 6H4v1a4 4 0 004 4M16 6h4v1a4 4 0 01-4 4M12 13v4M8 21h8M10 17h4"/>',pk:'<rect x="5" y="3" width="14" height="18" rx="2.5"/><circle cx="12" cy="12" r="3.5"/>',sq:'<path d="M8 3L3 6l2 4 3-1v11h8V9l3 1 2-4-5-3a4 4 0 01-8 0z"/>',up:'<path d="M12 19V5M6 11l6-6 6 6"/>',dn:'<path d="M12 5v14M6 13l6 6 6-6"/>',ch:'<path d="M6 9l6 6 6-6"/>',ar:'<path d="M5 12h14M13 6l6 6-6 6"/>',bl:'<circle cx="12" cy="12" r="9"/><path d="M12 8l3.5 2.5-1.3 4h-4.4l-1.3-4zM12 3v5M15.5 10.5L20 9M14.2 14.5l2.8 3.8M9.8 14.5L7 18.3M8.5 10.5L4 9"/>'};
 const ico=n=>`<svg class="i" viewBox="0 0 24 24">${IC[n]}</svg>`;
 let LD,STB="scorers";
-function landing(){document.body.classList.remove("mdt");liveInit();$("#m").innerHTML="";const L=$("#lp");$("header").style.display="none";$("#nv").style.display="none";closeM();L.style.display="block";L.scrollTop=0;
+function landing(){document.body.classList.remove("mdt","app");liveInit();$("#m").innerHTML="";const L=$("#lp");$("header").style.display="none";$("#nv").style.display="none";closeM();L.style.display="block";L.scrollTop=0;
  const cta=`<button class="b" data-a="1">Начать играть${ico("ar")}</button><button class="g" data-a="0">Войти</button>`,
  sk=LOAD,
  ss=Array.from({length:4},()=>'<div class="stat"><b>&nbsp;</b><span>&nbsp;</span></div>').join("");

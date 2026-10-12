@@ -409,6 +409,7 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stro
 @keyframes bll{to{transform:rotate(180deg)}}
 #bs{position:fixed;inset:0;z-index:50;display:grid;place-items:center;background:var(--bg);transition:opacity .3s}
 #bs.out{opacity:0;pointer-events:none}#bs .bl{--s:72px}
+.bl.full{--s:64px;position:fixed;inset:0;z-index:12;padding:0}
 .nws .bl{--s:34px;padding:16px 0}.fan .bl{--s:64px}
 .aov{position:absolute;inset:0;z-index:4;display:grid;place-items:center;background:rgba(var(--ab),.78);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);animation:fi .15s}
 .aov .bl{padding:0}
@@ -447,6 +448,7 @@ details.box{margin-bottom:8px}
 @media(prefers-reduced-motion:reduce){
  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
  .rvl{opacity:1;transform:none}
+ .bl .mk,.bl .mk::after{animation-duration:1.4s!important;animation-iteration-count:infinite!important}
 }
 
 /* ---------- theme switch animation (opacity only: runs on the GPU) ---------- */
@@ -571,7 +573,7 @@ async function boot(){try{await boot0()}finally{hideBS()}}
 function hideBS(){const e=document.getElementById("bs");if(e){e.classList.add("out");setTimeout(()=>e.remove(),350)}}
 async function boot0(){
  const {data:{session}}=await sb.auth.getSession();if(!session){landing();return}$("#lp").style.display="none";
- $("#m").innerHTML=LOAD;
+ $("#m").innerHTML=LOAD.replace("class=\"bl\"","class=\"bl full\"");
  try{
   if(!Object.keys(PL).length){const {data,error}=await sb.from("players").select("id,name,team,position,rating,last_change,photo,updated_at");if(error)throw error;data.forEach(p=>PL[p.id]=p)}
   const {data:pf}=await sb.from("profiles").select("*").maybeSingle();

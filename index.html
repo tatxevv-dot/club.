@@ -311,6 +311,7 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stro
 .zn{cursor:pointer}.zn .zf{transition:fill-opacity .3s}.zn.emp .zf{animation:zpl 2s ease-in-out infinite alternate}
 @keyframes zpl{from{fill-opacity:.03}to{fill-opacity:.17}}
 .zn:hover .zf{fill-opacity:.24}.ppl{pointer-events:none}.tfh{margin:12px 0 4px;padding:10px 12px;border-radius:var(--r1);background:rgba(var(--wh),.05);border:1px solid var(--ln);font-size:12.5px;color:var(--mu)}
+.cd .sq{position:absolute;left:0;right:0;bottom:0;top:0;pointer-events:none}.cd .sq b{position:absolute;top:5px;right:5px;font:700 9px/1 var(--f);padding:2px 4px;border-radius:5px;background:rgba(10,11,14,.6);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}.cd .sq u{position:absolute;left:0;bottom:0;height:4px;width:var(--w,100%);background:var(--c,#6ad66a);transition:width .6s}
 /* ---------- training ---------- */
 .trh small{display:block;margin-top:4px;color:var(--mu)}
 .tfld{position:relative;height:96px;border-radius:var(--r2);margin:14px 0 6px;overflow:hidden;border:1px solid var(--ln);background:var(--pitchbg) center/cover,linear-gradient(180deg,rgba(90,214,160,.14),rgba(90,214,160,.04))}
@@ -667,8 +668,10 @@ function ctReveal(cards,r){const p=PL[r.player_id],g=rar(p.rating);
  const m=modal(`<div class="ctv">${cards.map((id,i)=>card(id).replace('class="cd','style="--i:'+i+'" class="cd').replace(/<i class="qt">[^<]*<\/i>/,"")).join("")}</div><div class="burst"></div>${Array.from({length:16},(_,i)=>`<s style="--a:${i*22.5}deg;--d:${110+Math.random()*150|0}px"></s>`).join("")}`);
  m.classList.add("rv","g"+g);setTimeout(()=>navigator.vibrate&&navigator.vibrate(40),1800);
  RVT=setTimeout(()=>{const m2=modal(`<div class="mw" style="text-align:center"><small>Средний рейтинг ${r.avg} · бонус +${r.bonus}</small><div class="cres">${card(r.player_id,"deal").replace('class="cd','style="width:120px;height:168px;--i:0" class="cd')}</div><h3>${esc(p.name)}</h3><small>${p.position} · ${esc(p.team)} · рейтинг ${p.rating}</small><button class="b" id="ok" style="width:100%;margin-top:16px">Отлично</button></div>`);m2.classList.add("g"+g);$("#ok").onclick=closeM},2400)}
-function squad(){const m=$("#m"),used=new Set([...LU.xi,...LU.bn].filter(x=>x!=null));
- const sl=(a,i,lab)=>{const id=a[i];return id==null?`<div class="slot" data-a="${a===LU.xi?"xi":"bn"}" data-i="${i}">+ ${lab}</div>`:card(id).replace('class="cd','data-a="'+(a===LU.xi?"xi":"bn")+'" data-i="'+i+'" class="cd')};
+function sqSt(){document.querySelectorAll("[data-sq]").forEach(e=>{const o=trNow(+e.dataset.sq),c=trCol(o.s);e.style.setProperty("--w",o.s+"%");e.style.setProperty("--c",c);const t=e.querySelector("b");t&&(t.textContent=Math.round(o.s)+"%",t.style.color=c)})}
+function sqLoad(){sqSt();if(!TRN.ok||Date.now()-TRN.t>30000)trLoad().then(()=>{TRN.ok=1;tab==="sq"&&sqSt()}).catch(()=>{})}
+function squad(){setTimeout(sqLoad,0);const m=$("#m"),used=new Set([...LU.xi,...LU.bn].filter(x=>x!=null));
+ const sl=(a,i,lab)=>{const id=a[i];return id==null?`<div class="slot" data-a="${a===LU.xi?"xi":"bn"}" data-i="${i}">+ ${lab}</div>`:card(id).replace('class="cd','data-a="'+(a===LU.xi?"xi":"bn")+'" data-i="'+i+'" class="cd').replace(/<\/div>$/,'<span class="sq" data-sq="'+id+'"><b></b><u></u></span></div>')};
  const L=(a,b)=>`<div class="line">${Array.from({length:b-a},(_,j)=>sl(LU.xi,a+j,SL[a+j])).join("")}</div>`;
  const full=!LU.xi.includes(null),xi=LU.xi.filter(x=>x!=null);
  m.innerHTML=`<div class="box"><b>${RND?`Тур ${RND}: состав открыт`:"Тур пока не открыт"}</b><br><small>${RK?"Закрытие: "+new Date(RK).toLocaleString("ru-RU",{weekday:"short",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}):"Ждём расписание"}</small></div>

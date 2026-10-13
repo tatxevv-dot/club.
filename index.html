@@ -308,6 +308,31 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stro
 .zh{position:absolute;left:14px;bottom:12px;max-width:60%;color:rgba(255,255,255,.55);font-size:11.5px;pointer-events:none}
 .led{animation:ledp 2s ease-in-out infinite alternate}.sp{animation:ledp 1.2s ease-in-out infinite alternate}
 
+/* ---------- training ---------- */
+.trh small{display:block;margin-top:4px;color:var(--mu)}
+.tfld{position:relative;height:96px;border-radius:var(--r2);margin:14px 0 6px;overflow:hidden;border:1px solid var(--ln);background:var(--pitchbg) center/cover,linear-gradient(180deg,rgba(90,214,160,.14),rgba(90,214,160,.04))}
+.tfld::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 12.5%,rgba(var(--wh),.035) 12.5% 25%)}
+.tfe{position:absolute;inset:0;display:grid;place-items:center;color:var(--mu)}
+.tdt{position:absolute;top:calc(8px + var(--l)*28px);left:5%;width:24px;height:24px;border-radius:7px;background:var(--c);color:#10160a;font:700 11px/24px var(--f);text-align:center;font-style:normal;box-shadow:0 0 14px var(--c);animation:trun var(--d) ease-in-out infinite alternate}
+.tdt.zz{animation:none;left:48%;opacity:.55}
+@keyframes trun{to{left:calc(95% - 24px)}}
+.tsl{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:12px;border-radius:var(--r2);background:rgba(var(--wh),.04);border:1px solid var(--ln);margin-top:8px}
+.tsl.em{grid-template-columns:1fr;justify-items:center;gap:2px;border-style:dashed;background:transparent;cursor:pointer;padding:16px 12px;transition:background .2s}
+.tsl.em:hover{background:rgba(var(--wh),.05)}.tsl.em small{color:var(--mu)}
+.tsl .pi{min-width:0}.tsl .pi>div:first-child{font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.stb{height:8px;border-radius:4px;background:rgba(var(--wh),.09);overflow:hidden;margin:7px 0 5px;box-shadow:inset 0 1px 2px rgba(0,0,0,.4)}
+.stb i{display:block;height:100%;width:var(--w);border-radius:4px;background:var(--c);transition:width .8s linear,background .8s linear}
+.tm{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:var(--mu);font-variant-numeric:tabular-nums}
+.tr2{display:flex;flex-direction:column;align-items:flex-end;gap:6px}.tr2 b{font-size:17px}.tr2 small{color:var(--mu)}
+.tr2 button.g{min-height:34px;padding:0 12px;font-size:12px}
+.tw{margin-top:6px;font-size:12px;color:var(--mu)}.tw.w{color:var(--warn)}.tw.d{color:var(--bad)}
+.trb{display:flex;gap:8px;margin-top:14px}.trb button{flex:1;padding:0 10px}
+.tpk{margin-top:6px;cursor:pointer}.tpk.lk{opacity:.5;cursor:not-allowed}
+.tpk .pi small{color:var(--mu)}.tmu{display:flex;flex-direction:column;align-items:flex-end;font-weight:600;font-size:13px}.tmu small{color:var(--mu);font-weight:400}
+.trg{margin-top:16px!important;text-align:left!important;font-size:13px!important;color:var(--mu)}
+#tph{padding:10px 12px;border-radius:var(--r1);background:rgba(240,182,74,.12);border:1px solid rgba(240,182,74,.35);margin-top:10px}
+#tph.shk{animation:shk .35s}@keyframes shk{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
 /* ---------- toasts ---------- */
 #toasts{position:fixed;top:calc(10px + env(safe-area-inset-top,0px));left:0;right:0;z-index:40;display:flex;flex-direction:column;align-items:center;gap:8px;padding:0 12px;pointer-events:none}
 .tst{pointer-events:auto;width:100%;max-width:420px;padding:14px 16px;border-radius:var(--r3);background:linear-gradient(160deg,rgba(var(--wh),.16),rgba(var(--wh),.06)),rgba(var(--bk),.72);border-color:var(--ln2);box-shadow:inset 0 1px 0 var(--hi),0 18px 40px -10px rgba(0,0,0,.8);-webkit-backdrop-filter:blur(26px) saturate(180%);backdrop-filter:blur(26px) saturate(180%);font-size:13.5px;cursor:pointer;animation:up .35s var(--ease)}
@@ -541,7 +566,7 @@ const phImg=p=>p.photo?`<img class="ph" referrerpolicy="no-referrer" loading="la
 addEventListener("error",e=>{const t=e.target;if(!t.classList||!t.classList.contains("ph"))return;const i=+t.dataset.i+1;if(i<PH.length){t.dataset.i=i;t.src=phUrl(t.dataset.c,i)}else t.remove()},true);
 addEventListener("load",e=>{const t=e.target;if(t.classList&&t.classList.contains("ph"))PHI=+t.dataset.i},true);
 const card=(id,ex="")=>{const p=PL[id];return `<div class="cd r${rar(p.rating)} ${ex}" data-id="${id}">${phImg(p)}${QTY[id]>1?`<i class="qt">×${QTY[id]}</i>`:""}<div class="o">${p.rating}${tr(p)}</div><div class="n">${esc(p.name)}</div><div class="c">${p.position} · ${bdg(p.team,1)}${esc(p.team)}</div></div>`};
-const msg=e=>({"not enough coins":"Не хватает монет","nickname must be 2-20 chars":"Ник: от 2 до 20 символов","duplicate players":"Игрок указан дважды","no open round":"Нет открытого тура","league not found":"Лига с таким кодом не найдена","max level":"Максимальный уровень","daily pack limit":"Лимит этого пака на сегодня исчерпан","contract needs 5 cards":"Для контракта нужно ровно 5 карточек","cards not owned":"Этих карточек у тебя нет"}[e.message]||(/profiles_nick_uq/.test(e.message)?"Этот ник уже занят":e.message));
+const msg=e=>({"not enough coins":"Не хватает монет","nickname must be 2-20 chars":"Ник: от 2 до 20 символов","duplicate players":"Игрок указан дважды","no open round":"Нет открытого тура","league not found":"Лига с таким кодом не найдена","max level":"Максимальный уровень","daily pack limit":"Лимит этого пака на сегодня исчерпан","contract needs 5 cards":"Для контракта нужно ровно 5 карточек","cards not owned":"Этих карточек у тебя нет","only starters":"Тренироваться могут только игроки стартового состава","training full":"Все 3 слота тренировки заняты","too tired":"Игрок слишком устал: нужно минимум 5% выносливости","not logged in":"Нужно войти в аккаунт"}[e.message]||(/profiles_nick_uq/.test(e.message)?"Этот ник уже занят":e.message));
 async function rpc(fn,args){const {data,error}=await sb.rpc(fn,args);if(error)throw new Error(error.message);return data}
 let NAVB=null,TMN=null;
 function modal(html){const m=$("#md");m.className="modal";m.style.display="flex";m.innerHTML=html+'<button class="x" aria-label="Закрыть">✕</button>';m.querySelector(".x").onclick=closeM;
@@ -877,9 +902,9 @@ function scene(S){
  +`<g class="hs${can(1)}" data-k="cap">${ks}${pin("cap",1,135,-3,top+(C>=6?32:12),"Касса")}</g>`
  +tw(-128,100)+tw(128,100)+(T>=3?tree(150,100)+tree(-150,100):"")+fl}
 function stad(){const m=$("#m"),S=PF.stadium,pe=pend(),mx=capH()*inc();
- m.innerHTML=`<div class="stg" id="stg"><svg class="sv" viewBox="0 0 700 450"><g id="cam">${scene(S)}</g></svg><div class="zc"><button data-z="1" aria-label="Приблизить">+</button><button data-z="-1" aria-label="Отдалить">−</button><button data-z="0" aria-label="Сбросить">⌂</button></div><small class="zh">Колесо или щипок: масштаб. Перетаскивание: движение.</small></div><div class="box"><h3>Касса стадиона</h3><div class="row"><b id="pe" style="font-size:26px;letter-spacing:-1px">${CN}${pe}</b><button class="b" id="cl" ${pe<1?"disabled":""}>Забрать</button></div><div class="bar"><i id="pb" style="width:${Math.min(100,pe/mx*100)}%"></i></div><small>Доход ${inc()}/ч · касса вмещает ${capH()} ч.</small></div><div class="box"><h3>Твой стадион</h3>${UPG.map(u=>`<div class="row"><span>${u[1]} · ур. ${S[u[0]]}</span><b>${u[3]()}</b></div>`).join("")}<small>Нажимай на трибуны, кассу и музей, чтобы улучшить их. С каждым уровнем стадион меняется.</small></div>`;
+ m.innerHTML=`<div class="stg" id="stg"><svg class="sv" viewBox="0 0 700 450"><g id="cam">${scene(S)}</g></svg><div class="zc"><button data-z="1" aria-label="Приблизить">+</button><button data-z="-1" aria-label="Отдалить">−</button><button data-z="0" aria-label="Сбросить">⌂</button></div><small class="zh">Колесо или щипок: масштаб. Перетаскивание: движение.</small></div><div class="box"><h3>Касса стадиона</h3><div class="row"><b id="pe" style="font-size:26px;letter-spacing:-1px">${CN}${pe}</b><button class="b" id="cl" ${pe<1?"disabled":""}>Забрать</button></div><div class="bar"><i id="pb" style="width:${Math.min(100,pe/mx*100)}%"></i></div><small>Доход ${inc()}/ч · касса вмещает ${capH()} ч.</small></div><div id="tr"></div><div class="box"><h3>Твой стадион</h3>${UPG.map(u=>`<div class="row"><span>${u[1]} · ур. ${S[u[0]]}</span><b>${u[3]()}</b></div>`).join("")}<small>Нажимай на трибуны, кассу и музей, чтобы улучшить их. С каждым уровнем стадион меняется.</small></div>`;
  $("#cl").onclick=()=>act(()=>rpc("collect"));
- m.querySelectorAll(".hs").forEach(g=>g.onclick=()=>upg(g.dataset.k));camInit($("#stg"))}
+ m.querySelectorAll(".hs").forEach(g=>g.onclick=()=>upg(g.dataset.k));camInit($("#stg"));trInit()}
 function tickStad(){const e=$("#pe");if(!e||!PF)return;const pe=pend(),mx=capH()*inc();e.innerHTML=CN+pe;$("#pb").style.width=Math.min(100,pe/mx*100)+"%";$("#cl").disabled=pe<1}
 function camInit(st){STAB&&STAB.abort();STAB=new AbortController();const o={signal:STAB.signal},svg=st.querySelector("svg"),cam=svg.querySelector("#cam"),pts=new Map();let moved=0,d0=1,k0=1;
  const ap=()=>{cam.setAttribute("transform",`translate(${CAM.x} ${CAM.y}) scale(${CAM.k})`);svg.querySelectorAll(".pin").forEach(p=>p.setAttribute("transform",`translate(${p.dataset.x} ${p.dataset.y}) scale(${1/CAM.k})`))},
@@ -898,6 +923,60 @@ function camInit(st){STAB&&STAB.abort();STAB=new AbortController();const o={sign
 function upg(k){const i=["inc","cap","mus"].indexOf(k),u=UPG[i],c=costOf(i);
  modal(`<div class="box" style="width:100%;max-width:340px"><h3>${u[1]} · ур. ${PF.stadium[k]}</h3><small>${u[2]}</small><div class="row"><span>Сейчас</span><b>${u[3]()}</b></div><button class="b" id="uu" style="width:100%" ${PF.coins<c?"disabled":""}>Улучшить · ${CN}${c}</button></div>`);
  $("#uu").onclick=()=>{closeM();act(()=>rpc("upgrade",{kind:k}))}}
+// ---------- тренировки на стадионе ----------
+const TRN={m:new Map(),t:Date.now(),k:{},b:0},
+ trCol=s=>`hsl(${Math.round(Math.max(0,Math.min(100,s))*1.2)} 68% 54%)`,
+ trCoef=s=>.5+.5*Math.max(0,Math.min(100,s))/100,
+ trX=n=>"×"+n.toFixed(2).replace(".",","),
+ trRate=p=>Math.round(8+Math.max(0,p.rating-65)*.8),
+ trHms=h=>{const s=Math.max(0,Math.floor(h*3600)),p=n=>String(n).padStart(2,"0");return Math.floor(s/3600)+":"+p(Math.floor(s%3600/60))+":"+p(s%60)},
+ trXi=()=>LU.xi.filter(x=>x!=null),
+ trWhen=d=>new Date(d).toLocaleString("ru-RU",{weekday:"short",hour:"2-digit",minute:"2-digit"}),
+ trNow=id=>{const e=TRN.m.get(id);if(!e)return{s:100,tr:0,pd:0,rate:trRate(PL[id])};
+  const h=(Date.now()-TRN.t)/36e5,s=Number(e.stamina);
+  return e.training?{s:Math.max(0,s-10*h),tr:1,pd:e.pending+Math.floor(Math.min(h,s/10)*e.rate),rate:e.rate}:{s:Math.min(100,s+5*h),tr:0,pd:0,rate:e.rate}},
+ trFc=id=>{const p=PL[id],k=p&&TRN.k[p.team],h=k?(new Date(k)-Date.now())/36e5:0;if(h<=0)return null;
+  const o=trNow(id);return{k,s:o.tr?Math.max(0,o.s-10*h):Math.min(100,o.s+5*h)}};
+async function trLoad(){const [r,mt]=await Promise.all([rpc("train_status"),RND?sb.from("matches").select("home,away,kickoff").eq("round",RND):{data:[]}]);
+ TRN.t=Date.now();TRN.m=new Map((r||[]).map(e=>[Number(e.player_id),e]));TRN.k={};
+ (mt.data||[]).forEach(x=>[x.home,x.away].forEach(t=>{if(!TRN.k[t]||new Date(x.kickoff)<new Date(TRN.k[t]))TRN.k[t]=x.kickoff}))}
+function trInit(){const e=$("#tr");if(!e)return;e.innerHTML='<div class="box">'+LOAD+'</div>';
+ trLoad().then(trDraw).catch(x=>{const e=$("#tr");e&&(e.innerHTML=`<div class="box"><h3>Тренировки</h3><small>${esc(msg(x))}</small></div>`)})}
+function trDraw(){const el=$("#tr");if(!el)return;
+ const xi=trXi(),all=[...TRN.m.values()],
+  act=all.filter(e=>e.training).map(e=>Number(e.player_id)).filter(id=>PL[id]).slice(0,3),
+  rest=all.filter(e=>!e.training).map(e=>Number(e.player_id)).filter(id=>PL[id]&&(xi.includes(id)||LU.bn.includes(id))),
+  dots=act.map((id,i)=>{const o=trNow(id);return`<i class="tdt${o.s<=0?" zz":""}" data-dt="${id}" style="--l:${i};--c:${trCol(o.s)};--d:${(3.2+i*.9).toFixed(1)}s">${esc(((PL[id].name.trim().split(/\s+/).pop())||"?")[0])}</i>`}).join(""),
+  slot=id=>{const p=PL[id],o=trNow(id),f=trFc(id);
+   return`<div class="tsl"><b class="rb r${rar(p.rating)}">${p.rating}</b><div class="pi"><div>${esc(p.name)}</div><div class="stb"><i data-sb="${id}"></i></div><div class="tm"><span data-sp="${id}"></span><span data-tl="${id}"></span></div>${xi.includes(id)?"":'<div class="tw w">Сейчас в резерве: тренируется, но в старте не играет</div>'}${f?`<div class="tw${f.s<50?" d":f.s<80?" w":""}">К матчу (${trWhen(f.k)}): ${Math.round(f.s)}% · очки ${trX(trCoef(f.s))}</div>`:""}</div><div class="tr2"><b data-pd="${id}"></b><small>+${o.rate}/ч</small><button class="g" data-stop="${id}">Завершить</button></div></div>`},
+  emp='<div class="tsl em" data-add><b>＋ Выбрать игрока</b><small>только из стартового состава</small></div>',
+  restH=rest.length?`<div class="box"><h3>Выносливость и очки за матчи</h3><small>Очки игрока за матч умножаются на (0,5 + 0,5 × выносливость). Значение фиксируется в момент начала его матча.</small>${rest.map(id=>{const o=trNow(id),f=trFc(id);return`<div class="row"><span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(PL[id].name)}</span><span class="tmu"><b style="color:${trCol(o.s)}">${Math.round(o.s)}% · ${trX(trCoef(o.s))}</b><small>${o.s>=99.5?"восстановлен":"полная через "+trHms((100-o.s)/5)}${f?" · к матчу "+Math.round(f.s)+"%":""}</small></span></div>`}).join("")}</div>`:"";
+ el.innerHTML=`<div class="box trh"><h3>Тренировки на стадионе</h3><small>До 3 игроков из стартового состава. Тренировка приносит монеты, но тратит 10% выносливости в час. На отдыхе она растёт на 5% в час.</small><div class="tfld">${act.length?'<i class="lane"></i>':'<span class="tfe"><small>Поле пустое. Выбери игрока.</small></span>'}${dots}</div>${act.map(slot).join("")}${emp.repeat(Math.max(0,3-act.length))}<div class="row" style="margin-top:14px"><div><small>Накоплено</small><br><b data-tot style="font-size:24px;letter-spacing:-1px">${CN}0</b></div></div><div class="trb"><button class="g" id="trall" ${act.length?"":"disabled"}>Завершить тренировку</button><button class="b" id="trcl" disabled>Забрать монеты</button></div></div>${restH}`;
+ trTick()}
+function trTick(){if(!$("#tr")||tab!=="st")return;let tot=0;
+ [...TRN.m.values()].filter(e=>e.training).forEach(e=>{const id=Number(e.player_id),o=trNow(id),q=s=>$(`#tr [${s}="${id}"]`);if(!q("data-sb"))return;
+  const b=q("data-sb");b.style.setProperty("--w",o.s+"%");b.style.setProperty("--c",trCol(o.s));
+  q("data-sp").textContent=`${Math.round(o.s)}% · очки ${trX(trCoef(o.s))}`;
+  q("data-tl").textContent=o.s>0?"ещё "+trHms(o.s/10):"выдохся: заверши, чтобы отдыхать";
+  q("data-pd").innerHTML=CN+o.pd;tot+=o.pd;const d=q("data-dt");d&&d.style.setProperty("--c",trCol(o.s))});
+ const t=$("#tr [data-tot]");if(t)t.innerHTML=CN+tot;const c=$("#trcl");if(c)c.disabled=tot<1||!!TRN.b}
+async function trAct(f){if(TRN.b)return;TRN.b=1;
+ try{const n=await f(),{data}=await sb.from("profiles").select("coins,last_collect").single();if(data){PF.coins=data.coins}coins(PF.coins);await trLoad();trDraw();if(n>0)toast(`<b>+${n} монет</b> с тренировки`)}
+ catch(e){alert(msg(e))}finally{TRN.b=0;trTick()}}
+function trPick(){const xi=trXi(),bn=LU.bn.filter(x=>x!=null);
+ if(!xi.length){modal('<div class="mw"><div class="box"><h3>Нет стартового состава</h3><small>Тренироваться могут только игроки стартового состава. Сначала расставь игроков.</small><button class="b" id="trsq" style="width:100%;margin-top:12px">К составу</button></div></div>');$("#trsq").onclick=()=>{closeM();tab="sq";view()};return}
+ const row=(id,lk)=>{const p=PL[id];if(!p)return"";const o=trNow(id),c=lk?1:o.tr?2:o.s<5?3:0;
+  return`<div class="pl tpk${c?" lk":""}" data-id="${id}" data-lock="${c}"><b class="rb r${rar(p.rating)}">${p.rating}</b><div class="pi"><div>${esc(p.name)}</div><small>${p.position} · ${esc(p.team)}</small><div class="stb"><i style="--w:${o.s}%;--c:${trCol(o.s)}"></i></div></div><span class="tmu">${["+"+o.rate+"/ч","резерв","идёт","устал"][c]}<small>${Math.round(o.s)}%</small></span></div>`};
+ modal(`<div class="mw"><div class="box"><h3>Кого отправить на тренировку?</h3><small>Только игроки стартового состава. Резерв заблокирован.</small><div id="tph" class="tw w" hidden></div><h3 class="trg">Стартовый состав</h3>${xi.map(id=>row(id,0)).join("")}${bn.length?`<h3 class="trg">Резерв · недоступно</h3>${bn.map(id=>row(id,1)).join("")}`:""}</div></div>`)}
+document.addEventListener("click",e=>{const t=e.target;
+ if(t.closest("[data-add]"))return trPick();
+ let b=t.closest("[data-stop]");if(b)return trAct(()=>rpc("train_stop",{p_player:+b.dataset.stop}));
+ if(t.closest("#trcl"))return trAct(()=>rpc("train_collect"));
+ if(t.closest("#trall"))return trAct(async()=>{let n=0;for(const x of [...TRN.m.values()].filter(x=>x.training))n+=await rpc("train_stop",{p_player:+x.player_id});return n});
+ b=t.closest(".tpk");if(!b)return;const c=+b.dataset.lock;
+ if(!c){closeM();return trAct(()=>rpc("train_start",{p_player:+b.dataset.id}))}
+ const h=$("#tph");h.textContent=["","Игрок в резерве, тренироваться могут только 11 из стартового состава. Поменяй состав на вкладке «Состав».","Этот игрок уже тренируется.","Игрок слишком устал: для тренировки нужно минимум 5% выносливости."][c];h.hidden=false;h.classList.remove("shk");void h.offsetWidth;h.classList.add("shk")});
+setInterval(trTick,1000);
 // ---------- карточка игрока ----------
 const PIL={age:"Возраст",foot:"Ведущая нога",height:"Рост",nationality:"Страна",appearances:"Матчи",minutes:"Минуты",goals:"Голы",assists:"Ассисты",clean_sheets:"Сухие матчи",yellow_cards:"Жёлтые",red_cards:"Красные",avg_rating:"Средняя оценка",value:"Стоимость"};
 async function pinfo(id,name){modal('<div class="mw na">'+LOAD+'</div>');

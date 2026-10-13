@@ -308,6 +308,9 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stro
 .zh{position:absolute;left:14px;bottom:12px;max-width:60%;color:rgba(255,255,255,.55);font-size:11.5px;pointer-events:none}
 .led{animation:ledp 2s ease-in-out infinite alternate}.sp{animation:ledp 1.2s ease-in-out infinite alternate}
 
+.zn{cursor:pointer}.zn .zf{transition:fill-opacity .3s}.zn.emp .zf{animation:zpl 2s ease-in-out infinite alternate}
+@keyframes zpl{from{fill-opacity:.03}to{fill-opacity:.17}}
+.zn:hover .zf{fill-opacity:.24}.ppl{pointer-events:none}.tfh{margin:12px 0 4px;padding:10px 12px;border-radius:var(--r1);background:rgba(var(--wh),.05);border:1px solid var(--ln);font-size:12.5px;color:var(--mu)}
 /* ---------- training ---------- */
 .trh small{display:block;margin-top:4px;color:var(--mu)}
 .tfld{position:relative;height:96px;border-radius:var(--r2);margin:14px 0 6px;overflow:hidden;border:1px solid var(--ln);background:var(--pitchbg) center/cover,linear-gradient(180deg,rgba(90,214,160,.14),rgba(90,214,160,.04))}
@@ -900,11 +903,11 @@ function scene(S){
  +pit+ln([[0,-70,0],[0,70,0]],"#ffffffb0")+`<polygon points="${ci2}" fill="none" stroke="#ffffffb0" stroke-width="1.6"/>`+ln([[-95,-70,0],[95,-70,0],[95,70,0],[-95,70,0],[-95,-70,0]],"#ffffffb0")
  +`<g class="hs${can(0)}" data-k="inc">${bx(95,-70,120,70,hR,pal)}${bx(-120,70,120,95,hF,pal)}${roof}${pin("inc",0,0,-95,hB+(a>=3?32:8),"Трибуны")}</g>`
  +`<g class="hs${can(1)}" data-k="cap">${ks}${pin("cap",1,135,-3,top+(C>=6?32:12),"Касса")}</g>`
- +tw(-128,100)+tw(128,100)+(T>=3?tree(150,100)+tree(-150,100):"")+fl}
+ +tw(-128,100)+tw(128,100)+(T>=3?tree(150,100)+tree(-150,100):"")+fl+TVIS()}
 function stad(){const m=$("#m"),S=PF.stadium,pe=pend(),mx=capH()*inc();
  m.innerHTML=`<div class="stg" id="stg"><svg class="sv" viewBox="0 0 700 450"><g id="cam">${scene(S)}</g></svg><div class="zc"><button data-z="1" aria-label="Приблизить">+</button><button data-z="-1" aria-label="Отдалить">−</button><button data-z="0" aria-label="Сбросить">⌂</button></div><small class="zh">Колесо или щипок: масштаб. Перетаскивание: движение.</small></div><div class="box"><h3>Касса стадиона</h3><div class="row"><b id="pe" style="font-size:26px;letter-spacing:-1px">${CN}${pe}</b><button class="b" id="cl" ${pe<1?"disabled":""}>Забрать</button></div><div class="bar"><i id="pb" style="width:${Math.min(100,pe/mx*100)}%"></i></div><small>Доход ${inc()}/ч · касса вмещает ${capH()} ч.</small></div><div id="tr"></div><div class="box"><h3>Твой стадион</h3>${UPG.map(u=>`<div class="row"><span>${u[1]} · ур. ${S[u[0]]}</span><b>${u[3]()}</b></div>`).join("")}<small>Нажимай на трибуны, кассу и музей, чтобы улучшить их. С каждым уровнем стадион меняется.</small></div>`;
  $("#cl").onclick=()=>act(()=>rpc("collect"));
- m.querySelectorAll(".hs").forEach(g=>g.onclick=()=>upg(g.dataset.k));camInit($("#stg"));trInit()}
+ m.querySelectorAll(".hs").forEach(g=>g.onclick=()=>upg(g.dataset.k));camInit($("#stg"));m.querySelectorAll("[data-zi]").forEach(g=>g.onclick=()=>zClick(+g.dataset.zi));trVis();trInit()}
 function tickStad(){const e=$("#pe");if(!e||!PF)return;const pe=pend(),mx=capH()*inc();e.innerHTML=CN+pe;$("#pb").style.width=Math.min(100,pe/mx*100)+"%";$("#cl").disabled=pe<1}
 function camInit(st){STAB&&STAB.abort();STAB=new AbortController();const o={signal:STAB.signal},svg=st.querySelector("svg"),cam=svg.querySelector("#cam"),pts=new Map();let moved=0,d0=1,k0=1;
  const ap=()=>{cam.setAttribute("transform",`translate(${CAM.x} ${CAM.y}) scale(${CAM.k})`);svg.querySelectorAll(".pin").forEach(p=>p.setAttribute("transform",`translate(${p.dataset.x} ${p.dataset.y}) scale(${1/CAM.k})`))},
@@ -951,9 +954,9 @@ function trDraw(){const el=$("#tr");if(!el)return;
    return`<div class="tsl"><b class="rb r${rar(p.rating)}">${p.rating}</b><div class="pi"><div>${esc(p.name)}</div><div class="stb"><i data-sb="${id}"></i></div><div class="tm"><span data-sp="${id}"></span><span data-tl="${id}"></span></div>${xi.includes(id)?"":'<div class="tw w">Сейчас в резерве: тренируется, но в старте не играет</div>'}${f?`<div class="tw${f.s<50?" d":f.s<80?" w":""}">К матчу (${trWhen(f.k)}): ${Math.round(f.s)}% · очки ${trX(trCoef(f.s))}</div>`:""}</div><div class="tr2"><b data-pd="${id}"></b><small>+${o.rate}/ч</small><button class="g" data-stop="${id}">Завершить</button></div></div>`},
   emp='<div class="tsl em" data-add><b>＋ Выбрать игрока</b><small>только из стартового состава</small></div>',
   restH=rest.length?`<div class="box"><h3>Выносливость и очки за матчи</h3><small>Очки игрока за матч умножаются на (0,5 + 0,5 × выносливость). Значение фиксируется в момент начала его матча.</small>${rest.map(id=>{const o=trNow(id),f=trFc(id);return`<div class="row"><span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(PL[id].name)}</span><span class="tmu"><b style="color:${trCol(o.s)}">${Math.round(o.s)}% · ${trX(trCoef(o.s))}</b><small>${o.s>=99.5?"восстановлен":"полная через "+trHms((100-o.s)/5)}${f?" · к матчу "+Math.round(f.s)+"%":""}</small></span></div>`}).join("")}</div>`:"";
- el.innerHTML=`<div class="box trh"><h3>Тренировки на стадионе</h3><small>До 3 игроков из стартового состава. Тренировка приносит монеты, но тратит 10% выносливости в час. На отдыхе она растёт на 5% в час.</small><div class="tfld">${act.length?'<i class="lane"></i>':'<span class="tfe"><small>Поле пустое. Выбери игрока.</small></span>'}${dots}</div>${act.map(slot).join("")}${emp.repeat(Math.max(0,3-act.length))}<div class="row" style="margin-top:14px"><div><small>Накоплено</small><br><b data-tot style="font-size:24px;letter-spacing:-1px">${CN}0</b></div></div><div class="trb"><button class="g" id="trall" ${act.length?"":"disabled"}>Завершить тренировку</button><button class="b" id="trcl" disabled>Забрать монеты</button></div></div>${restH}`;
- trTick()}
-function trTick(){if(!$("#tr")||tab!=="st")return;let tot=0;
+ el.innerHTML=`<div class="box trh"><h3>Тренировки на стадионе</h3><small>До 3 игроков из стартового состава. Тренировка приносит монеты, но тратит 10% выносливости в час. На отдыхе она растёт на 5% в час.</small><div class="tfh">⚽ Нажми на зону поля на стадионе выше, чтобы назначить игрока на тренировку. Нажми на занятую зону, чтобы завершить её.</div>${act.map(slot).join("")}${emp.repeat(Math.max(0,3-act.length))}<div class="row" style="margin-top:14px"><div><small>Накоплено</small><br><b data-tot style="font-size:24px;letter-spacing:-1px">${CN}0</b></div></div><div class="trb"><button class="g" id="trall" ${act.length?"":"disabled"}>Завершить тренировку</button><button class="b" id="trcl" disabled>Забрать монеты</button></div></div>${restH}`;
+ TZ.act=act;trVis();trTick()}
+function trTick(){if(!$("#tr")||tab!=="st")return;trVis();let tot=0;
  [...TRN.m.values()].filter(e=>e.training).forEach(e=>{const id=Number(e.player_id),o=trNow(id),q=s=>$(`#tr [${s}="${id}"]`);if(!q("data-sb"))return;
   const b=q("data-sb");b.style.setProperty("--w",o.s+"%");b.style.setProperty("--c",trCol(o.s));
   q("data-sp").textContent=`${Math.round(o.s)}% · очки ${trX(trCoef(o.s))}`;
@@ -976,6 +979,61 @@ document.addEventListener("click",e=>{const t=e.target;
  b=t.closest(".tpk");if(!b)return;const c=+b.dataset.lock;
  if(!c){closeM();return trAct(()=>rpc("train_start",{p_player:+b.dataset.id}))}
  const h=$("#tph");h.textContent=["","Игрок в резерве, тренироваться могут только 11 из стартового состава. Поменяй состав на вкладке «Состав».","Этот игрок уже тренируется.","Игрок слишком устал: для тренировки нужно минимум 5% выносливости."][c];h.hidden=false;h.classList.remove("shk");void h.offsetWidth;h.classList.add("shk")});
+// ---------- визуализация тренировок на поле стадиона ----------
+const TZ={act:[]},YC=[-46.5,0,46.5],ZCOL=["#c7f464","#6ad6ff","#ffb86b"],
+ QP=(x,y,z=0)=>[350+(x-y)*1.35,250+(x+y)*.7-z*1.1],
+ TV={P:[0,1,2].map(i=>({x:-30+i*30,y:YC[i],fx:1,ph:i*2,k:0,v:0})),b:{x:0,y:0,z:0},mode:"carry",h:0,c:0,cnt:0,fl:null,t:0,w:0,raf:0,last:0,root:null,hist:[],ord:""};
+function TVIS(){
+ const z=[0,1,2].map(i=>{const y0=YC[i]-23,y1=YC[i]+23,pt=[[-92,y0],[92,y0],[92,y1],[-92,y1]].map(p=>QP(...p).map(Math.round).join(",")).join(" ");
+  return`<g class="zn emp" id="zn${i}" data-zi="${i}"><polygon class="zf" points="${pt}" fill="${ZCOL[i]}" fill-opacity=".08" stroke="${ZCOL[i]}" stroke-opacity=".55" stroke-width="1.4" stroke-dasharray="5 4"/></g>`}).join("");
+ const pg=[[-95,-70],[95,-70],[95,70],[-95,70]].map(p=>QP(...p).map(Math.round).join(",")).join(" "),[cx,cy]=QP(0,0).map(Math.round);
+ const pl=[0,1,2].map(i=>`<g class="ppl" id="pp${i}" style="display:none"><ellipse rx="12" ry="5" fill="${ZCOL[i]}" opacity=".28"><animate attributeName="opacity" values=".15;.38;.15" dur="2s" repeatCount="indefinite"/></ellipse><ellipse id="ps${i}" rx="6.5" ry="2.6" fill="#000" opacity=".4"/><g id="pq${i}"><line id="ll${i}" stroke="#1b2230" stroke-width="3" stroke-linecap="round"/><line id="lr${i}" stroke="#1b2230" stroke-width="3" stroke-linecap="round"/><rect x="-5.5" y="-19" width="11" height="13" rx="4.5" fill="${ZCOL[i]}" stroke="#0a0b0e" stroke-opacity=".35"/><text id="pt${i}" y="-9.5" text-anchor="middle" font-size="7" font-weight="800" fill="#10160a" font-family="Onest,sans-serif">?</text><circle cy="-24" r="4.6" fill="#f0c9a2"/><path d="M-4.7 -24.5a4.7 4.7 0 0 1 9.4 0z" fill="#2a2018"/></g></g>`).join("");
+ const pins=[0,1,2].map(i=>{const[u,v]=QP(-60,YC[i],28);return`<g class="pin" data-x="${Math.round(u)}" data-y="${Math.round(v)-16}" data-zi="${i}" style="cursor:pointer"><g class="pn"><rect id="zr${i}" x="-52" y="-12" width="104" height="22" rx="11" fill="#0a0b0ed9" stroke="${ZCOL[i]}" stroke-opacity=".8"/><text id="zt${i}" y="3" text-anchor="middle" fill="#fff" font-size="11" font-weight="700" font-family="Onest,sans-serif">＋ Игрок</text></g></g>`}).join("");
+ return`<g id="pz"><defs><radialGradient id="pgl" cx=".5" cy=".5" r=".6"><stop offset="0" stop-color="#fff" stop-opacity=".2"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs><polygon points="${pg}" fill="url(#pgl)" pointer-events="none"/>${z}<g id="pl">${pl}</g><g class="ppl" id="pbl" style="display:none"><g id="ptr">${[0,1,2,3,4].map(i=>`<circle id="tr${i}" r="${2.6-i*.4}" fill="#fff" opacity="${.35-i*.06}"/>`).join("")}</g><ellipse id="pbs" rx="3.4" ry="1.5" fill="#000" opacity=".4"/><g id="pbb"><circle r="3.4" fill="#fff" stroke="#10131a" stroke-width=".8"/><path d="M0-1.6l1.5 1.1-.6 1.7h-1.8l-.6-1.7z" fill="#10131a"/></g></g>${pins}</g></g>`}
+function zClick(i){const id=TZ.act[i];if(!id||!PL[id])return trPick();
+ const p=PL[id],o=trNow(id);
+ modal(`<div class="mw"><div class="box"><h3>${esc(p.name)}</h3><small>${p.position} · ${esc(p.team)}</small><div class="row"><span>Выносливость</span><b style="color:${trCol(o.s)}">${Math.round(o.s)}%</b></div><div class="row"><span>Накоплено</span><b>${CN}${o.pd}</b></div><div class="row"><span>Доход</span><b>+${o.rate}/ч</b></div><button class="g" data-stop="${id}" style="width:100%;margin-top:10px">Завершить тренировку</button></div></div>`);
+ const b=document.querySelector(".mw [data-stop]");b&&b.addEventListener("click",()=>closeM())}
+function trVis(){const r=document.getElementById("pz");if(!r)return;
+ for(let i=0;i<3;i++){const id=TZ.act[i],z=r.querySelector("#zn"+i),t=r.querySelector("#zt"+i),p=id&&PL[id];if(!z)continue;
+  z.classList.toggle("emp",!p);const pg=z.querySelector("polygon");pg.setAttribute("stroke-dasharray",p?"0":"5 4");if(p)pg.setAttribute("fill-opacity",".1");else pg.removeAttribute("fill-opacity");
+  if(p){const o=trNow(id),n=(p.name.trim().split(/\s+/).pop()||"?");t.textContent=n.slice(0,9)+" · "+Math.round(o.s)+"%";const q=r.querySelector("#pt"+i);q.textContent=n[0].toUpperCase()}else t.textContent="＋ Игрок"}
+ if(!TV.raf){TV.last=0;TV.raf=requestAnimationFrame(tvLoop)}}
+function tvLoop(ts){const r=document.getElementById("pz");if(!r||tab!=="st"){TV.raf=0;return}
+ const dt=Math.min(.05,TV.last?(ts-TV.last)/1e3:.016);TV.last=ts;tvStep(dt,r);TV.raf=requestAnimationFrame(tvLoop)}
+function tvStep(dt,r){const n=TZ.act.filter(id=>PL[id]).length,P=TV.P,b=TV.b,$$=s=>r.querySelector(s);TV.t+=dt;const t=TV.t,bl=$$("#pbl");
+ for(let i=0;i<3;i++){const g=$$("#pp"+i);g&&(g.style.display=i<n?"":"none")}
+ if(!n){bl.style.display="none";return}
+ bl.style.display="";if(TV.h>=n)TV.h=0;
+ const cl=(v,a,c)=>Math.max(a,Math.min(c,v));
+ for(let i=0;i<n;i++){const p=P[i];let tx,ty,sp;
+  if(TV.fl&&TV.fl.r===i){tx=TV.fl.tx;ty=TV.fl.ty;sp=46}
+  else if(TV.mode==="carry"&&TV.h===i){tx=TV.dir*58;ty=YC[i]+8*Math.sin(t*1.3);sp=30}
+  else{tx=45*Math.sin(t*.4+i*2.1);ty=YC[i]+10*Math.sin(t*.7+i);sp=18}
+  const dx=tx-p.x,dy=ty-p.y,d=Math.hypot(dx,dy)||1,v=Math.min(sp,d*3.5);
+  p.x=cl(p.x+dx/d*v*dt,-88,88);p.y=cl(p.y+dy/d*v*dt,YC[i]-20,YC[i]+20);p.v+=(v-p.v)*Math.min(1,dt*8);
+  if(Math.abs(dx)>1)p.fx+=((dx>0?1:-1)-p.fx)*Math.min(1,dt*9);p.ph+=p.v*dt*.5;p.k=Math.max(0,p.k-dt)}
+ if(TV.mode==="carry"){const h=P[TV.h];if(TV.dir===undefined)TV.dir=1;TV.c+=dt;
+  b.x=h.x+h.fx*6;b.y=h.y+1;b.z=Math.abs(Math.sin(t*9))*2.2;
+  if(TV.c>1.2+(TV.cnt%2)*.5){TV.c=0;TV.cnt++;h.k=.28;const sh=n===1||TV.cnt%3===0;
+   if(sh){const dir=h.x>=0?1:-1,gx=dir*98,gy=(Math.random()-.5)*24,T=.65+Math.abs(gx-b.x)/260;TV.fl={x0:b.x,y0:b.y,tx:gx,ty:gy,u:0,T,ap:7,kind:"s",r:-1};TV.mode="fly"}
+   else{const rr=(TV.h+1+(n===3?Math.floor(Math.random()*2):0))%n,tx=cl((Math.random()-.5)*110,-80,80),ty=YC[rr]+(Math.random()-.5)*12,T=.85;TV.fl={x0:b.x,y0:b.y,tx,ty,u:0,T,ap:14,kind:"p",r:rr};TV.mode="fly"}}}
+ else if(TV.mode==="fly"){const f=TV.fl;f.u=Math.min(1,f.u+dt/f.T);const e=f.u;b.x=f.x0+(f.tx-f.x0)*e;b.y=f.y0+(f.ty-f.y0)*e;b.z=4*f.ap*e*(1-e)+2;
+  if(f.u>=1){if(f.kind==="p"){TV.h=f.r;TV.fl=null;TV.mode="carry";TV.c=0;TV.dir=Math.random()<.5?-1:1}else{TV.mode="net";TV.w=0;b.z=2}}}
+ else{TV.w+=dt;b.z=Math.max(0,2-TV.w*3);if(TV.w>.8){TV.fl=null;TV.h=Math.floor(Math.random()*n);TV.mode="carry";TV.c=0;TV.dir=Math.random()<.5?-1:1}}
+ // отрисовка
+ const ord=[...Array(n).keys()].sort((a,c)=>(P[a].x+P[a].y)-(P[c].x+P[c].y));const key=ord.join();
+ if(key!==TV.ord){TV.ord=key;const pl=$$("#pl");ord.forEach(i=>pl.appendChild($$("#pp"+i)))}
+ for(let i=0;i<n;i++){const p=P[i],[u,v]=QP(p.x,p.y),w=Math.sin(p.ph)*Math.min(1,p.v/12)*5,k=p.k>0?Math.sin(p.k/.28*3.14)*9:0;
+  $$("#pp"+i).setAttribute("transform",`translate(${u.toFixed(1)} ${v.toFixed(1)}) scale(${(1.1).toFixed(2)})`);
+  $$("#pq"+i).setAttribute("transform",`translate(0 ${(-Math.abs(Math.sin(p.ph))*1.4*Math.min(1,p.v/12)).toFixed(2)}) scale(${p.fx>0?1:-1},1)`);
+  const L=$$("#ll"+i),R=$$("#lr"+i);L.setAttribute("x1",-2);L.setAttribute("y1",-6);L.setAttribute("x2",(-2-w).toFixed(2));L.setAttribute("y2",0);
+  R.setAttribute("x1",2);R.setAttribute("y1",-6);R.setAttribute("x2",(2+w+k).toFixed(2));R.setAttribute("y2",-k*.25)}
+ const[bu,bv]=QP(b.x,b.y,b.z),[su,sv]=QP(b.x,b.y,0);
+ $$("#pbb").setAttribute("transform",`translate(${bu.toFixed(1)} ${(bv-3).toFixed(1)}) rotate(${(t*400%360).toFixed(0)})`);
+ $$("#pbs").setAttribute("cx",su.toFixed(1));$$("#pbs").setAttribute("cy",sv.toFixed(1));
+ TV.hist.push([bu,bv-3]);if(TV.hist.length>12)TV.hist.shift();
+ for(let i=0;i<5;i++){const c=$$("#tr"+i),q=TV.hist[TV.hist.length-1-(i+1)*2];if(c){if(q&&TV.mode==="fly"){c.setAttribute("cx",q[0].toFixed(1));c.setAttribute("cy",q[1].toFixed(1));c.style.display=""}else c.style.display="none"}}}
 setInterval(trTick,1000);
 // ---------- карточка игрока ----------
 const PIL={age:"Возраст",foot:"Ведущая нога",height:"Рост",nationality:"Страна",appearances:"Матчи",minutes:"Минуты",goals:"Голы",assists:"Ассисты",clean_sheets:"Сухие матчи",yellow_cards:"Жёлтые",red_cards:"Красные",avg_rating:"Средняя оценка",value:"Стоимость"};

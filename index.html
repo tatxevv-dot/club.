@@ -671,7 +671,7 @@ function ctReveal(cards,r){const p=PL[r.player_id],g=rar(p.rating);
 function sqSt(){document.querySelectorAll("[data-sq]").forEach(e=>{const o=trNow(+e.dataset.sq),c=trCol(o.s);e.style.setProperty("--w",o.s+"%");e.style.setProperty("--c",c);const t=e.querySelector("b");t&&(t.textContent=Math.round(o.s)+"%",t.style.color=c)})}
 function sqLoad(){sqSt();if(!TRN.ok||Date.now()-TRN.t>30000)trLoad().then(()=>{TRN.ok=1;tab==="sq"&&sqSt()}).catch(()=>{})}
 function squad(){setTimeout(sqLoad,0);const m=$("#m"),used=new Set([...LU.xi,...LU.bn].filter(x=>x!=null));
- const sl=(a,i,lab)=>{const id=a[i];return id==null?`<div class="slot" data-a="${a===LU.xi?"xi":"bn"}" data-i="${i}">+ ${lab}</div>`:card(id).replace('class="cd','data-a="'+(a===LU.xi?"xi":"bn")+'" data-i="'+i+'" class="cd').replace(/<\/div>$/,'<span class="sq" data-sq="'+id+'"><b></b><u></u></span></div>')};
+ const sl=(a,i,lab)=>{const id=a[i];return id==null?`<div class="slot" data-a="${a===LU.xi?"xi":"bn"}" data-i="${i}">+ ${lab}</div>`:card(id).replace('class="cd','data-a="'+(a===LU.xi?"xi":"bn")+'" data-i="'+i+'" class="cd').replace(/<\/div>$/,'<span class="sq" data-sq="'+id+'"><u></u></span></div>')};
  const L=(a,b)=>`<div class="line">${Array.from({length:b-a},(_,j)=>sl(LU.xi,a+j,SL[a+j])).join("")}</div>`;
  const full=!LU.xi.includes(null),xi=LU.xi.filter(x=>x!=null);
  m.innerHTML=`<div class="box"><b>${RND?`Тур ${RND}: состав открыт`:"Тур пока не открыт"}</b><br><small>${RK?"Закрытие: "+new Date(RK).toLocaleString("ru-RU",{weekday:"short",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}):"Ждём расписание"}</small></div>

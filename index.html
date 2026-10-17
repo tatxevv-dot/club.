@@ -445,6 +445,9 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stro
 .nws .bl{--s:34px;padding:16px 0}.fan .bl{--s:64px}
 .aov{position:absolute;inset:0;z-index:4;display:grid;place-items:center;background:rgba(var(--ab),.78);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);animation:fi .15s}
 .aov .bl{padding:0}
+#m.gw>*:not(.gwl){visibility:hidden}
+#m.gw{position:relative;min-height:60vh}
+#m.gw>.gwl{position:absolute;left:0;right:0;top:30vh;visibility:visible}
 /* ---------- motion ---------- */
 .mw:not(.na)>*{animation:up .38s var(--ease) both}.mw:not(.na)>:nth-child(2){animation-delay:.05s}.mw:not(.na)>:nth-child(3){animation-delay:.1s}.mw:not(.na)>:nth-child(4){animation-delay:.15s}.mw:not(.na)>:nth-child(n+5){animation-delay:.2s}
 .mt,.pl,.st{transition:background .2s,transform .15s var(--ease)}
@@ -636,7 +639,17 @@ function view(){document.body.classList.remove("mdt");if(tab!=="fx")unwatchMatch
   m.querySelectorAll(".op").forEach(b=>b.onclick=async()=>{try{b.disabled=true;const r=await rpc("open_pack",{p_tier:+b.dataset.i});await refresh();view();reveal(+b.dataset.i,r.pack_id,r.offer.map(Number))}catch(e){alert(msg(e))}});
   m.querySelectorAll(".rs").forEach(b=>b.onclick=()=>{const p=PEND.find(x=>x.id==b.dataset.id);choose(p.id,p.offer.map(Number),1)});PS&&contractWire()}
  if(tab==="sq")squad();
- if(tab==="fx")fixtures();if(tab==="lg")league();if(tab==="ss")stats()}
+ if(tab==="fx")fixtures();if(tab==="lg")league();if(tab==="ss")stats();
+ if(tab==="sq"||tab==="fx"&&!FXM)imgGate(m,tab)}
+let GT=0;
+/* Скрывает страницу (Состав / Туры), пока не загрузятся все фото игроков и логотипы команд */
+function imgGate(m,t){const my=++GT;m.classList.add("gw");let L=m.querySelector(":scope>.gwl");if(!L){L=document.createElement("div");L.className="bl gwl";L.innerHTML='<i class="mk"></i>';m.appendChild(L)}
+ const t0=Date.now();let ok=0;const done=()=>{if(my!==GT)return;clearInterval(iv);m.classList.remove("gw");const l=m.querySelector(":scope>.gwl");l&&l.remove()};
+ const iv=setInterval(()=>{if(my!==GT||tab!==t||FXM&&t==="fx"){clearInterval(iv);if(my===GT){m.classList.remove("gw");const l=m.querySelector(":scope>.gwl");l&&l.remove()}return}
+  const imgs=[...m.querySelectorAll("img.ph,img.tlg")];imgs.forEach(i=>{if(i.loading==="lazy")i.loading="eager"});
+  const busy=[...m.children].some(e=>e.classList.contains("bl")&&!e.classList.contains("gwl"))||m.querySelector(".box>.bl,#lfx>.bl,.rs~.bl")||imgs.some(i=>!(i.complete&&i.naturalWidth>0)&&i.isConnected);
+  if(Date.now()-t0>8000){done();return}
+  ok=busy?0:ok+1;if(ok>=2)done()},100)}
 async function act(f){try{await f();await refresh();view()}catch(e){alert(msg(e))}}
 function reveal(t,pid,offer){const b=Math.max(...offer.map(i=>rar(PL[i].rating)));
  const m=modal(`<div class="hero">${packEl(t)}</div><div class="burst"></div>${Array.from({length:16},(_,i)=>`<s style="--a:${i*22.5}deg;--d:${110+Math.random()*150|0}px"></s>`).join("")}`);

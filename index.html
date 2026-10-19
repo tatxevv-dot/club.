@@ -999,11 +999,13 @@ const ico=n=>`<svg class="i" viewBox="0 0 24 24">${IC[n]}</svg>`;
 let LD,STB="scorers",LTOP,PM={};
 const zcard=(p,x="")=>`<div class="cd zc r${rar(p.rating)}" ${x} role="button" tabindex="0" aria-label="Увеличить карточку: ${esc(p.name)}">${phImg(p)}<div class="o">${p.rating}</div><div class="n">${esc(p.name)}</div><div class="c">${p.position} · ${bdg(p.team,1)}${esc(p.team)}</div></div>`;
 async function ltop(){if(LTOP)return LTOP;try{const{data}=await sb.from("players").select("id,name,team,position,rating,last_change,photo").order("rating",{ascending:false}).limit(40);LTOP=(data||[]).filter(p=>p.photo);LTOP.forEach(p=>{PM[p.id]=p;PM[p.name]=p})}catch(e){LTOP=[]}return LTOP}
-function scatter(L){L.querySelectorAll(".pk,.pkh").forEach(e=>e.remove());if(!LTOP||!LTOP.length)return;
- const hero=new Set(((LD&&LD.stars)||[]).map(p=>p.id)),pool=LTOP.filter(p=>!hero.has(p.id));if(!pool.length)return;let k=0;const nx=()=>pool[(k++)%pool.length];
+function scatter(L){L.querySelectorAll(".pk,.pkh").forEach(e=>e.remove());
+ const hero=new Set(((LD&&LD.stars)||[]).slice(0,1).map(p=>p.id)),seen=new Set(),pool=[].concat(LTOP||[],(LD&&LD.risers)||[],(LD&&LD.fallers)||[],(LD&&LD.stars)||[]).map(p=>p.photo?p:Object.assign({},p,{photo:(PM[p.id]||PM[p.name]||{}).photo})).filter(p=>p&&p.id!=null&&p.name&&!hero.has(p.id)&&!seen.has(p.id)&&seen.add(p.id));if(!pool.length)return;let k=0;const nx=()=>pool[(k++)%pool.length];
  const ct=L.querySelector(".ctas");if(ct){const d=document.createElement("div");d.className="sc pkh";d.style.setProperty("--r","9deg");d.innerHTML=zcard(nx());ct.appendChild(d)}
  [["how","l",-11],["feat","r",9],["packs","l",12],["live","r",-8],["faq","l",10]].forEach(([id,side,rot])=>{const sec=L.querySelector("#"+id);if(!sec)return;const w=document.createElement("div");w.className="pk";w.innerHTML='<div class="sc '+side+'" style="--r:'+rot+'deg">'+zcard(nx())+'</div>';sec.after(w)});
- if("IntersectionObserver"in window){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{root:L,threshold:.2});L.querySelectorAll(".sc").forEach(x=>io.observe(x))}else L.querySelectorAll(".sc").forEach(x=>x.classList.add("in"))}
+ const show=el=>el.querySelectorAll(".sc").forEach(x=>x.classList.add("in"));
+ if("IntersectionObserver"in window){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){show(e.target);io.unobserve(e.target)}}),{root:L,threshold:0,rootMargin:"0px 0px -6% 0px"});L.querySelectorAll(".pk,.ctas").forEach(x=>io.observe(x))}else show(L);
+ setTimeout(()=>{const c=L.querySelector(".ctas");c&&show(c)},400)}
 function landing(){document.body.classList.remove("mdt","app");liveInit();$("#m").innerHTML="";const L=$("#lp");$("header").style.display="none";$("#nv").style.display="none";closeM();L.style.display="block";L.scrollTop=0;
  const cta=`<button class="b" data-a="1">Начать играть${ico("ar")}</button><button class="g" data-a="0">Войти</button>`,
  sk=LOAD,
@@ -1027,7 +1029,7 @@ function landing(){document.body.classList.remove("mdt","app");liveInit();$("#m"
  L.addEventListener("click",e=>zoom(e.target.closest(".cd.zc")));L.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){const c=e.target.closest(".cd.zc");if(c){e.preventDefault();zoom(c)}}});
  L.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{const t=L.querySelector("#"+b.dataset.go);t&&t.scrollIntoView({behavior:rm?"auto":"smooth"})});
  if("IntersectionObserver"in window){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{root:L,threshold:.08});L.querySelectorAll(".rvl").forEach(x=>io.observe(x))}else L.querySelectorAll(".rvl").forEach(x=>x.classList.add("in"));
- fillL(LD);rpc("landing_data").then(d=>{LD=d;fillL(d);if(LTOP)scatter(L)}).catch(()=>fillL(LD||{}));ltop().then(()=>{fillL(LD);scatter(L)})}
+ fillL(LD);rpc("landing_data").then(d=>{LD=d;fillL(d);scatter(L)}).catch(()=>fillL(LD||{}));ltop().then(()=>{fillL(LD);scatter(L)})}
 function fillL(D){if(!D||!$("#lcn"))return;const c=D.counts||{},nf=v=>v==null?"-":Number(v).toLocaleString("ru-RU"),lst=(a,f)=>a&&a.length?a.map(f).join(""):'<small class="emp">Пока нет данных</small>';
  $("#lfan").innerHTML=(D.stars||[]).map(p=>zcard(p.photo?p:Object.assign({},p,{photo:(PM[p.id]||PM[p.name]||{}).photo}))).join("");
  $("#lcn").innerHTML=[[c.users,"клубов в игре"],[c.players,"игроков в базе"],[c.played,"матчей сыграно"],[c.leagues,"лиг сообщества"]].map(a=>`<div class="stat"><b>${nf(a[0])}</b><span>${a[1]}</span></div>`).join("");

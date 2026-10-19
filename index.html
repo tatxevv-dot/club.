@@ -661,14 +661,15 @@ main.in>*,.mw:not(.na)>*{animation:none}
 .fh{font-size:13px;color:var(--mu);text-align:center;margin:0}
 .fh::before{content:"↑ ";}
 @media(max-width:899px){.lh{min-height:0;padding:44px 0 56px}.lh .lw{gap:36px}}
-.sc{position:absolute;z-index:3;transform:rotate(var(--r,0deg))}
-.sc .cd.zc{width:var(--w,60px);height:calc(var(--w,60px)*1.4);padding:5px;border-radius:9px}
-.sc .cd.zc .o{font-size:calc(var(--w,60px)*.3)}.sc .cd.zc .n{font-size:8px}.sc .cd.zc .o small{display:none}
-.sc .cd.zc:hover{transform:translateY(-6px) scale(1.12)}
+.sc{--w:48px;position:absolute;top:6px;z-index:3;transform:rotate(var(--r,0deg))}
+.sc .cd.zc{width:var(--w);height:calc(var(--w)*1.4);padding:5px;border-radius:9px}
+.sc .cd.zc .o{font-size:calc(var(--w)*.3)}.sc .cd.zc .n{font-size:8px}.sc .cd.zc .o small{display:none}
+.sc .cd.zc:hover{transform:translateY(-4px) scale(1.12)}
+.ctas>.sc{top:50%}
 .ctas{position:relative}
 .lh{overflow:visible}
 #lp section{position:relative}
-@media(min-width:900px){.sc .cd.zc{width:calc(var(--w,60px)*1.25);height:calc(var(--w,60px)*1.75)}.sc .cd.zc .n{font-size:10px}}
+@media(min-width:900px){.sc{--w:56px;top:10px}.sc .cd.zc .n{font-size:9px}}
 /* zoomed card */
 .czo{position:fixed;inset:0;z-index:40;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;background:rgba(255,255,255,.9);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);opacity:0;transition:opacity .25s;cursor:pointer}
 .czo.on{opacity:1}.czo p{font-size:13px;color:var(--mu);margin:0}
@@ -989,11 +990,10 @@ let LD,STB="scorers",LTOP,PM={};
 const zcard=(p,x="")=>`<div class="cd zc r${rar(p.rating)}" ${x} role="button" tabindex="0" aria-label="Увеличить карточку: ${esc(p.name)}">${phImg(p)}<div class="o">${p.rating}</div><div class="n">${esc(p.name)}</div><div class="c">${p.position} · ${bdg(p.team,1)}${esc(p.team)}</div></div>`;
 async function ltop(){if(LTOP)return LTOP;try{const{data}=await sb.from("players").select("id,name,team,position,rating,last_change,photo").order("rating",{ascending:false}).limit(40);LTOP=(data||[]).filter(p=>p.photo);LTOP.forEach(p=>{PM[p.id]=p;PM[p.name]=p})}catch(e){LTOP=[]}return LTOP}
 function scatter(L){L.querySelectorAll(".sc").forEach(e=>e.remove());if(!LTOP||!LTOP.length)return;
- const hero=new Set(((LD&&LD.stars)||[]).map(p=>p.id)),pool=LTOP.filter(p=>!hero.has(p.id)).sort(()=>Math.random()-.5),R=(a,b)=>a+Math.random()*(b-a),mk=(p,st)=>{const d=document.createElement("div");d.className="sc";d.style.cssText=st;d.innerHTML=zcard(p,`style="animation-delay:${R(0,2).toFixed(2)}s,${R(0,3).toFixed(2)}s"`);return d};
- const ct=L.querySelector(".ctas");if(ct&&pool.length)ct.appendChild(mk(pool.pop(),`--w:${Math.round(R(58,68))}px;--r:${Math.round(R(6,16))}deg;right:${Math.round(R(1,8))}%;top:50%;margin-top:-48px`));
- const secs=[...L.querySelectorAll("section.lh,section.sec")];
- secs.slice(0,-1).forEach((sc,i)=>{if(!pool.length)return;const left=i%2?R(5,40):R(52,86);sc.appendChild(mk(pool.pop(),`--w:${Math.round(R(52,72))}px;--r:${Math.round(R(-20,20))}deg;left:${left.toFixed(1)}%;bottom:-${Math.round(R(36,52))}px`))})}
-
+ const hero=new Set(((LD&&LD.stars)||[]).map(p=>p.id)),pool=LTOP.filter(p=>!hero.has(p.id)),mk=(p,st)=>{const d=document.createElement("div");d.className="sc";d.style.cssText=st;d.innerHTML=zcard(p);return d};
+ let k=0;const ct=L.querySelector(".ctas");if(ct&&pool[k])ct.appendChild(mk(pool[k++],"--w:62px;--r:9deg;right:4%;top:50%;margin-top:-43px"));
+ const spots=[["how",8,-10],["feat",20,8],["packs",6,-7],["live",16,11],["faq",9,-9]];
+ spots.forEach(([id,rt,rot])=>{const sc=L.querySelector("#"+id);if(sc&&pool[k])sc.appendChild(mk(pool[k++],`--r:${rot}deg;right:${rt}%`))})}
 function landing(){document.body.classList.remove("mdt","app");liveInit();$("#m").innerHTML="";const L=$("#lp");$("header").style.display="none";$("#nv").style.display="none";closeM();L.style.display="block";L.scrollTop=0;
  const cta=`<button class="b" data-a="1">Начать играть${ico("ar")}</button><button class="g" data-a="0">Войти</button>`,
  sk=LOAD,

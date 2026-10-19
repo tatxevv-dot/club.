@@ -663,7 +663,11 @@ main.in>*,.mw:not(.na)>*{animation:none}
 @media(max-width:899px){.lh{min-height:0;padding:44px 0 56px}.lh .lw{gap:36px}}
 .pk{position:relative;height:44px;z-index:2}
 .sc{--w:min(27vw,112px);--o:0px;position:absolute;z-index:2;width:var(--w);container-type:inline-size;opacity:0;transition:transform .9s var(--ease),opacity .6s}
-.sc.in{opacity:1;--o:0px}
+.sc.in{opacity:.82;--o:0px}
+/* единый эффект просвета для всех разбросанных карточек */
+.sc .cd.zc.r0{background:linear-gradient(165deg,rgba(255,255,255,.14),rgba(255,255,255,.04))}
+.sc .cd.zc.r3{background:linear-gradient(165deg,rgba(247,242,228,.86),rgba(220,210,176,.8) 68%,rgba(196,182,137,.76))}
+.sc .cd.zc{-webkit-backdrop-filter:none;backdrop-filter:none}
 .pk .sc{top:calc(22px - var(--w)*.7)}
 .sc.l{left:calc(var(--w)*-.3);transform:translateX(-90%) rotate(var(--r,0deg))}.sc.r{right:calc(var(--w)*-.3);transform:translateX(90%) rotate(var(--r,0deg))}
 .sc.l.in,.sc.r.in{transform:rotate(var(--r,0deg))}

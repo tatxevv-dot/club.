@@ -661,14 +661,22 @@ main.in>*,.mw:not(.na)>*{animation:none}
 .fh{font-size:13px;color:var(--mu);text-align:center;margin:0}
 .fh::before{content:"↑ ";}
 @media(max-width:899px){.lh{min-height:0;padding:44px 0 56px}.lh .lw{gap:36px}}
-.shelf{position:relative;height:210px}
-.shelf .lw{position:relative;height:100%}
-.sc{--w:min(15vw,62px);position:absolute;left:var(--x);top:var(--t);z-index:1;width:calc(var(--w)*var(--s,1));container-type:inline-size;transform:rotate(var(--r,0deg))}
+.pk{position:relative;height:0;z-index:2}
+.sc{--w:min(16vw,64px);--o:0px;position:absolute;z-index:2;width:var(--w);container-type:inline-size;opacity:0;transition:transform .9s var(--ease),opacity .6s}
+.sc.in{opacity:1;--o:0px}
+.pk .sc{top:calc(var(--w)*-.7)}
+.sc.l{left:calc(var(--w)*-.42);transform:translateX(-70%) rotate(var(--r,0deg))}.sc.r{right:calc(var(--w)*-.42);transform:translateX(70%) rotate(var(--r,0deg))}
+.sc.l.in,.sc.r.in{transform:rotate(var(--r,0deg))}
+.pkh{top:50%;right:calc(var(--w)*-.42 - 20px);margin-top:calc(var(--w)*-.7);--w:min(17vw,68px);transform:translateX(70%) rotate(var(--r,0deg))}
+.pkh.in{transform:rotate(var(--r,0deg))}
 .sc .cd.zc{width:100%;height:auto;aspect-ratio:5/7;padding:7cqw 7cqw 6cqw;border-radius:12cqw}
 .sc .cd.zc .o{font-size:30cqw}.sc .cd.zc .n{font-size:14cqw}.sc .cd.zc .o small{display:none}
 .sc .cd.zc:hover{transform:translateY(-6px) scale(1.1)}
-.shelf+.sec{border-top:0}
-@media(min-width:900px){.shelf{height:290px}.sc{--w:92px}}
+@media(min-width:900px){.sc{--w:92px}.pkh{display:none}}
+/* hero: one card on desktop, none on phone (peek card instead) */
+.lh .rc2{display:none}
+@media(min-width:900px){.lh .rc2{display:flex}#lfan{justify-content:center;max-width:none}#lfan .cd.zc{flex:none;width:200px;height:280px;max-width:none;aspect-ratio:auto;margin:0;padding:16px;border-radius:18px;rotate:6deg}#lfan .cd.zc:nth-child(n+2){display:none}#lfan .cd.zc .o{font-size:58px}#lfan .cd.zc .n{font-size:22px}#lfan .cd.zc .c{display:block;font-size:13px}#lfan .cd.zc .o small{font-size:13px}}
+@media(prefers-reduced-motion:reduce){.sc{transition:none}}
 .ctas{position:relative}
 .lh{overflow:visible}
 #lp section{position:relative}
@@ -991,21 +999,17 @@ const ico=n=>`<svg class="i" viewBox="0 0 24 24">${IC[n]}</svg>`;
 let LD,STB="scorers",LTOP,PM={};
 const zcard=(p,x="")=>`<div class="cd zc r${rar(p.rating)}" ${x} role="button" tabindex="0" aria-label="Увеличить карточку: ${esc(p.name)}">${phImg(p)}<div class="o">${p.rating}</div><div class="n">${esc(p.name)}</div><div class="c">${p.position} · ${bdg(p.team,1)}${esc(p.team)}</div></div>`;
 async function ltop(){if(LTOP)return LTOP;try{const{data}=await sb.from("players").select("id,name,team,position,rating,last_change,photo").order("rating",{ascending:false}).limit(40);LTOP=(data||[]).filter(p=>p.photo);LTOP.forEach(p=>{PM[p.id]=p;PM[p.name]=p})}catch(e){LTOP=[]}return LTOP}
-function scatter(L){L.querySelectorAll(".shelf").forEach(e=>e.remove());if(!LTOP||!LTOP.length)return;
- const hero=new Set(((LD&&LD.stars)||[]).map(p=>p.id)),pool=LTOP.filter(p=>!hero.has(p.id));if(!pool.length)return;let k=0;
- const B=[["how",[[4,6,-9,1],[24,54,7,.9],[44,4,5,1.05],[62,56,-8,1],[80,8,10,.95]]],
-  ["feat",[[10,30,-6,1.1],[34,2,8,.95],[58,50,-9,1.05],[80,12,6,1]]],
-  ["packs",[[2,54,8,.9],[18,4,-7,1],[36,58,-5,.95],[52,6,9,1],[70,54,-8,.95],[85,4,6,.9]]],
-  ["live",[[6,12,-8,1.05],[26,56,6,.95],[46,6,-5,1],[66,52,9,1],[82,10,-7,.95]]],
-  ["faq",[[14,52,7,1],[34,6,-9,1.05],[58,54,-6,.95],[78,8,8,1]]]];
- B.forEach(([id,cs])=>{const sec=L.querySelector("#"+id);if(!sec)return;const sh=document.createElement("div");sh.className="shelf";sh.setAttribute("aria-label","Карточки игроков");
-  sh.innerHTML='<div class="lw">'+cs.map(c=>'<div class="sc" style="--x:'+c[0]+'%;--t:'+c[1]+'%;--r:'+c[2]+'deg;--s:'+c[3]+'">'+zcard(pool[(k++)%pool.length])+'</div>').join("")+'</div>';sec.after(sh)})}
+function scatter(L){L.querySelectorAll(".pk,.pkh").forEach(e=>e.remove());if(!LTOP||!LTOP.length)return;
+ const hero=new Set(((LD&&LD.stars)||[]).map(p=>p.id)),pool=LTOP.filter(p=>!hero.has(p.id));if(!pool.length)return;let k=0;const nx=()=>pool[(k++)%pool.length];
+ const ct=L.querySelector(".ctas");if(ct){const d=document.createElement("div");d.className="sc pkh";d.style.setProperty("--r","9deg");d.innerHTML=zcard(nx());ct.appendChild(d)}
+ [["how","l",-11],["feat","r",9],["packs","l",12],["live","r",-8],["faq","l",10]].forEach(([id,side,rot])=>{const sec=L.querySelector("#"+id);if(!sec)return;const w=document.createElement("div");w.className="pk";w.innerHTML='<div class="sc '+side+'" style="--r:'+rot+'deg">'+zcard(nx())+'</div>';sec.after(w)});
+ if("IntersectionObserver"in window){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{root:L,threshold:.2});L.querySelectorAll(".sc").forEach(x=>io.observe(x))}else L.querySelectorAll(".sc").forEach(x=>x.classList.add("in"))}
 function landing(){document.body.classList.remove("mdt","app");liveInit();$("#m").innerHTML="";const L=$("#lp");$("header").style.display="none";$("#nv").style.display="none";closeM();L.style.display="block";L.scrollTop=0;
  const cta=`<button class="b" data-a="1">Начать играть${ico("ar")}</button><button class="g" data-a="0">Войти</button>`,
  sk=LOAD,
  ss=Array.from({length:4},()=>'<div class="stat"><b>&nbsp;</b><span>&nbsp;</span></div>').join("");
  L.innerHTML=`<div class="lb"><div class="lw"><div class="lgo"><i class="mk"></i>Club</div><nav class="lnk" aria-label="Разделы"><button class="lk" data-go="how">Как играть</button><button class="lk" data-go="feat">Возможности</button><button class="lk" data-go="packs">Паки</button><button class="lk" data-go="live">Лиги и статы</button><button class="lk" data-go="faq">Вопросы</button></nav><div class="lbb"><button class="g" data-a="0">Войти</button><button class="b" data-a="1">Начать играть</button></div></div></div>
-<section class="lh"><div class="lw"><div class="lc"><span class="ey">Fantasy-футбол · Английская Премьер-лига</span><h1>Собери клуб мечты из звёзд АПЛ</h1><p class="lead">Открывай паки с реальными игроками, выставляй состав на каждый тур и зарабатывай очки за настоящие матчи. Соревнуйся с друзьями в частных лигах и поднимайся в общем рейтинге.</p><div class="ctas"><button class="b" data-a="1">Начать играть${ico("ar")}</button><button class="g" data-go="how">Как это работает</button></div><ul class="chk"><li>Бесплатно</li><li>Без карты и скачивания</li><li>Старт за 2 минуты</li></ul></div><div class="rc2"><div class="fan" id="lfan">${sk}</div><p class="fh">Нажми на карточку, чтобы рассмотреть</p></div></div></section>
+<section class="lh"><div class="lw"><div class="lc"><span class="ey">Fantasy-футбол · Английская Премьер-лига</span><h1>Собери клуб мечты из звёзд АПЛ</h1><p class="lead">Открывай паки с реальными игроками, выставляй состав на каждый тур и зарабатывай очки за настоящие матчи. Соревнуйся с друзьями в частных лигах и поднимайся в общем рейтинге.</p><div class="ctas"><button class="b" data-a="1">Начать играть${ico("ar")}</button><button class="g" data-go="how">Как это работает</button></div><ul class="chk"><li>Бесплатно</li><li>Без карты и скачивания</li><li>Старт за 2 минуты</li></ul></div><div class="rc2"><div class="fan" id="lfan">${sk}</div></div></div></section>
 <section class="sec" id="how"><div class="lw"><div class="sh rvl"><span class="ey">Как это работает</span><h2>От первого пака до первой победы</h2><p>Четыре шага. Всё остальное игра подскажет сама.</p></div><div class="stp">${[["01","Создай клуб","Выбери ник и капитана. Сразу получаешь ещё 15 игроков, чтобы собрать первый состав."],["02","Открывай паки","Бронза, Серебро и Золото. Из 10 карточек выбираешь 3 лучших для своей коллекции."],["03","Ставь состав","11 игроков на поле, запас на скамейке и капитан, который приносит ×2 очков."],["04","Набирай очки","Игроки получают очки за голы, ассисты и игру в реальных матчах тура."]].map((s,i)=>`<div class="stc rvl" style="transition-delay:${i*70}ms"><b>${s[0]}</b><h3>${s[1]}</h3><p>${s[2]}</p></div>`).join("")}</div></div></section>
 <section class="sec" id="feat"><div class="lw"><div class="sh rvl"><span class="ey">Возможности</span><h2>Больше, чем просто выбор состава</h2><p>Клуб растёт вместе с тобой: коллекция, стадион, тренировки и соревнования с друзьями.</p></div><div class="fgr">${[["pk","Коллекция карточек","Игроки пяти уровней редкости с рейтингом от реальной формы. Повторы остаются копиями."],["sq","Тактика и капитан","Расставляй схему по позициям и выбирай капитана на каждый тур."],["cal","Реальные туры","Очки считаются по настоящим матчам АПЛ. Расписание и результаты внутри игры."],["tr","Лиги с друзьями","Создай частную лигу, отправь код и сравнивайтесь в личной таблице."],["sh","Свой стадион","Трибуны, касса и музей приносят монеты каждый час и повышают шанс на редких игроков."],["up","Контракты и тренировки","Обменивай 5 карточек на игрока сильнее и прокачивай состав на тренировках."]].map((f,i)=>`<div class="fc2 rvl" style="transition-delay:${(i%3)*70}ms"><div class="fi">${ico(f[0])}</div><h3>${f[1]}</h3><p>${f[2]}</p></div>`).join("")}</div></div></section>
 <section class="sec" id="packs"><div class="lw"><div class="split"><div class="sh rvl"><span class="ey">Паки</span><h2>Три уровня паков, каждый открывает удачу</h2><p>В каждом паке 10 игроков. Ты выбираешь 3 лучших, остальные не пропадают зря: лимиты обновляются, а лишние карточки можно отдать в контракт.</p><p>Чем выше пак, тем больше шанс на игроков с рейтингом 90+.</p></div><div class="pkr rvl">${PKS.map((p,i)=>`<div class="pkc2">${packEl(i)}<b>${p[0]}</b><small>${CN}${p[1]}</small></div>`).join("")}</div></div></div></section>

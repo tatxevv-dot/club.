@@ -661,15 +661,14 @@ main.in>*,.mw:not(.na)>*{animation:none}
 .fh{font-size:13px;color:var(--mu);text-align:center;margin:0}
 .fh::before{content:"↑ ";}
 @media(max-width:899px){.lh{min-height:0;padding:44px 0 56px}.lh .lw{gap:36px}}
-.shelf{padding:34px 0;border-top:1px solid transparent}
-.shelf .lw{position:relative;display:flex;justify-content:center;align-items:center;gap:12px}
-.shelf .lw::before{content:"";position:absolute;left:20px;right:20px;top:50%;height:1px;background:var(--ln)}
-.sc{position:relative;z-index:1;flex:1 1 0;max-width:min(var(--mw,84px),22vw);container-type:inline-size;transform:translateY(var(--y,0)) rotate(var(--r,0deg))}
+.shelf{position:relative;height:210px}
+.shelf .lw{position:relative;height:100%}
+.sc{--w:min(15vw,62px);position:absolute;left:var(--x);top:var(--t);z-index:1;width:calc(var(--w)*var(--s,1));container-type:inline-size;transform:rotate(var(--r,0deg))}
 .sc .cd.zc{width:100%;height:auto;aspect-ratio:5/7;padding:7cqw 7cqw 6cqw;border-radius:12cqw}
 .sc .cd.zc .o{font-size:30cqw}.sc .cd.zc .n{font-size:14cqw}.sc .cd.zc .o small{display:none}
-.sc .cd.zc:hover{transform:translateY(-6px) scale(1.08)}
+.sc .cd.zc:hover{transform:translateY(-6px) scale(1.1)}
 .shelf+.sec{border-top:0}
-@media(min-width:900px){.shelf{padding:48px 0}.shelf .lw{gap:22px}.sc{max-width:var(--mw,84px)}}
+@media(min-width:900px){.shelf{height:290px}.sc{--w:92px}}
 .ctas{position:relative}
 .lh{overflow:visible}
 #lp section{position:relative}
@@ -994,9 +993,13 @@ const zcard=(p,x="")=>`<div class="cd zc r${rar(p.rating)}" ${x} role="button" t
 async function ltop(){if(LTOP)return LTOP;try{const{data}=await sb.from("players").select("id,name,team,position,rating,last_change,photo").order("rating",{ascending:false}).limit(40);LTOP=(data||[]).filter(p=>p.photo);LTOP.forEach(p=>{PM[p.id]=p;PM[p.name]=p})}catch(e){LTOP=[]}return LTOP}
 function scatter(L){L.querySelectorAll(".shelf").forEach(e=>e.remove());if(!LTOP||!LTOP.length)return;
  const hero=new Set(((LD&&LD.stars)||[]).map(p=>p.id)),pool=LTOP.filter(p=>!hero.has(p.id));if(!pool.length)return;let k=0;
- const B=[["how",84,[10,3,-6,3,10],[-9,-4,0,4,9]],["feat",104,[-8,10,-6],[-7,5,-4]],["packs",78,[-8,8,-8,8,-8,8],[-8,6,-5,8,-6,5]],["live",92,[8,-6,8,-6],[6,-5,5,-6]],["faq",84,[-6,6,-10,6,-6],[-6,5,-2,-5,7]]];
- B.forEach(([id,mw,ys,rs])=>{const sec=L.querySelector("#"+id);if(!sec)return;const sh=document.createElement("div");sh.className="shelf";sh.setAttribute("aria-label","Карточки игроков");
-  sh.innerHTML='<div class="lw" style="--mw:'+mw+'px">'+ys.map((y,i)=>'<div class="sc" style="--y:'+y+'%;--r:'+rs[i]+'deg">'+zcard(pool[(k++)%pool.length])+'</div>').join("")+'</div>';sec.after(sh)})}
+ const B=[["how",[[4,6,-9,1],[24,54,7,.9],[44,4,5,1.05],[62,56,-8,1],[80,8,10,.95]]],
+  ["feat",[[10,30,-6,1.1],[34,2,8,.95],[58,50,-9,1.05],[80,12,6,1]]],
+  ["packs",[[2,54,8,.9],[18,4,-7,1],[36,58,-5,.95],[52,6,9,1],[70,54,-8,.95],[85,4,6,.9]]],
+  ["live",[[6,12,-8,1.05],[26,56,6,.95],[46,6,-5,1],[66,52,9,1],[82,10,-7,.95]]],
+  ["faq",[[14,52,7,1],[34,6,-9,1.05],[58,54,-6,.95],[78,8,8,1]]]];
+ B.forEach(([id,cs])=>{const sec=L.querySelector("#"+id);if(!sec)return;const sh=document.createElement("div");sh.className="shelf";sh.setAttribute("aria-label","Карточки игроков");
+  sh.innerHTML='<div class="lw">'+cs.map(c=>'<div class="sc" style="--x:'+c[0]+'%;--t:'+c[1]+'%;--r:'+c[2]+'deg;--s:'+c[3]+'">'+zcard(pool[(k++)%pool.length])+'</div>').join("")+'</div>';sec.after(sh)})}
 function landing(){document.body.classList.remove("mdt","app");liveInit();$("#m").innerHTML="";const L=$("#lp");$("header").style.display="none";$("#nv").style.display="none";closeM();L.style.display="block";L.scrollTop=0;
  const cta=`<button class="b" data-a="1">Начать играть${ico("ar")}</button><button class="g" data-a="0">Войти</button>`,
  sk=LOAD,

@@ -661,15 +661,18 @@ main.in>*,.mw:not(.na)>*{animation:none}
 .fh{font-size:13px;color:var(--mu);text-align:center;margin:0}
 .fh::before{content:"↑ ";}
 @media(max-width:899px){.lh{min-height:0;padding:44px 0 56px}.lh .lw{gap:36px}}
-.sc{--w:48px;position:absolute;top:6px;z-index:3;transform:rotate(var(--r,0deg))}
-.sc .cd.zc{width:var(--w);height:calc(var(--w)*1.4);padding:5px;border-radius:9px}
-.sc .cd.zc .o{font-size:calc(var(--w)*.3)}.sc .cd.zc .n{font-size:8px}.sc .cd.zc .o small{display:none}
-.sc .cd.zc:hover{transform:translateY(-4px) scale(1.12)}
-.ctas>.sc{top:50%}
+.shelf{padding:34px 0;border-top:1px solid transparent}
+.shelf .lw{position:relative;display:flex;justify-content:center;align-items:center;gap:12px}
+.shelf .lw::before{content:"";position:absolute;left:20px;right:20px;top:50%;height:1px;background:var(--ln)}
+.sc{position:relative;z-index:1;flex:1 1 0;max-width:min(var(--mw,84px),22vw);container-type:inline-size;transform:translateY(var(--y,0)) rotate(var(--r,0deg))}
+.sc .cd.zc{width:100%;height:auto;aspect-ratio:5/7;padding:7cqw 7cqw 6cqw;border-radius:12cqw}
+.sc .cd.zc .o{font-size:30cqw}.sc .cd.zc .n{font-size:14cqw}.sc .cd.zc .o small{display:none}
+.sc .cd.zc:hover{transform:translateY(-6px) scale(1.08)}
+.shelf+.sec{border-top:0}
+@media(min-width:900px){.shelf{padding:48px 0}.shelf .lw{gap:22px}.sc{max-width:var(--mw,84px)}}
 .ctas{position:relative}
 .lh{overflow:visible}
 #lp section{position:relative}
-@media(min-width:900px){.sc{--w:56px;top:10px}.sc .cd.zc .n{font-size:9px}}
 /* zoomed card */
 .czo{position:fixed;inset:0;z-index:40;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;background:rgba(255,255,255,.9);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);opacity:0;transition:opacity .25s;cursor:pointer}
 .czo.on{opacity:1}.czo p{font-size:13px;color:var(--mu);margin:0}
@@ -989,11 +992,11 @@ const ico=n=>`<svg class="i" viewBox="0 0 24 24">${IC[n]}</svg>`;
 let LD,STB="scorers",LTOP,PM={};
 const zcard=(p,x="")=>`<div class="cd zc r${rar(p.rating)}" ${x} role="button" tabindex="0" aria-label="Увеличить карточку: ${esc(p.name)}">${phImg(p)}<div class="o">${p.rating}</div><div class="n">${esc(p.name)}</div><div class="c">${p.position} · ${bdg(p.team,1)}${esc(p.team)}</div></div>`;
 async function ltop(){if(LTOP)return LTOP;try{const{data}=await sb.from("players").select("id,name,team,position,rating,last_change,photo").order("rating",{ascending:false}).limit(40);LTOP=(data||[]).filter(p=>p.photo);LTOP.forEach(p=>{PM[p.id]=p;PM[p.name]=p})}catch(e){LTOP=[]}return LTOP}
-function scatter(L){L.querySelectorAll(".sc").forEach(e=>e.remove());if(!LTOP||!LTOP.length)return;
- const hero=new Set(((LD&&LD.stars)||[]).map(p=>p.id)),pool=LTOP.filter(p=>!hero.has(p.id)),mk=(p,st)=>{const d=document.createElement("div");d.className="sc";d.style.cssText=st;d.innerHTML=zcard(p);return d};
- let k=0;const ct=L.querySelector(".ctas");if(ct&&pool[k])ct.appendChild(mk(pool[k++],"--w:62px;--r:9deg;right:4%;top:50%;margin-top:-43px"));
- const spots=[["how",8,-10],["feat",20,8],["packs",6,-7],["live",16,11],["faq",9,-9]];
- spots.forEach(([id,rt,rot])=>{const sc=L.querySelector("#"+id);if(sc&&pool[k])sc.appendChild(mk(pool[k++],`--r:${rot}deg;right:${rt}%`))})}
+function scatter(L){L.querySelectorAll(".shelf").forEach(e=>e.remove());if(!LTOP||!LTOP.length)return;
+ const hero=new Set(((LD&&LD.stars)||[]).map(p=>p.id)),pool=LTOP.filter(p=>!hero.has(p.id));if(!pool.length)return;let k=0;
+ const B=[["how",84,[10,3,-6,3,10],[-9,-4,0,4,9]],["feat",104,[-8,10,-6],[-7,5,-4]],["packs",78,[-8,8,-8,8,-8,8],[-8,6,-5,8,-6,5]],["live",92,[8,-6,8,-6],[6,-5,5,-6]],["faq",84,[-6,6,-10,6,-6],[-6,5,-2,-5,7]]];
+ B.forEach(([id,mw,ys,rs])=>{const sec=L.querySelector("#"+id);if(!sec)return;const sh=document.createElement("div");sh.className="shelf";sh.setAttribute("aria-label","Карточки игроков");
+  sh.innerHTML='<div class="lw" style="--mw:'+mw+'px">'+ys.map((y,i)=>'<div class="sc" style="--y:'+y+'%;--r:'+rs[i]+'deg">'+zcard(pool[(k++)%pool.length])+'</div>').join("")+'</div>';sec.after(sh)})}
 function landing(){document.body.classList.remove("mdt","app");liveInit();$("#m").innerHTML="";const L=$("#lp");$("header").style.display="none";$("#nv").style.display="none";closeM();L.style.display="block";L.scrollTop=0;
  const cta=`<button class="b" data-a="1">Начать играть${ico("ar")}</button><button class="g" data-a="0">Войти</button>`,
  sk=LOAD,

@@ -648,8 +648,8 @@ main.in>*,.mw:not(.na)>*{animation:none}
 /* ---------- landing v4: small glowing cards ---------- */
 .lh .rc2{align-items:center;gap:18px}
 .lh .fan,#lfan{pointer-events:auto;flex:none;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:12px;width:100%;padding:12px 0}
-.cd.zc{--gl:rgba(110,120,140,.5);flex:none;width:80px;height:112px;max-width:none;aspect-ratio:auto;margin:0;padding:8px 8px 7px;border-radius:12px;cursor:pointer;animation:cdg 3s ease-in-out infinite,cdb 4.5s ease-in-out infinite;transition:transform .25s var(--ease)}
-.cd.zc.r3{--gl:rgba(255,196,60,.7)}.cd.zc.r2{--gl:rgba(150,120,255,.55)}
+.cd.zc{--gl:rgba(140,152,180,.6);flex:none;width:80px;height:112px;max-width:none;aspect-ratio:auto;margin:0;padding:8px 8px 7px;border-radius:12px;cursor:pointer;animation:cdg 3s ease-in-out infinite,cdb 4.5s ease-in-out infinite;transition:transform .25s var(--ease)}
+.cd.zc.r1,.czt .cd.r1{--gl:rgba(96,156,240,.7)}.cd.zc.r2,.czt .cd.r2{--gl:rgba(240,176,40,.75)}.cd.zc.r3,.czt .cd.r3{--gl:rgba(222,186,96,.8)}.czt .cd.r0{--gl:rgba(140,152,180,.6)}
 .cd.zc:hover{transform:translateY(-8px) scale(1.08);animation-play-state:paused,paused;box-shadow:0 0 26px 4px var(--gl)}
 .cd.zc:active{transform:scale(.96)}
 .cd.zc .o{font-size:24px}.cd.zc .n{font-size:11px}.cd.zc .c{display:none}.cd.zc .o small{font-size:9px}
@@ -661,18 +661,18 @@ main.in>*,.mw:not(.na)>*{animation:none}
 .fh{font-size:13px;color:var(--mu);text-align:center;margin:0}
 .fh::before{content:"↑ ";}
 @media(max-width:899px){.lh{min-height:0;padding:44px 0 56px}.lh .lw{gap:36px}}
-.pk{position:relative;height:0;z-index:2}
-.sc{--w:min(16vw,64px);--o:0px;position:absolute;z-index:2;width:var(--w);container-type:inline-size;opacity:0;transition:transform .9s var(--ease),opacity .6s}
+.pk{position:relative;height:44px;z-index:2}
+.sc{--w:min(27vw,112px);--o:0px;position:absolute;z-index:2;width:var(--w);container-type:inline-size;opacity:0;transition:transform .9s var(--ease),opacity .6s}
 .sc.in{opacity:1;--o:0px}
-.pk .sc{top:calc(var(--w)*-.7)}
-.sc.l{left:calc(var(--w)*-.42);transform:translateX(-70%) rotate(var(--r,0deg))}.sc.r{right:calc(var(--w)*-.42);transform:translateX(70%) rotate(var(--r,0deg))}
+.pk .sc{top:calc(22px - var(--w)*.7)}
+.sc.l{left:calc(var(--w)*-.3);transform:translateX(-90%) rotate(var(--r,0deg))}.sc.r{right:calc(var(--w)*-.3);transform:translateX(90%) rotate(var(--r,0deg))}
 .sc.l.in,.sc.r.in{transform:rotate(var(--r,0deg))}
-.pkh{top:50%;right:calc(var(--w)*-.42 - 20px);margin-top:calc(var(--w)*-.7);--w:min(17vw,68px);transform:translateX(70%) rotate(var(--r,0deg))}
+.pkh{top:50%;right:calc(var(--w)*-.3 - 20px);margin-top:calc(var(--w)*-.7);--w:min(25vw,100px);transform:translateX(90%) rotate(var(--r,0deg))}
 .pkh.in{transform:rotate(var(--r,0deg))}
 .sc .cd.zc{width:100%;height:auto;aspect-ratio:5/7;padding:7cqw 7cqw 6cqw;border-radius:12cqw}
 .sc .cd.zc .o{font-size:30cqw}.sc .cd.zc .n{font-size:14cqw}.sc .cd.zc .o small{display:none}
 .sc .cd.zc:hover{transform:translateY(-6px) scale(1.1)}
-@media(min-width:900px){.sc{--w:92px}.pkh{display:none}}
+@media(min-width:900px){.sc{--w:140px}.pk{height:64px}.pk .sc{top:calc(32px - var(--w)*.7)}.pkh{display:none}}
 /* hero: one card on desktop, none on phone (peek card instead) */
 .lh .rc2{display:none}
 @media(min-width:900px){.lh .rc2{display:flex}#lfan{justify-content:center;max-width:none}#lfan .cd.zc{flex:none;width:200px;height:280px;max-width:none;aspect-ratio:auto;margin:0;padding:16px;border-radius:18px;rotate:6deg}#lfan .cd.zc:nth-child(n+2){display:none}#lfan .cd.zc .o{font-size:58px}#lfan .cd.zc .n{font-size:22px}#lfan .cd.zc .c{display:block;font-size:13px}#lfan .cd.zc .o small{font-size:13px}}
@@ -687,7 +687,6 @@ main.in>*,.mw:not(.na)>*{animation:none}
 .czt{--rx:0deg;--ry:0deg;--sx:50%;transform:scale(.25) rotate(-8deg);opacity:0;transition:transform .45s cubic-bezier(.2,1.25,.3,1),opacity .25s;transform-style:preserve-3d}
 .czo.on .czt{transform:rotateX(var(--rx)) rotateY(var(--ry));opacity:1}
 .czt .cd{width:min(260px,68vw);height:min(364px,95vw);padding:18px 18px 16px;border-radius:20px;cursor:pointer;box-shadow:0 0 50px 6px var(--gl,rgba(255,196,60,.5)),0 30px 60px -24px rgba(0,0,0,.45);animation:none;transform:none!important}
-.czt .cd.r3{--gl:rgba(255,196,60,.6)}
 .czt .cd .o{font-size:60px}.czt .cd .n{font-size:24px}.czt .cd .c{font-size:15px;display:block}.czt .cd .o small{font-size:14px}
 .czt .cd::after{display:block;content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(circle at var(--sx) 20%,rgba(255,255,255,.7),transparent 55%);pointer-events:none;z-index:2;animation:none;transform:none}
 /* stats band */

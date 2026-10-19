@@ -441,6 +441,8 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stro
 .nws .bl{--s:34px;padding:16px 0}.fan .bl{--s:64px}
 .aov{position:absolute;inset:0;z-index:4;display:grid;place-items:center;background:rgba(var(--ab),.78);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);animation:fi .15s}
 .aov .bl{padding:0}
+main.ldg>*:not(.ldo){visibility:hidden}
+main.ldg>.ldo{position:absolute;left:0;right:0;top:calc(var(--top) + 16px);visibility:visible;animation:none}
 /* ---------- motion ---------- */
 .mw:not(.na)>*{animation:up .38s var(--ease) both}.mw:not(.na)>:nth-child(2){animation-delay:.05s}.mw:not(.na)>:nth-child(3){animation-delay:.1s}.mw:not(.na)>:nth-child(4){animation-delay:.15s}.mw:not(.na)>:nth-child(n+5){animation-delay:.2s}
 .mt,.pl,.st{transition:background .2s,transform .15s var(--ease)}
@@ -556,7 +558,14 @@ const SB_URL="https://pvocjvvzkvzhckilhokx.supabase.co";
 const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB2b2NqdnZ6a3Z6aGNraWxob2t4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEzMjEyNzEsImV4cCI6MjEwNjg5NzI3MX0.UkWtFCI0LME9DBx6ZRGuzB_BnvBKlEVLynIgzWmRdUg";
 const sb=supabase.createClient(SB_URL,SB_KEY);
 const LOAD='<div class="bl" role="status" aria-label="Загрузка"><i class="mk"></i></div>';
-let FRESH=0;const tmo=(p,ms)=>Promise.race([p,new Promise(r=>setTimeout(r,ms))]);
+let FRESH=0,HT=0;
+async function hold(m,pr,ms=12000){const t=++HT;m.querySelectorAll(".ldo").forEach(e=>e.remove());m.classList.add("ldg");m.insertAdjacentHTML("afterbegin",LOAD.replace('class="bl"','class="bl ldo"'));
+ const eager=()=>m.querySelectorAll("img[loading]").forEach(i=>i.loading="eager"),end=Date.now()+ms,alive=()=>HT===t&&m.classList.contains("ldg");
+ eager();if(pr)await Promise.race([Promise.resolve(pr).catch(()=>{}),new Promise(r=>setTimeout(r,ms))]);
+ while(alive()&&Date.now()<end){eager();const w=[...m.querySelectorAll("img")].some(i=>i.isConnected&&!(i.complete&&(i.naturalWidth>0||!i.dataset.i)));if(!w)break;await new Promise(r=>setTimeout(r,80))}
+ if(!alive())return;const o=m.querySelector(".ldo");o&&o.remove();m.classList.remove("ldg");
+ if(m.classList.contains("in")){m.classList.remove("in");void m.offsetWidth;m.classList.add("in")}}
+const tmo=(p,ms)=>Promise.race([p,new Promise(r=>setTimeout(r,ms))]);
 const TI={sun:'<svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',moon:'<svg class="i" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 019.5 4a8 8 0 1010.5 10.5z"/></svg>'};
 let THM="dark";
 const thIco=()=>THM==="dark"?TI.sun:TI.moon;
@@ -695,7 +704,7 @@ function ctReveal(cards,r){const p=PL[r.player_id],g=rar(p.rating);
  RVT=setTimeout(()=>{const m2=modal(`<div class="mw" style="text-align:center"><small>Средний рейтинг ${r.avg} · бонус +${r.bonus}</small><div class="cres">${card(r.player_id,"deal").replace('class="cd','style="width:120px;height:168px;--i:0" class="cd')}</div><h3>${esc(p.name)}</h3><small>${p.position} · ${esc(p.team)} · рейтинг ${p.rating}</small><button class="b" id="ok" style="width:100%;margin-top:16px">Отлично</button></div>`);m2.classList.add("g"+g);$("#ok").onclick=closeM},2400)}
 function sqSt(){document.querySelectorAll("[data-sq]").forEach(e=>{const o=trNow(+e.dataset.sq),c=trCol(o.s);e.style.setProperty("--w",o.s+"%");e.style.setProperty("--c",c);const t=e.querySelector("b");t&&(t.textContent=Math.round(o.s)+"%",t.style.color=c)})}
 function sqLoad(){sqSt();if(!TRN.ok||Date.now()-TRN.t>30000)trLoad().then(()=>{TRN.ok=1;tab==="sq"&&sqSt()}).catch(()=>{})}
-function sqEnter(){if(!FRESH)return squad();FRESH=0;$("#m").innerHTML=LOAD;tmo(trLoad().then(()=>{TRN.ok=1}).catch(()=>{}),8000).then(()=>{if(tab==="sq")squad()})}
+function sqEnter(){if(!FRESH)return squad();FRESH=0;$("#m").innerHTML=LOAD;tmo(trLoad().then(()=>{TRN.ok=1}).catch(()=>{}),8000).then(()=>{if(tab==="sq"){squad();hold($("#m"))}})}
 function squad(){setTimeout(sqLoad,0);const m=$("#m"),used=new Set([...LU.xi,...LU.bn].filter(x=>x!=null));
  const sl=(a,i,lab)=>{const id=a[i];return id==null?`<div class="slot" data-a="${a===LU.xi?"xi":"bn"}" data-i="${i}">+ ${lab}</div>`:card(id).replace('class="cd','data-a="'+(a===LU.xi?"xi":"bn")+'" data-i="'+i+'" class="cd').replace(/<\/div>$/,'<span class="sq" data-sq="'+id+'"><u></u></span></div>')};
  const L=(a,b)=>`<div class="line">${Array.from({length:b-a},(_,j)=>sl(LU.xi,a+j,SL[a+j])).join("")}</div>`;
@@ -734,15 +743,15 @@ let NW=null;
 async function news(){const dr=()=>{const e=$("#nws");if(e)e.innerHTML=NW.length?NW.map(n=>{const t=`<b>${esc(n.title)}</b><small>${esc(n.source||"Club")} · ${fmtD(n.published_at)}</small>`;return/^https?:\/\//.test(n.url||"")?`<a class="nw" href="${esc(n.url)}" target="_blank" rel="noopener">${t}</a>`:`<div class="nw">${t}</div>`}).join(""):"<small>Новостей пока нет</small>"};
  if(NW)return dr();try{const{data,error}=await sb.from("news").select("title,url,source,published_at").order("published_at",{ascending:false}).limit(8);if(error)throw error;NW=data}catch(x){NW=[]}dr()}
 const fixtures=()=>{const m=$("#m");document.body.classList.toggle("mdt",!!FXM);if(FXM){FRESH=0;return mdetail(FXM)}unwatchMatch();
- if(FRESH){FRESH=0;m.innerHTML=LOAD;tmo(loadMT(),8000).then(()=>{if(tab==="fx"&&!FXM)fixtures()});return}
+ if(FRESH){FRESH=0;m.innerHTML=LOAD;tmo(loadMT(),8000).then(()=>{if(tab!=="fx"||FXM)return;m.innerHTML=fxShell("");fxList($("#fxl"),id=>{FXM=id;fixtures()},1);hold(m,news())});return}
  m.innerHTML=fxShell("");fxList($("#fxl"),id=>{FXM=id;fixtures()});news()};
-async function fxList(h,open){const live=()=>h.isConnected&&(h.id==="lfx"||tab==="fx"&&!FXM);
+async function fxList(h,open,nf){const live=()=>h.isConnected&&(h.id==="lfx"||tab==="fx"&&!FXM);
  const draw=()=>{if(!live()){FXD.delete(draw);return}FXD.add(draw);const cr=curR();FXR=FXR||cr;const g={};MT.filter(x=>x.round===FXR).forEach(x=>(g[fmtD(x.kickoff)]??=[]).push(x));
   h.innerHTML=`<div class="rs">${Array.from({length:38},(_,i)=>`<button class="rc${i+1===FXR?" on":""}${i+1===cr?" cur":""}" data-r="${i+1}">${i+1}</button>`).join("")}</div>`+lvStrip(h)+(Object.entries(g).map(([d,a])=>`<div class="dl">${d}</div><div class="${h.id==="lfx"?"":"box"}">${a.map(x=>mrow(x)).join("")}</div>`).join("")||"<p class='mu'>Матчей нет</p>");
   h.querySelectorAll(".rc").forEach(b=>b.onclick=()=>{FXR=+b.dataset.r;draw()});h.querySelectorAll(".mt").forEach(e=>e.onclick=()=>open(+e.dataset.id));
   const on=h.querySelector(".rc.on"),rs=h.querySelector(".rs");rs.scrollLeft=on.offsetLeft-rs.clientWidth/2+on.offsetWidth/2};
  if(MT)draw();else h.innerHTML=LOAD;
- try{const {data,error}=await sb.from("matches").select(MC).order("kickoff");if(error)throw error;MT=data;liveDot();draw()}catch(e){if(!MT)h.innerHTML=esc(e.message)}}
+ if(nf&&MT)return;try{const {data,error}=await sb.from("matches").select(MC).order("kickoff");if(error)throw error;MT=data;liveDot();draw()}catch(e){if(!MT)h.innerHTML=esc(e.message)}}
 const SN=[["possessionPct","Владение"],["totalShots","Удары"],["shotsOnTarget","Удары в створ"],["blockedShots","Заблокированные"],["wonCorners","Угловые"],["foulsCommitted","Фолы"],["offsides","Офсайды"],["yellowCards","Жёлтые"],["redCards","Красные"],["saves","Сейвы"],["totalPasses","Передачи"],["accuratePasses","Точные передачи"],["passPct","Точность передач"],["totalCrosses","Навесы"],["accurateCrosses","Точные навесы"],["totalLongBalls","Длинные передачи"],["totalTackles","Отборы"],["interceptions","Перехваты"],["totalClearance","Выносы"]];
 const sfmt=(k,v)=>{const n=parseFloat(v);if(!isFinite(n))return v==null?"-":esc(v);return k==="possessionPct"?Math.round(n)+"%":/Pct$/.test(k)?Math.round(n*100)+"%":String(Math.round(n*10)/10)};
 function extraHtml(x,E,XT){const I=E.info||{},S=E.stadium||{},T=E.timeline||[],ST=E.stats||{},LU=E.lineups||[];let top="",bot="";
@@ -874,7 +883,7 @@ async function league(){const m=$("#m");m.innerHTML=LOAD;
   m.querySelectorAll(".inv").forEach(b=>b.onclick=async()=>{const u=location.origin+location.pathname+"?league="+encodeURIComponent(b.dataset.code),t="Вступай в мою лигу «"+b.dataset.n+"» в Club";try{if(navigator.share){await navigator.share({title:"Club",text:t,url:u})}else{await navigator.clipboard.writeText(u);toast("<b>Ссылка скопирована</b><small>Отправь её друзьям</small>")}}catch(e){}});
   if($("#lc"))$("#lc").onclick=async()=>{try{const c=await rpc("create_league",{p_name:$("#ln").value});alert("Лига создана. Код для друзей: "+c);league()}catch(e){alert(msg(e))}};
   if($("#ljb")){const inv=INV();if(inv){$("#lj").value=inv;$("#lj").insertAdjacentHTML("beforebegin","<small>Тебя пригласили в лигу. Нажми «Вступить по коду».</small>")}$("#ljb").onclick=async()=>{try{await rpc("join_league",{p_code:$("#lj").value.trim()});try{sessionStorage.removeItem("club_inv")}catch(e){}league()}catch(e){alert(msg(e))}}}
- }catch(e){m.innerHTML=ERRV(e)}}
+ hold(m)}catch(e){m.innerHTML=ERRV(e)}}
 document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{if(b.dataset.t===tab)FXM=null;tab=b.dataset.t;view()});
 $("#hp").onclick=()=>tour(0);$("#hl").onclick=async()=>{if(PF&&confirm("Выйти из аккаунта?")){await sb.auth.signOut();PF=null;landing()}};
 
@@ -1083,7 +1092,7 @@ document.addEventListener("click",e=>{const mp=e.target.closest("[data-mp]");if(
 async function stats(){const m=$("#m");m.innerHTML=LOAD;
  try{LD=await rpc("landing_data");
   m.innerHTML='<div id="lfan" style="display:none"></div><div class="box fw"><h3>Статистика команд</h3><div class="tabs" id="ttb"></div><div id="tms">'+LOAD+'</div></div><div class="box fw"><h3>Статистика сезона</h3><div class="tabs" id="ltb"></div><div id="lst"></div></div><div class="box"><h3>Растут</h3><div id="lup"></div></div><div class="box"><h3>Падают</h3><div id="ldw"></div></div><div class="box fw"><h3>Игра в цифрах</h3><div class="stats" id="lcn"></div></div><div class="box fw"><h3>Лиги сообщества</h3><div id="llg"></div></div>';
-  fillL(LD);teamStats()}catch(e){m.innerHTML=ERRV(e)}}
+  fillL(LD);hold(m,teamStats())}catch(e){m.innerHTML=ERRV(e)}}
 const TSEC=[["Главное",[["xg","Ожидаемые голы (xG)"],["possessionPct","Владение мячом"],["totalShots","Всего ударов"],["shotsOnTarget","Удары в створ"],["wonCorners","Угловые"],["pass","Передачи"],["yellowCards","Жёлтые карточки"]],1],
  ["Удары",[["xg","Ожидаемые голы (xG)"],["totalShots","Всего ударов"],["shotsOnTarget","Удары в створ"],["offT","Удары мимо"],["blockedShots","Удары заблокированы"]]],
  ["Атака",[["wonCorners","Угловые"],["offsides","Офсайды"],["penaltyKickShots","Пенальти"]]],

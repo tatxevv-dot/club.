@@ -538,11 +538,7 @@ html[data-theme=light] .tst,html[data-theme=light] #ttp{box-shadow:inset 0 1px 0
  .cd,.box,.tile,.cta,.stage,button.g,.rc{border-color:var(--ln2)}
 }
 
-/* ---------- rarity pips (rarity is no longer colour-only), hero pack, skip hint ---------- */
-.cd:not(.sel).r1::before,.cd:not(.sel).r2::before,.cd:not(.sel).r3::before{position:absolute;top:7px;right:7px;z-index:3;font:700 11px/1 var(--f);letter-spacing:-.12em;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.8)}
-.cd:not(.sel).r1::before{content:"\25C6"}.cd:not(.sel).r2::before{content:"\25C6\25C6"}.cd:not(.sel).r3::before{content:"\25C6\25C6\25C6";color:#241a05;text-shadow:none}
-html[data-theme=light] .cd:not(.sel).r1::before,html[data-theme=light] .cd:not(.sel).r2::before{color:var(--tx);text-shadow:none}
-.cd:not(.r0) .qt{top:22px}
+/* ---------- hero pack, skip hint ---------- */
 .lpk{position:absolute;right:5%;top:6%;width:22%;max-width:104px;transform:rotate(9deg);filter:drop-shadow(0 18px 26px rgba(0,0,0,.55));pointer-events:none;z-index:2}
 .lpk .pack i{display:block;position:absolute;inset:0;z-index:3;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.65) 50%,transparent 60%);transform:translateX(-100%);animation:shn 1.4s .8s 2}
 .skp{position:fixed;left:0;right:0;bottom:calc(24px + env(safe-area-inset-bottom,0px));text-align:center;color:var(--tx2);font-size:13px;pointer-events:none}
@@ -560,6 +556,7 @@ const SB_URL="https://pvocjvvzkvzhckilhokx.supabase.co";
 const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB2b2NqdnZ6a3Z6aGNraWxob2t4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEzMjEyNzEsImV4cCI6MjEwNjg5NzI3MX0.UkWtFCI0LME9DBx6ZRGuzB_BnvBKlEVLynIgzWmRdUg";
 const sb=supabase.createClient(SB_URL,SB_KEY);
 const LOAD='<div class="bl" role="status" aria-label="Загрузка"><i class="mk"></i></div>';
+let FRESH=0;const tmo=(p,ms)=>Promise.race([p,new Promise(r=>setTimeout(r,ms))]);
 const TI={sun:'<svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',moon:'<svg class="i" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 019.5 4a8 8 0 1010.5 10.5z"/></svg>'};
 let THM="dark";
 const thIco=()=>THM==="dark"?TI.sun:TI.moon;
@@ -656,14 +653,14 @@ async function onboard(){document.body.classList.remove("app");$("header").style
 
 // ---------- экраны ----------
 function view(){document.body.classList.remove("mdt");if(tab!=="fx")unwatchMatch();$("header").style.display="";{const h=$("#hl");h.innerHTML='<span>'+esc(PF.nickname)+'</span><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>';h.setAttribute("aria-label",PF.nickname+": выйти из аккаунта");h.title="Выйти из аккаунта"}coins(PF.coins);setTitle();
- document.querySelectorAll("nav button").forEach(b=>{const on=b.dataset.t===tab;b.classList.toggle("on",on);on?b.setAttribute("aria-current","page"):b.removeAttribute("aria-current")});const m=$("#m");if(LT!==tab)m.scrollTop=0;m.className=LT!==tab?"in":"";LT=tab;
+ document.querySelectorAll("nav button").forEach(b=>{const on=b.dataset.t===tab;b.classList.toggle("on",on);on?b.setAttribute("aria-current","page"):b.removeAttribute("aria-current")});const m=$("#m");if(LT!==tab)m.scrollTop=0;FRESH=LT!==tab;m.className=FRESH?"in":"";LT=tab;
  if(tab==="st")return stad();if(0){const pe=pend(),mx=capH()*inc();
   m.innerHTML=`<div class="box"><h3>Касса стадиона</h3><div class="row"><b style="font-size:26px;letter-spacing:-1px">${CN}${pe}</b><button class="b" id="cl" ${pe<1?"disabled":""}>Забрать</button></div><div class="bar"><i style="width:${Math.min(100,pe/mx*100)}%"></i></div><small>Доход ${inc()}/ч · касса вмещает ${capH()} ч.</small></div><div class="box"><h3>Улучшения</h3>${[["Трибуны","Доход в час +50%","inc"],["Касса","Вместимость +0,5 ч","cap"],["Музей","Шанс редких в паках +10%","mus"]].map((u,k)=>`<div class="row"><div>${u[0]} · ур. ${PF.stadium[u[2]]}<br><small>${u[1]}</small></div><button class="b up" data-k="${u[2]}" data-c="${k}" ${PF.coins<costOf(k)?"disabled":""}>${CN}${costOf(k)}</button></div>`).join("")}</div>`;
   $("#cl").onclick=()=>act(()=>rpc("collect"));m.querySelectorAll(".up").forEach(b=>b.onclick=()=>act(()=>rpc("upgrade",{kind:b.dataset.k})))}
  if(tab==="pk"){m.innerHTML=(PEND.length?`<div class="box"><h3>Неоткрытые паки</h3>${PEND.map(p=>`<div class="row"><span class="pr">${packEl(p.tier,"mini")}${PKS[p.tier][0]}</span><button class="b rs" data-id="${p.id}">Выбрать игроков</button></div>`).join("")}</div>`:"")+`<div class="box"><div class="pkgrid">${PKS.map((p,i)=>`<div class="pkc">${packEl(i)}<span>${PKS[i][0]}</span><small>${PS?"Осталось "+left(i)+" из "+PS.limits[i]:""}</small><button class="b op" data-i="${i}" ${PF.coins<p[1]||left(i)<=0?"disabled":""}>${CN}${p[1]}</button></div>`).join("")}</div><small>10 игроков, забираешь 3 · повторы остаются копиями${PS?" · лимиты обновятся через "+rst():""}</small></div>${PS?contractBox():""}`;
   m.querySelectorAll(".op").forEach(b=>b.onclick=async()=>{try{b.disabled=true;const r=await rpc("open_pack",{p_tier:+b.dataset.i});await refresh();view();reveal(+b.dataset.i,r.pack_id,r.offer.map(Number))}catch(e){alert(msg(e))}});
   m.querySelectorAll(".rs").forEach(b=>b.onclick=()=>{const p=PEND.find(x=>x.id==b.dataset.id);choose(p.id,p.offer.map(Number),1)});PS&&contractWire()}
- if(tab==="sq")squad();
+ if(tab==="sq")sqEnter();
  if(tab==="fx")fixtures();if(tab==="lg")league();if(tab==="ss")stats()}
 async function act(f){try{await f();await refresh();view()}catch(e){alert(msg(e))}}
 function reveal(t,pid,offer){const b=Math.max(...offer.map(i=>rar(PL[i].rating)));
@@ -698,6 +695,7 @@ function ctReveal(cards,r){const p=PL[r.player_id],g=rar(p.rating);
  RVT=setTimeout(()=>{const m2=modal(`<div class="mw" style="text-align:center"><small>Средний рейтинг ${r.avg} · бонус +${r.bonus}</small><div class="cres">${card(r.player_id,"deal").replace('class="cd','style="width:120px;height:168px;--i:0" class="cd')}</div><h3>${esc(p.name)}</h3><small>${p.position} · ${esc(p.team)} · рейтинг ${p.rating}</small><button class="b" id="ok" style="width:100%;margin-top:16px">Отлично</button></div>`);m2.classList.add("g"+g);$("#ok").onclick=closeM},2400)}
 function sqSt(){document.querySelectorAll("[data-sq]").forEach(e=>{const o=trNow(+e.dataset.sq),c=trCol(o.s);e.style.setProperty("--w",o.s+"%");e.style.setProperty("--c",c);const t=e.querySelector("b");t&&(t.textContent=Math.round(o.s)+"%",t.style.color=c)})}
 function sqLoad(){sqSt();if(!TRN.ok||Date.now()-TRN.t>30000)trLoad().then(()=>{TRN.ok=1;tab==="sq"&&sqSt()}).catch(()=>{})}
+function sqEnter(){if(!FRESH)return squad();FRESH=0;$("#m").innerHTML=LOAD;tmo(trLoad().then(()=>{TRN.ok=1}).catch(()=>{}),8000).then(()=>{if(tab==="sq")squad()})}
 function squad(){setTimeout(sqLoad,0);const m=$("#m"),used=new Set([...LU.xi,...LU.bn].filter(x=>x!=null));
  const sl=(a,i,lab)=>{const id=a[i];return id==null?`<div class="slot" data-a="${a===LU.xi?"xi":"bn"}" data-i="${i}">+ ${lab}</div>`:card(id).replace('class="cd','data-a="'+(a===LU.xi?"xi":"bn")+'" data-i="'+i+'" class="cd').replace(/<\/div>$/,'<span class="sq" data-sq="'+id+'"><u></u></span></div>')};
  const L=(a,b)=>`<div class="line">${Array.from({length:b-a},(_,j)=>sl(LU.xi,a+j,SL[a+j])).join("")}</div>`;
@@ -735,7 +733,9 @@ const fxShell=h=>`<div class="fxw"><div id="fxl">${h}</div>${NWS}</div>`;
 let NW=null;
 async function news(){const dr=()=>{const e=$("#nws");if(e)e.innerHTML=NW.length?NW.map(n=>{const t=`<b>${esc(n.title)}</b><small>${esc(n.source||"Club")} · ${fmtD(n.published_at)}</small>`;return/^https?:\/\//.test(n.url||"")?`<a class="nw" href="${esc(n.url)}" target="_blank" rel="noopener">${t}</a>`:`<div class="nw">${t}</div>`}).join(""):"<small>Новостей пока нет</small>"};
  if(NW)return dr();try{const{data,error}=await sb.from("news").select("title,url,source,published_at").order("published_at",{ascending:false}).limit(8);if(error)throw error;NW=data}catch(x){NW=[]}dr()}
-const fixtures=()=>{const m=$("#m");document.body.classList.toggle("mdt",!!FXM);if(FXM)return mdetail(FXM);unwatchMatch();m.innerHTML=fxShell("");fxList($("#fxl"),id=>{FXM=id;fixtures()});news()};
+const fixtures=()=>{const m=$("#m");document.body.classList.toggle("mdt",!!FXM);if(FXM){FRESH=0;return mdetail(FXM)}unwatchMatch();
+ if(FRESH){FRESH=0;m.innerHTML=LOAD;tmo(loadMT(),8000).then(()=>{if(tab==="fx"&&!FXM)fixtures()});return}
+ m.innerHTML=fxShell("");fxList($("#fxl"),id=>{FXM=id;fixtures()});news()};
 async function fxList(h,open){const live=()=>h.isConnected&&(h.id==="lfx"||tab==="fx"&&!FXM);
  const draw=()=>{if(!live()){FXD.delete(draw);return}FXD.add(draw);const cr=curR();FXR=FXR||cr;const g={};MT.filter(x=>x.round===FXR).forEach(x=>(g[fmtD(x.kickoff)]??=[]).push(x));
   h.innerHTML=`<div class="rs">${Array.from({length:38},(_,i)=>`<button class="rc${i+1===FXR?" on":""}${i+1===cr?" cur":""}" data-r="${i+1}">${i+1}</button>`).join("")}</div>`+lvStrip(h)+(Object.entries(g).map(([d,a])=>`<div class="dl">${d}</div><div class="${h.id==="lfx"?"":"box"}">${a.map(x=>mrow(x)).join("")}</div>`).join("")||"<p class='mu'>Матчей нет</p>");
@@ -1173,6 +1173,7 @@ function unwatchMatch(){clearTimeout(RDB);if(RCH){sb.removeChannel(RCH);RCH=null
 function paint(o,x){if(mst(o)!==mst(x)){for(const d of [...FXD])d()}else document.querySelectorAll('.mt[data-id="'+x.id+'"] .sc').forEach(e=>e.outerHTML=scr(x));liveDot();if(curOpen()===x.id)scheduleDetail(2500)}
 function onMatch(r){if(!MT||!r)return;const i=MT.findIndex(v=>v.id===r.id);if(i<0)return;const o=MT[i],n={...o};MK.forEach(k=>{if(k in r)n[k]=r[k]});MT[i]=n;
  if(!sameM(o,n)){paint(o,n);if(!dnM(mst(o))&&dnM(mst(n)))setTimeout(checkScores,6000)}else if(curOpen()===n.id)scheduleDetail(2500)}
+async function loadMT(){try{const {data,error}=await sb.from("matches").select(MC).order("kickoff");if(!error&&data){MT=data;liveDot()}}catch(e){}}
 async function patchMT(){try{const {data,error}=await sb.from("matches").select(MC).order("kickoff");if(error||!data)return;const old=MT;MT=data;if(old){const om=new Map(old.map(x=>[x.id,x]));for(const x of data){const o=om.get(x.id);if(o&&!sameM(o,x))paint(o,x)}}liveDot()}catch(e){}}
 async function poll(){if(document.hidden||!MT)return;const now=Date.now();
  if(!MT.some(x=>x.status==="live"||x.ft||(!x.finished&&+new Date(x.kickoff)<=now+6e4&&now-new Date(x.kickoff)<5*36e5)))return;

@@ -371,6 +371,9 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stro
 .ac button.ax{position:absolute;top:14px;right:14px;z-index:3;width:44px;min-height:44px;height:44px;padding:0;margin:0}
 @media(max-width:700px){.ac{grid-template-columns:1fr;background:rgb(var(--ab));-webkit-backdrop-filter:none;backdrop-filter:none;animation:none}.av{display:none}.al{--px:22px;--py:22px;padding:64px var(--px) var(--py);justify-content:flex-start}}
 
+/* ---------- capped lists ---------- */
+.cpc{position:relative}.cpb{filter:blur(5px);opacity:.5;pointer-events:none;user-select:none}.cph{display:none!important}
+button.cpm{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:3;width:auto;min-height:42px;padding:0 22px;margin:0;white-space:nowrap}
 /* ---------- auth v2 ---------- */
 .ac{grid-template-columns:1fr!important;width:min(448px,100%)!important}.av{display:none!important}
 .al{text-align:center;--px:32px;--py:30px}.al .lgo{justify-content:center;margin-bottom:22px}.al .fl{text-align:left}
@@ -1101,7 +1104,13 @@ function landing(){document.body.classList.remove("mdt","app");liveInit();$("#m"
  L.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{const t=L.querySelector("#"+b.dataset.go);t&&t.scrollIntoView({behavior:rm?"auto":"smooth"})});
  if("IntersectionObserver"in window){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{root:L,threshold:.08});L.querySelectorAll(".rvl").forEach(x=>io.observe(x))}else L.querySelectorAll(".rvl").forEach(x=>x.classList.add("in"));
  fillL(LD);rpc("landing_data").then(d=>{LD=d;fillL(d);scatter(L)}).catch(()=>fillL(LD||{}));ltop().then(()=>{fillL(LD);scatter(L)})}
-function fillL(D){if(!D||!$("#lcn"))return;const c=D.counts||{},nf=v=>v==null?"-":Number(v).toLocaleString("ru-RU"),lst=(a,f)=>a&&a.length?a.map(f).join(""):'<small class="emp">Пока нет данных</small>';
+const CAPX={};
+function capList(sel,n=5){const e=$(sel);if(!e||CAPX[sel])return;const k=[...e.children].filter(c=>c.matches(".st,.pl"));if(k.length<=n)return;
+ k.forEach((c,i)=>{if(i>=n+3)c.classList.add("cph");else if(i>=n)c.classList.add("cpb")});e.classList.add("cpc");
+ const b=document.createElement("button");b.type="button";b.className="b cpm";b.textContent="Показать больше ("+(k.length-n)+")";
+ b.onclick=()=>{CAPX[sel]=1;k.forEach(c=>c.classList.remove("cph","cpb"));e.classList.remove("cpc");b.remove()};e.appendChild(b)}
+function fillL(D){fillL0(D);capList("#lst");capList("#lup");capList("#ldw")}
+function fillL0(D){if(!D||!$("#lcn"))return;const c=D.counts||{},nf=v=>v==null?"-":Number(v).toLocaleString("ru-RU"),lst=(a,f)=>a&&a.length?a.map(f).join(""):'<small class="emp">Пока нет данных</small>';
  $("#lfan").innerHTML=(D.stars||[]).map(p=>zcard(p.photo?p:Object.assign({},p,{photo:(PM[p.id]||PM[p.name]||{}).photo}))).join("");
  $("#lcn").innerHTML=[[c.users,"клубов в игре"],[c.players,"игроков в базе"],[c.played,"матчей сыграно"],[c.leagues,"лиг сообщества"]].map(a=>`<div class="stat"><b>${nf(a[0])}</b><span>${a[1]}</span></div>`).join("");
  $("#llg").innerHTML=(D.leagues||[]).length?`<div class="box">${D.leagues.map((l,i)=>`<div class="pl"><b class="rb r0">${i+1}</b><div class="pi"><div>${esc(l.name)}</div><small>Лидер: ${esc(l.leader||"-")} · ${Math.round(l.pts||0)} очк.</small></div><span class="dp">${ico("us")}${l.members}</span></div>`).join("")}</div>`:'<div class="box"><small>Активных лиг пока нет. Создай первую и позови друзей.</small></div>';
@@ -1375,7 +1384,8 @@ async function teamAll(n,k){const pv=NAVB;TMN=n;
   m.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>{pos=b.dataset.q;draw()});
   m.querySelectorAll("[data-pid]").forEach(e=>e.onclick=()=>back(()=>pinfo(+e.dataset.pid)))};draw()}
 let TSB="tbl";
-async function teamStats(){if(!MT)await patchMT();const e=$("#tms");if(!e)return;
+async function teamStats(){await teamStats0();capList("#tms")}
+async function teamStats0(){if(!MT)await patchMT();const e=$("#tms");if(!e)return;
  const tb=tstand();if(!tb.length){e.innerHTML="<small class='emp'>Пока нет сыгранных матчей</small>";return}
  const T={tbl:"Таблица",gf:"Атака",ga:"Защита",cs:"Сухие матчи"},val=x=>TSB==="tbl"?x.pts:TSB==="gf"?x.gf:TSB==="ga"?x.ga:x.cs,
   a=[...tb].sort((x,y)=>TSB==="tbl"?0:TSB==="ga"?(val(x)-val(y)||y.pts-x.pts):(val(y)-val(x)||y.pts-x.pts)),mx=Math.max(1,...a.map(val));

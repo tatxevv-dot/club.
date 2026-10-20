@@ -755,6 +755,16 @@ header .lgsel,.lgsel{height:40px;font-size:13.5px;padding:0 24px 0 11px;backgrou
 header #hp,header #hl,header #co{height:40px}
 header #hp,header #hl{width:40px!important;max-width:40px!important}
 header #co{padding:0 10px!important}
+
+/* --- v4: размеры, чтобы ничего не налезало --- */
+header .lgo .mk,header .mk{display:none!important}
+header .lgo{gap:8px;font-size:clamp(15px,4.6vw,19px)}
+header .lgo::before{height:18px;width:3px}
+header .hr{gap:5px}
+header .lgsel{height:38px;font-size:13px;padding:0 21px 0 9px;background-position:right 7px center}
+header #hp,header #hl,header #co{height:38px}
+header #hp,header #hl{width:38px!important;max-width:38px!important}
+header #co{padding:0 9px!important;font-size:13px}
 </style></head><body><noscript><style>#bs{display:none}</style><main style="position:static;padding:32px 20px;max-width:560px;margin:0 auto"><h1>Club</h1><p>Fantasy-футбол по топ-5 лигам и Лиге чемпионов: собери клуб из реальных игроков, открывай паки и соревнуйся с друзьями в лигах.</p><p>Для игры нужен включённый JavaScript.</p></main></noscript><div id="bs"><div class="bl" role="status" aria-label="Загрузка"><i class="mk"></i></div></div><script>setTimeout(function(){var e=document.getElementById("bs");e&&e.remove()},12000)</script>
 <header style="display:none"><div class="lgo"><i class="mk"></i><span id="pt"></span></div><div class="hr"><button id="hp" aria-label="Обучение" title="Обучение">?</button><button id="hl" title="Выйти из аккаунта"></button><span id="co" title="Монеты"></span></div></header>
 <main id="m"></main><button id="mx" class="g" aria-label="Закрыть матч">✕</button>

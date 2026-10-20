@@ -1608,4 +1608,33 @@ html[data-theme=light] .cd .ph{background:radial-gradient(circle at 50% 30%,rgba
 .cd.zc.r4,.czt .cd.r4{--gl:rgba(200,212,240,.7)}
 html[data-theme=light] .cd.r4{background:linear-gradient(155deg,#f4f6fc,#d3d9e8 60%,#e8ecf6);border-color:rgba(120,134,170,.4)}
 </style>
+<script>
+(function(){
+let SEL=null;
+const _f=fillL;
+fillL=function(D){_f(D);chips()};
+function cur(){return SEL||CLG}
+function chips(){
+ const live=document.querySelector("#live");if(!live||!document.querySelector("#lcn"))return;
+ if(COMPS.length<2&&!chips.t){chips.t=1;loadComps().then(()=>{chips.t=0;COMPS.length>1&&chips()}).catch(()=>{});return}
+ let r=document.querySelector("#lgl");
+ if(!r){const sh=live.querySelector(".sh");if(!sh)return;r=document.createElement("div");r.id="lgl";r.className="tabs";r.style.cssText="margin:0 0 16px;overflow-x:auto;flex-wrap:nowrap";sh.insertAdjacentElement("afterend",r);
+  r.onclick=e=>{const b=e.target.closest("button[data-lg]");if(b&&b.dataset.lg!==cur())pick(b.dataset.lg)}}
+ r.innerHTML=COMPS.map(c=>'<button class="rc'+(c.slug===cur()?' on':'')+'" data-lg="'+c.slug+'" style="flex:none;white-space:nowrap">'+esc(c.short||c.name)+'</button>').join("");
+}
+async function pick(slug){
+ SEL=slug;chips();
+ const ld='<div class="ld"></div>';["#lup","#ldw","#lst"].forEach(q=>{const e=document.querySelector(q);if(e)e.style.opacity=".4"});
+ try{
+  const sch=SCH_OF(slug);
+  const [a,b]=await Promise.all([sb0.schema(sch).rpc("landing_data"),sb0.schema(sch).from("players").select("id,name,team,position,rating,last_change,photo").order("rating",{ascending:false}).limit(60)]);
+  if(a.error)throw a.error;
+  (b.data||[]).forEach(p=>{PM[p.id]=p;PM[p.name]=p});
+  if(SEL!==slug)return;
+  LD=a.data;fillL(LD);
+ }catch(e){console.warn(e)}
+ ["#lup","#ldw","#lst"].forEach(q=>{const e=document.querySelector(q);if(e)e.style.opacity=""});
+}
+})();
+</script>
 </body></html>

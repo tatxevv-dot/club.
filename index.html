@@ -1637,4 +1637,22 @@ async function pick(slug){
 }
 })();
 </script>
+<script>
+(function(){
+const cols="id,name,team,position,rating,last_change,photo";
+ltop=async function(){
+ if(LTOP)return LTOP;
+ try{
+  if(COMPS.length<2)await loadComps();
+  const rs=await Promise.all(COMPS.map(c=>sb0.schema(c.schema_name).from("players").select(cols).not("photo","is",null).order("rating",{ascending:false}).limit(16).then(r=>(r.data||[]).filter(p=>p.photo&&p.rating>=75),()=>[])));
+  const ls=rs.filter(l=>l.length).sort(()=>Math.random()-.5),out=[],seen=new Set();
+  for(let i=0;i<16;i++)for(const l of ls){const p=l[i];if(p&&!seen.has(p.name)){seen.add(p.name);out.push(p)}}
+  LTOP=out;out.forEach(p=>{PM[p.id]=p;PM[p.name]=p});
+ }catch(e){LTOP=[]}
+ return LTOP;
+};
+const L=document.querySelector("#lp");
+if(L&&L.style.display==="block"){LTOP=null;ltop().then(()=>{scatter(L)})}
+})();
+</script>
 </body></html>

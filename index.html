@@ -745,6 +745,16 @@ header .lgsel,.lgsel{height:44px;box-sizing:border-box;border-radius:var(--r2,10
 .cd .c b{font-weight:600}
 .cd .c .tlg.s,.cd .c .tb{width:17px!important;height:17px!important;margin:0!important;flex:none;vertical-align:0}
 .cd .c .tb{font-size:8px;display:inline-flex;align-items:center;justify-content:center}
+
+/* --- v3: название раздела слева, лига справа --- */
+header .lgo{display:flex!important;flex:1 1 auto;min-width:0;gap:10px;font-size:clamp(17px,5.2vw,22px);font-weight:700;letter-spacing:-.025em;margin:0}
+header .lgo span{display:block;overflow:visible;text-overflow:clip;white-space:nowrap;line-height:1}
+header .lgo::before{content:"";flex:none;width:4px;height:22px;border-radius:2px;background:var(--tx,#111)}
+header .hr{margin-left:0;gap:6px;flex:none}
+header .lgsel,.lgsel{height:40px;font-size:13.5px;padding:0 24px 0 11px;background-position:right 8px center;text-align:left;white-space:nowrap}
+header #hp,header #hl,header #co{height:40px}
+header #hp,header #hl{width:40px!important;max-width:40px!important}
+header #co{padding:0 10px!important}
 </style></head><body><noscript><style>#bs{display:none}</style><main style="position:static;padding:32px 20px;max-width:560px;margin:0 auto"><h1>Club</h1><p>Fantasy-футбол по топ-5 лигам и Лиге чемпионов: собери клуб из реальных игроков, открывай паки и соревнуйся с друзьями в лигах.</p><p>Для игры нужен включённый JavaScript.</p></main></noscript><div id="bs"><div class="bl" role="status" aria-label="Загрузка"><i class="mk"></i></div></div><script>setTimeout(function(){var e=document.getElementById("bs");e&&e.remove()},12000)</script>
 <header style="display:none"><div class="lgo"><i class="mk"></i><span id="pt"></span></div><div class="hr"><button id="hp" aria-label="Обучение" title="Обучение">?</button><button id="hl" title="Выйти из аккаунта"></button><span id="co" title="Монеты"></span></div></header>
 <main id="m"></main><button id="mx" class="g" aria-label="Закрыть матч">✕</button>
@@ -764,7 +774,7 @@ const SCH_OF=s=>(COMPS.find(c=>c.slug===s)||{schema_name:"public"}).schema_name;
 const sb=new Proxy(sb0,{get(o,k){if(k==="from")return t=>o.schema(SCH_OF(CLG)).from(t);if(k==="rpc")return(f,a,opt)=>o.schema(SCH_OF(CLG)).rpc(f,a,opt);const v=o[k];return typeof v==="function"?v.bind(o):v}});
 const lgSel=()=>`<button type="button" class="lgsel" aria-label="Сменить лигу">${(COMPS.find(c=>c.slug===CLG)||COMPS[0]).short}</button>`;
 document.addEventListener("click",e=>{const s=e.target.closest&&e.target.closest(".lgsel");if(!s)return;modal(`<div class="box"><h3>Выбери лигу</h3><div style="display:grid;gap:8px;margin-top:12px">${COMPS.map(c=>`<button class="b${c.slug===CLG?"":" g"}" data-lg="${c.slug}">${c.name}</button>`).join("")}</div></div>`);document.querySelectorAll("#md [data-lg]").forEach(x=>x.onclick=()=>{if(x.dataset.lg===CLG){closeM();return}try{localStorage.setItem("club_lg",x.dataset.lg)}catch(z){}location.reload()})});
-async function loadComps(){try{const {data}=await sb0.from("competitions").select("*").eq("active",true).order("sort");if(data&&data.length)COMPS=data;if(!COMPS.find(c=>c.slug===CLG))CLG=COMPS[0].slug;const c=COMPS.find(c=>c.slug===CLG);document.title="Club | "+c.name;document.querySelectorAll("header .lgsel").forEach(e=>e.remove());const h=document.querySelector("header");if(h)h.insertAdjacentHTML("afterbegin",lgSel());const {data:ti}=await sb.from("team_info").select("team,logo");LOGO={};(ti||[]).forEach(r=>{if(r.logo)LOGO[r.team]=r.logo})}catch(e){}}
+async function loadComps(){try{const {data}=await sb0.from("competitions").select("*").eq("active",true).order("sort");if(data&&data.length)COMPS=data;if(!COMPS.find(c=>c.slug===CLG))CLG=COMPS[0].slug;const c=COMPS.find(c=>c.slug===CLG);document.title="Club | "+c.name;document.querySelectorAll("header .lgsel").forEach(e=>e.remove());const h=document.querySelector("header .hr");if(h)h.insertAdjacentHTML("afterbegin",lgSel());const {data:ti}=await sb.from("team_info").select("team,logo");LOGO={};(ti||[]).forEach(r=>{if(r.logo)LOGO[r.team]=r.logo})}catch(e){}}
 const LOAD='<div class="bl" role="status" aria-label="Загрузка"><i class="mk"></i></div>';
 let FRESH=0,HT=0;
 async function hold(m,pr,ms=12000){const t=++HT;m.querySelectorAll(".ldo").forEach(e=>e.remove());m.classList.add("ldg");m.insertAdjacentHTML("afterbegin",LOAD.replace('class="bl"','class="bl ldo"'));

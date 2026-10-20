@@ -890,7 +890,7 @@ const tchip=(n,l)=>{const w=n.split(" ");return`<i class="tb"${l?` data-team="${
 const bdg=(n,s,l)=>TCODE[n]?`<img class="tlg${s?" s":""}" referrerpolicy="no-referrer" loading="lazy" decoding="async" alt="" src="${bUrl(n,BPI)}" data-i="${BPI}" data-n="${esc(n)}"${s?' data-s="1"':""}${l?` data-team="${esc(n)}"`:""}>`:s?"":tchip(n,l);
 addEventListener("error",e=>{const t=e.target;if(!t.classList||!t.classList.contains("tlg"))return;const i=+t.dataset.i+1;if(i<BU.length){t.dataset.i=i;t.src=bUrl(t.dataset.n,i)}else if(t.dataset.s)t.remove();else t.outerHTML=tchip(t.dataset.n,t.hasAttribute("data-team"))},true);
 addEventListener("load",e=>{const t=e.target;if(t.classList&&t.classList.contains("tlg"))BPI=+t.dataset.i},true);
-const rg=v=>v==null?"n":v>=8?"h":v>=7?"g":v>=6?"m":"l",rf=v=>v==null?"-":Number(v).toFixed(1),sg=v=>(v>0?"+":"")+Number(v).toFixed(1);
+const rg=v=>v==null?"n":v>=8?"h":v>=7?"g":v>=6?"m":"l",rf=v=>v==null?"-":Number(v).toFixed(1).replace(/^10\.0$/,"10"),sg=v=>(v>0?"+":"")+Number(v).toFixed(1);
 const fmtD=d=>d?new Date(d).toLocaleDateString("ru-RU",{weekday:"short",day:"numeric",month:"short"}):"Дата уточняется",fmtT=d=>d?new Date(d).toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"}):"";
 const curR=()=>{const r=MT.filter(x=>!x.finished).map(x=>x.round);return r.length?Math.min(...r):38};
 const mst=x=>x.finished?"fin":(x.ft||x.status==="ft")?"ft":x.status==="live"?"live":"sch";

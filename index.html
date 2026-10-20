@@ -744,13 +744,13 @@ main.in>*,.mw:not(.na)>*{animation:none}
 const SB_URL="https://pvocjvvzkvzhckilhokx.supabase.co";
 const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB2b2NqdnZ6a3Z6aGNraWxob2t4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEzMjEyNzEsImV4cCI6MjEwNjg5NzI3MX0.UkWtFCI0LME9DBx6ZRGuzB_BnvBKlEVLynIgzWmRdUg";
 const sb0=supabase.createClient(SB_URL,SB_KEY);
-let LG="epl";try{LG=localStorage.getItem("club_lg")||"epl"}catch(e){}
+let CLG="epl";try{CLG=localStorage.getItem("club_lg")||"epl"}catch(e){}
 let COMPS=[{slug:"epl",short:"АПЛ",name:"Английская Премьер-лига",schema_name:"public"}],LOGO={};
 const SCH_OF=s=>(COMPS.find(c=>c.slug===s)||{schema_name:"public"}).schema_name;
-const sb=new Proxy(sb0,{get(o,k){if(k==="from")return t=>o.schema(SCH_OF(LG)).from(t);if(k==="rpc")return(f,a,opt)=>o.schema(SCH_OF(LG)).rpc(f,a,opt);const v=o[k];return typeof v==="function"?v.bind(o):v}});
-const lgSel=()=>`<select class="lgsel" aria-label="Лига">${COMPS.map(c=>`<option value="${c.slug}"${c.slug===LG?" selected":""}>${c.short}</option>`).join("")}</select>`;
+const sb=new Proxy(sb0,{get(o,k){if(k==="from")return t=>o.schema(SCH_OF(CLG)).from(t);if(k==="rpc")return(f,a,opt)=>o.schema(SCH_OF(CLG)).rpc(f,a,opt);const v=o[k];return typeof v==="function"?v.bind(o):v}});
+const lgSel=()=>`<select class="lgsel" aria-label="Лига">${COMPS.map(c=>`<option value="${c.slug}"${c.slug===CLG?" selected":""}>${c.short}</option>`).join("")}</select>`;
 document.addEventListener("change",e=>{const s=e.target;if(s&&s.classList&&s.classList.contains("lgsel")){try{localStorage.setItem("club_lg",s.value)}catch(x){}location.reload()}});
-async function loadComps(){try{const {data}=await sb0.from("competitions").select("*").eq("active",true).order("sort");if(data&&data.length)COMPS=data;if(!COMPS.find(c=>c.slug===LG))LG=COMPS[0].slug;const c=COMPS.find(c=>c.slug===LG);document.title="Club | "+c.name;document.querySelectorAll("header .lgsel").forEach(e=>e.remove());const h=document.querySelector("header .hr");if(h)h.insertAdjacentHTML("afterbegin",lgSel());const {data:ti}=await sb.from("team_info").select("team,logo");LOGO={};(ti||[]).forEach(r=>{if(r.logo)LOGO[r.team]=r.logo})}catch(e){}}
+async function loadComps(){try{const {data}=await sb0.from("competitions").select("*").eq("active",true).order("sort");if(data&&data.length)COMPS=data;if(!COMPS.find(c=>c.slug===CLG))CLG=COMPS[0].slug;const c=COMPS.find(c=>c.slug===CLG);document.title="Club | "+c.name;document.querySelectorAll("header .lgsel").forEach(e=>e.remove());const h=document.querySelector("header .hr");if(h)h.insertAdjacentHTML("afterbegin",lgSel());const {data:ti}=await sb.from("team_info").select("team,logo");LOGO={};(ti||[]).forEach(r=>{if(r.logo)LOGO[r.team]=r.logo})}catch(e){}}
 const LOAD='<div class="bl" role="status" aria-label="Загрузка"><i class="mk"></i></div>';
 let FRESH=0,HT=0;
 async function hold(m,pr,ms=12000){const t=++HT;m.querySelectorAll(".ldo").forEach(e=>e.remove());m.classList.add("ldg");m.insertAdjacentHTML("afterbegin",LOAD.replace('class="bl"','class="bl ldo"'));
@@ -1441,7 +1441,7 @@ function lvStrip(h){const a=(MT||[]).filter(x=>mst(x)==="live"&&x.round!==FXR);r
 function liveDot(){const b=document.querySelector('nav button[data-t="fx"]');b&&b.classList.toggle("lvd",!!(MT&&MT.some(x=>mst(x)==="live")))}
 function scheduleDetail(ms){clearTimeout(RDB);RDB=setTimeout(refreshDetail,ms)}
 function refreshDetail(){const id=curOpen();if(!id||!MT)return;if(LMID===id)lmatch(id,1);else mdetail(id,1)}
-function watchMatch(id){unwatchMatch();RCH=sb.channel("mr"+id).on("postgres_changes",{event:"*",schema:SCH_OF(LG),table:"player_match_ratings",filter:"match_id=eq."+id},()=>scheduleDetail(1200)).on("postgres_changes",{event:"*",schema:SCH_OF(LG),table:"match_timeline",filter:"match_id=eq."+id},()=>scheduleDetail(1200)).on("postgres_changes",{event:"*",schema:SCH_OF(LG),table:"match_team_stats",filter:"match_id=eq."+id},()=>scheduleDetail(1200)).subscribe()}
+function watchMatch(id){unwatchMatch();RCH=sb.channel("mr"+id).on("postgres_changes",{event:"*",schema:SCH_OF(CLG),table:"player_match_ratings",filter:"match_id=eq."+id},()=>scheduleDetail(1200)).on("postgres_changes",{event:"*",schema:SCH_OF(CLG),table:"match_timeline",filter:"match_id=eq."+id},()=>scheduleDetail(1200)).on("postgres_changes",{event:"*",schema:SCH_OF(CLG),table:"match_team_stats",filter:"match_id=eq."+id},()=>scheduleDetail(1200)).subscribe()}
 function unwatchMatch(){clearTimeout(RDB);if(RCH){sb.removeChannel(RCH);RCH=null}}
 function paint(o,x){if(mst(o)!==mst(x)){for(const d of [...FXD])d()}else document.querySelectorAll('.mt[data-id="'+x.id+'"] .sc').forEach(e=>e.outerHTML=scr(x));liveDot();if(curOpen()===x.id)scheduleDetail(2500)}
 function onMatch(r){if(!MT||!r)return;const i=MT.findIndex(v=>v.id===r.id);if(i<0)return;const o=MT[i],n={...o};MK.forEach(k=>{if(k in r)n[k]=r[k]});MT[i]=n;
@@ -1452,8 +1452,8 @@ async function poll(){if(document.hidden||!MT)return;const now=Date.now();
  if(!MT.some(x=>x.status==="live"||x.ft||(!x.finished&&+new Date(x.kickoff)<=now+6e4&&now-new Date(x.kickoff)<5*36e5)))return;
  await patchMT();if(PF)checkScores();if(curOpen())scheduleDetail(300)}
 function liveInit(){if(!POLL){POLL=setInterval(poll,30000);document.addEventListener("visibilitychange",()=>{if(!document.hidden)poll()})}
- if(LCH)return;LCH=sb.channel("live-matches").on("postgres_changes",{event:"UPDATE",schema:SCH_OF(LG),table:"matches"},p=>onMatch(p.new)).subscribe()}
-function scoreInit(){if(SCH||!PF)return;SCH=sb.channel("my-scores").on("postgres_changes",{event:"*",schema:SCH_OF(LG),table:"match_scores",filter:"user_id=eq."+PF.id},()=>checkScores()).subscribe();checkScores()}
+ if(LCH)return;LCH=sb.channel("live-matches").on("postgres_changes",{event:"UPDATE",schema:SCH_OF(CLG),table:"matches"},p=>onMatch(p.new)).subscribe()}
+function scoreInit(){if(SCH||!PF)return;SCH=sb.channel("my-scores").on("postgres_changes",{event:"*",schema:SCH_OF(CLG),table:"match_scores",filter:"user_id=eq."+PF.id},()=>checkScores()).subscribe();checkScores()}
 function scoreStop(){if(SCH){sb.removeChannel(SCH);SCH=null}SEEN=null;unwatchMatch()}
 function toast(h,id){const t=document.createElement("div");t.className="tst";t.innerHTML=h;t.onclick=()=>{t.remove();if(id&&PF){FXM=id;tab="fx";view()}};$("#toasts").appendChild(t);setTimeout(()=>t.remove(),9000);navigator.vibrate&&navigator.vibrate(40)}
 async function checkScores(){if(!PF)return;try{

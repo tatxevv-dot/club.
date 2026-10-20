@@ -375,6 +375,7 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stro
 .cpc{position:relative}.cpb{user-select:none}
 .cpo{position:absolute;left:0;right:0;bottom:0;height:min(100%,215px);z-index:2;border-radius:0 0 10px 10px;-webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px);background:linear-gradient(180deg,rgba(var(--ab),.1),rgba(var(--ab),.7));-webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,.1),rgba(0,0,0,.7) 55%,rgba(0,0,0,.7));mask-image:linear-gradient(180deg,rgba(0,0,0,.1),rgba(0,0,0,.7) 55%,rgba(0,0,0,.7))}.cph{display:none!important}
 button.cpm{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:3;width:auto;min-height:42px;padding:0 22px;margin:0;white-space:nowrap}
+button.cpm.cpl{position:static;transform:none;display:block;margin:12px auto 0}
 /* ---------- auth v2 ---------- */
 .ac{grid-template-columns:1fr!important;width:min(448px,100%)!important}.av{display:none!important}
 .al{text-align:center;--px:32px;--py:30px}.al .lgo{justify-content:center;margin-bottom:22px}.al .fl{text-align:left}
@@ -1106,10 +1107,13 @@ function landing(){document.body.classList.remove("mdt","app");liveInit();$("#m"
  if("IntersectionObserver"in window){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{root:L,threshold:.08});L.querySelectorAll(".rvl").forEach(x=>io.observe(x))}else L.querySelectorAll(".rvl").forEach(x=>x.classList.add("in"));
  fillL(LD);rpc("landing_data").then(d=>{LD=d;fillL(d);scatter(L)}).catch(()=>fillL(LD||{}));ltop().then(()=>{fillL(LD);scatter(L)})}
 const CAPX={};
-function capList(sel,n=5){const e=$(sel);if(!e||CAPX[sel])return;const k=[...e.children].filter(c=>c.matches(".st,.pl"));if(k.length<=n)return;
- k.forEach((c,i)=>{if(i>=n+3)c.classList.add("cph");else if(i>=n)c.classList.add("cpb")});e.classList.add("cpc");const o=document.createElement("div");o.className="cpo";e.appendChild(o);
- const b=document.createElement("button");b.type="button";b.className="b cpm";b.textContent="Показать больше ("+(k.length-n)+")";
- b.onclick=()=>{CAPX[sel]=1;k.forEach(c=>c.classList.remove("cph","cpb"));e.classList.remove("cpc");b.remove();o.remove()};e.appendChild(b)}
+function capList(sel,n=5){const e=$(sel);if(!e)return;e.querySelectorAll(".cpo,.cpm").forEach(x=>x.remove());
+ const k=[...e.children].filter(c=>c.matches(".st,.pl"));k.forEach(c=>c.classList.remove("cph","cpb"));e.classList.remove("cpc");if(k.length<=n)return;
+ const mk=(t,f)=>{const b=document.createElement("button");b.type="button";b.className="b cpm";b.textContent=t;b.onclick=f;e.appendChild(b);return b};
+ if(CAPX[sel]){const c=mk("Свернуть",()=>{CAPX[sel]=0;capList(sel)});c.classList.add("cpl");return}
+ k.forEach((c,i)=>{if(i>=n+3)c.classList.add("cph");else if(i>=n)c.classList.add("cpb")});e.classList.add("cpc");
+ const o=document.createElement("div");o.className="cpo";e.appendChild(o);
+ mk("Показать больше ("+(k.length-n)+")",()=>{CAPX[sel]=1;capList(sel)})}
 function fillL(D){fillL0(D);capList("#lst");capList("#lup");capList("#ldw")}
 function fillL0(D){if(!D||!$("#lcn"))return;const c=D.counts||{},nf=v=>v==null?"-":Number(v).toLocaleString("ru-RU"),lst=(a,f)=>a&&a.length?a.map(f).join(""):'<small class="emp">Пока нет данных</small>';
  $("#lfan").innerHTML=(D.stars||[]).map(p=>zcard(p.photo?p:Object.assign({},p,{photo:(PM[p.id]||PM[p.name]||{}).photo}))).join("");

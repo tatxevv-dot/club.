@@ -1585,4 +1585,19 @@ st.textContent="Собираю архив... ок "+ok+", не вышло "+bad.
 const blob=await zip.generateAsync({type:"blob"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="players.zip";a.textContent="ГОТОВО ("+ok+" фото, "+Math.round(blob.size/1048576)+" МБ). НАЖМИ, ЧТОБЫ СОХРАНИТЬ";a.style.cssText="position:fixed;z-index:100000;top:10px;left:10px;right:10px;padding:18px;font-size:18px;font-weight:700;background:#3b82f6;color:#fff;text-align:center;border-radius:12px;text-decoration:none";document.body.append(a);b.remove();st.textContent="Не скачано: "+bad.length};
 })}
 </script>
+<style id="face-cards">
+.cd{--fr:rgba(255,255,255,.35);--fg:rgba(255,255,255,.12)}
+.cd.r1{--fr:#6aa8f5;--fg:rgba(96,156,240,.35)}
+.cd.r2{--fr:#f2b933;--fg:rgba(240,176,40,.4)}
+.cd.r3{--fr:#e8c76a;--fg:rgba(232,199,106,.5)}
+.cd .ph{position:absolute!important;right:6%!important;left:auto!important;top:15%!important;width:58%!important;height:auto!important;aspect-ratio:1/1;border-radius:50%;object-fit:cover!important;object-position:50% 12%!important;-webkit-mask-image:none!important;mask-image:none!important;z-index:1!important;
+background:radial-gradient(circle at 50% 30%,rgba(255,255,255,.38),rgba(255,255,255,.06) 70%);
+border:2px solid var(--fr);box-shadow:0 0 0 3px var(--fg),0 8px 18px -6px rgba(0,0,0,.6),inset 0 -10px 16px -8px rgba(0,0,0,.35)}
+.cd .o,.cd .n,.cd .c{position:relative;z-index:2}
+.cd .o{text-shadow:0 1px 6px rgba(0,0,0,.35)}
+.cd .n{text-shadow:0 1px 6px rgba(0,0,0,.35)}
+.czt .cd .ph{top:17%!important;width:62%!important;border-width:3px}
+.cd.zc .ph{width:60%!important}
+html[data-theme=light] .cd .ph{background:radial-gradient(circle at 50% 30%,rgba(255,255,255,.9),rgba(16,22,36,.06) 75%)}
+</style>
 </body></html>

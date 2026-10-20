@@ -371,6 +371,17 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stro
 .ac button.ax{position:absolute;top:14px;right:14px;z-index:3;width:44px;min-height:44px;height:44px;padding:0;margin:0}
 @media(max-width:700px){.ac{grid-template-columns:1fr;background:rgb(var(--ab));-webkit-backdrop-filter:none;backdrop-filter:none;animation:none}.av{display:none}.al{--px:22px;--py:22px;padding:64px var(--px) var(--py);justify-content:flex-start}}
 
+/* ---------- auth v2 ---------- */
+.ac{grid-template-columns:1fr!important;width:min(448px,100%)!important}.av{display:none!important}
+.al{text-align:center;--px:32px;--py:30px}.al .lgo{justify-content:center;margin-bottom:22px}.al .fl{text-align:left}
+.al h2{font-size:26px}.al p{font-size:14.5px;margin-bottom:18px}
+.pk3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:14px 8px;margin:0 0 18px;border-radius:var(--r3);background:linear-gradient(180deg,rgba(var(--wh),.06),rgba(var(--wh),.02));border:1px solid var(--ln)}
+.pk3 div{display:grid;justify-items:center;gap:7px;font-size:12px;line-height:1.25;color:var(--tx2)}.pk3 .ic{color:var(--ac);display:grid;place-items:center}.pk3 .ic svg{width:22px;height:22px}
+.al .oa{grid-template-columns:1fr;gap:10px}.al .oa button{position:relative;min-height:52px;justify-content:center;font-size:14px;font-weight:600;letter-spacing:.01em}.al .oa svg{position:absolute;left:18px}
+.al button.sl{background:none;border:0;box-shadow:none;color:var(--tx2);font:500 14px var(--f);margin-top:12px;min-height:40px}.al button.sl b{color:var(--ac);font-weight:600}
+.al small{font-size:12px;line-height:1.5;margin-top:10px}
+@media(max-width:700px){.al{--px:20px;--py:20px;padding:26px var(--px) var(--py)}.pk3{padding:12px 6px}}
+
 /* ---------- onboarding (first login) ---------- */
 .ob{margin:6px 0 22px}
 
@@ -787,7 +798,7 @@ function authView(up){if($("#lp").style.display!=="block")landing();const A=$("#
  IF='<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.8-4.7 4.54-4.7 1.31 0 2.68.24 2.68.24v2.97h-1.5c-1.5 0-1.96.93-1.96 1.89v2.26h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z"/></svg>',
  IA='<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12.15 6.9c-.95 0-2.42-1.08-3.96-1.04-2.04.03-3.91 1.18-4.96 3.01-2.12 3.68-.55 9.1 1.52 12.09 1.01 1.45 2.21 3.09 3.79 3.04 1.52-.07 2.09-.99 3.94-.99 1.83 0 2.35.99 3.96.95 1.64-.03 2.68-1.48 3.68-2.95 1.16-1.69 1.64-3.33 1.66-3.42-.04-.01-3.18-1.22-3.22-4.86-.03-3.04 2.48-4.49 2.6-4.56-1.43-2.09-3.62-2.32-4.39-2.38-2-.16-3.68 1.09-4.61 1.09zM15.53 3.83c.84-1.01 1.4-2.43 1.25-3.83-1.21.05-2.66.8-3.53 1.82-.78.9-1.45 2.34-1.27 3.71 1.34.1 2.72-.69 3.55-1.7z"/></svg>',
  perks=[["cal","Реальные матчи","Оценки считаются по итогам настоящих игр"],["sh","Честная игра","Очки и награды начисляет сервер"],["us","Играй с друзьями","Лиги по коду и общий рейтинг"]];
- A.innerHTML=`<div class="ac" role="dialog" aria-modal="true" aria-labelledby="at"><button class="g ax" aria-label="Закрыть">✕</button><div class="al"><div class="lgo"><i class="mk"></i>Club</div><div class="sw" role="tablist"><button type="button" role="tab" data-m="0">Вход</button><button type="button" role="tab" data-m="1">Регистрация</button></div><h2 id="at"></h2><p id="ap"></p><div class="oa"><button class="g" data-p="google">${IG}Google</button><button class="g" data-p="facebook">${IF}Facebook</button><button class="g" data-p="apple">${IA}Apple</button></div><div class="or">или почтой</div><label class="fl"><span>Почта</span><input id="em" type="email" placeholder="name@example.com" autocomplete="email"></label><label class="fl"><span>Пароль</span><input id="pw" type="password" placeholder="От 6 символов" autocomplete="${up?"new-password":"current-password"}"></label><div class="sf"><div class="err" id="er" role="alert"></div><button class="b" id="sbm"></button></div><small>Входя, ты соглашаешься с правилами игры. Проект независимый.</small></div><div class="av"><div class="avc"><span class="ey">Что внутри</span>${perks.map(a=>`<div class="pl"><div class="ic">${ico(a[0])}</div><div class="pi"><div>${a[1]}</div><small>${a[2]}</small></div></div>`).join("")}</div></div></div>`;
+ A.innerHTML=`<div class="ac" role="dialog" aria-modal="true" aria-labelledby="at"><button class="g ax" aria-label="Закрыть">✕</button><div class="al"><div class="lgo"><i class="mk"></i>Club</div><h2 id="at"></h2><p id="ap"></p><div class="pk3">${[["cal","Реальные матчи"],["sh","Честный счёт"],["us","Лиги с друзьями"]].map(a=>`<div><span class="ic">${ico(a[0])}</span>${a[1]}</div>`).join("")}</div><div class="oa"><button class="b" data-p="google">${IG}Продолжить через Google</button><button class="g" data-p="apple">${IA}Продолжить через Apple</button><button class="g" data-p="facebook">${IF}Продолжить через Facebook</button></div><div class="or">или почтой</div><label class="fl"><span>Почта</span><input id="em" type="email" placeholder="name@example.com" autocomplete="email"></label><label class="fl"><span>Пароль</span><input id="pw" type="password" placeholder="От 6 символов" autocomplete="${up?"new-password":"current-password"}"></label><div class="sf"><div class="err" id="er" role="alert"></div><button class="b" id="sbm"></button></div><button type="button" class="sl" id="sw"></button><small>Продолжая, ты соглашаешься с правилами игры. Проект независимый.</small></div></div>`;
  A.onclick=x=>{if(x.target===A)closeAuth()};A.querySelector(".ax").onclick=closeAuth;
  const go=async(up)=>{const email=$("#em").value.trim(),password=$("#pw").value;$("#er").style.color="";$("#er").textContent="";if(!email||password.length<6){$("#er").textContent="Введи почту и пароль от 6 символов";return}
   const ov=document.createElement("div");ov.className="aov";ov.innerHTML=LOAD;A.querySelector(".ac").appendChild(ov);let r;try{r=up?await sb.auth.signUp({email,password}):await sb.auth.signInWithPassword({email,password})}finally{ov.remove()}
@@ -795,10 +806,10 @@ function authView(up){if($("#lp").style.display!=="block")landing();const A=$("#
   if(up&&!r.data.session){$("#er").style.color="var(--ok)";$("#er").textContent="Мы отправили письмо. Подтверди почту и войди.";return}
   closeAuth();boot()};
  A.querySelectorAll("[data-p]").forEach(b=>b.onclick=async()=>{$("#er").style.color="";$("#er").textContent="";const {error}=await sb.auth.signInWithOAuth({provider:b.dataset.p,options:{redirectTo:location.origin+location.pathname}});if(error)$("#er").textContent=error.message});
- const TX=[["С возвращением","Войди, чтобы продолжить игру: паки, состав и лиги ждут.","Войти"],["Собери клуб и играй бесплатно","Паки, составы и лиги с друзьями по реальным матчам Премьер-лиги.","Создать аккаунт"]];
- const setM=u=>{up=!!u;const t=TX[+up];A.querySelectorAll(".sw button").forEach(b=>{const on=+b.dataset.m===+up;b.classList.toggle("on",on);b.setAttribute("aria-selected",on)});
+ const TX=[["С возвращением","Войди, чтобы продолжить: паки, состав, задания и лиги ждут.","Войти"],["Создай свой клуб","Бесплатно. Паки, составы, задания и лиги с друзьями по реальным матчам Премьер-лиги.","Создать аккаунт"]];
+ const setM=u=>{up=!!u;const t=TX[+up];$("#sw").innerHTML=up?"Уже есть аккаунт? <b>Войти</b>":"Нет аккаунта? <b>Создать</b>";
   $("#at").textContent=t[0];$("#ap").textContent=t[1];$("#sbm").textContent=t[2];$("#pw").autocomplete=up?"new-password":"current-password";$("#er").style.color="";$("#er").textContent=""};
- A.querySelectorAll(".sw button").forEach(b=>b.onclick=()=>setM(+b.dataset.m));setM(up);
+ $("#sw").onclick=()=>setM(!up);setM(up);
  $("#sbm").onclick=()=>go(up);$("#pw").onkeydown=x=>{if(x.key==="Enter")go(up)};setTimeout(()=>$("#em")&&$("#em").focus(),50)}
 
 
@@ -1371,7 +1382,7 @@ async function teamStats(){if(!MT)await patchMT();const e=$("#tms");if(!e)return
 // ---------- обучение ----------
 let TE=null;
 const TS=[
- {sel:"#nv",t:"Меню игры",x:"Шесть разделов: стадион, паки, состав, туры, лига и статистика. Сейчас быстро пройдёмся по каждому."},
+ {sel:"#nv",t:"Меню игры",x:"Восемь разделов: стадион, паки, состав, туры, лига, статистика, задания и скаут. Быстро пройдёмся по каждому."},
  {tab:"st",sel:"#co",t:"Монеты",x:"Твоя валюта. На монеты покупаешь паки и улучшаешь стадион."},
  {tab:"st",sel:"#stg",t:"Твой стадион",x:"Он сам приносит монеты каждый час. Нажимай на трибуны, кассу и музей, чтобы улучшать их."},
  {tab:"st",sel:"#cl",t:"Забирай доход",x:"Монеты копятся в кассе, пока она не заполнится. Заходи и жми «Забрать»."},
@@ -1381,9 +1392,11 @@ const TS=[
  {tab:"fx",sel:".rs",t:"Туры",x:"Расписание и счёт всех 38 туров. Нажми на матч, чтобы увидеть составы и оценки игроков."},
  {tab:"lg",sel:"#m .box",t:"Лиги",x:"Очки считаются по настоящим матчам. Создай лигу, отправь код друзьям и соревнуйтесь."},
  {tab:"ss",sel:"#m .box",t:"Статистика",x:"Бомбардиры, ассистенты, кто растёт в рейтинге. Нажми на игрока, чтобы открыть его карточку."},
- {t:"Готово!",x:"Собирай состав, открывай паки и поднимайся в таблице. Обучение можно повторить кнопкой «?» вверху."}];
-function tourAuto(){try{if(localStorage.getItem("club_tour"))return}catch(e){}setTimeout(()=>tour(0),700)}
-function tourEnd(){try{localStorage.setItem("club_tour","1")}catch(e){}const o=$("#tov");o&&o.remove();removeEventListener("resize",tpos);if(PF){tab="st";FXM=null;view()}}
+ {tab:"qs",sel:"#m .box",t:"Задания",x:"Ежедневные задания и достижения. Выполняй их и забирай награду: монеты или пак."},
+ {tab:"sc",sel:"#m .box",t:"Скаут",x:"Показывает, у кого из твоих игроков в этом туре самые лёгкие соперники. Удобно для состава и выбора капитана."},
+ {t:"Готово!",x:"Собирай состав, выполняй задания, открывай паки и поднимайся в таблице. Обучение можно повторить кнопкой «?» вверху."}];
+function tourAuto(){try{if(localStorage.getItem("club_tour2"))return}catch(e){}setTimeout(()=>tour(0),700)}
+function tourEnd(){try{localStorage.setItem("club_tour2","1")}catch(e){}const o=$("#tov");o&&o.remove();removeEventListener("resize",tpos);if(PF){tab="st";FXM=null;view()}}
 function tpos(){const o=$("#tov");if(!o)return;const sp=$("#tsp"),tp=$("#ttp"),vw=innerWidth,vh=innerHeight,tw=Math.min(320,vw-24);tp.style.width=tw+"px";const th=tp.offsetHeight;
  if(!TE){sp.style.cssText="left:50%;top:50%;width:0;height:0";tp.style.left=(vw-tw)/2+"px";tp.style.top=Math.max(12,(vh-th)/2)+"px";return}
  const r=TE.getBoundingClientRect(),p=8;sp.style.cssText=`left:${r.left-p}px;top:${r.top-p}px;width:${r.width+2*p}px;height:${r.height+2*p}px`;

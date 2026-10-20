@@ -703,10 +703,17 @@ main.in>*,.mw:not(.na)>*{animation:none}
 
 /* fix: opaque modal/auth backdrop so the page behind never bleeds through */
 .modal,#au{background:var(--bg);-webkit-backdrop-filter:none;backdrop-filter:none}
+</style><style>
+.qr{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--ln)}.qr:first-of-type{border-top:0}
+.qr>div:first-child{flex:1;min-width:0}.qr .bar{margin-top:8px}.qr b{display:block}.qr .rw{white-space:nowrap}
+.qr.dn{opacity:.55}.qh{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.bst{display:inline-block;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:600;border:1px solid var(--ln2)}
+.ez3{color:var(--ok)}.ez2{color:var(--warn)}.ez1{color:var(--bad)}
+.sco{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--ln)}.sco .pi{flex:1;min-width:0}
 </style></head><body><noscript><style>#bs{display:none}</style><main style="position:static;padding:32px 20px;max-width:560px;margin:0 auto"><h1>Club</h1><p>Fantasy-футбол по Английской Премьер-лиге: собери клуб из реальных игроков, открывай паки и соревнуйся с друзьями в лигах.</p><p>Для игры нужен включённый JavaScript.</p></main></noscript><div id="bs"><div class="bl" role="status" aria-label="Загрузка"><i class="mk"></i></div></div><script>setTimeout(function(){var e=document.getElementById("bs");e&&e.remove()},12000)</script>
 <header style="display:none"><div class="lgo"><i class="mk"></i><span id="pt"></span></div><div class="hr"><button id="hp" aria-label="Обучение" title="Обучение">?</button><button id="hl" title="Выйти из аккаунта"></button><span id="co" title="Монеты"></span></div></header>
 <main id="m"></main><button id="mx" class="g" aria-label="Закрыть матч">✕</button>
-<nav id="nv" style="display:none" aria-label="Разделы игры"><div class="nb"><i class="mk"></i>Club</div><button data-t="st"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="8" rx="9" ry="4"/><path d="M3 8v8c0 2.2 4 4 9 4s9-1.8 9-4V8"/></svg>Стадион</button><button data-t="pk"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2.5"/><circle cx="12" cy="12" r="3.5"/></svg>Паки</button><button data-t="sq"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3L3 6l2 4 3-1v11h8V9l3 1 2-4-5-3a4 4 0 01-8 0z"/></svg>Состав</button><button data-t="fx"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Туры</button><button data-t="lg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4h8v5a4 4 0 01-8 0zM8 6H4v1a4 4 0 004 4M16 6h4v1a4 4 0 01-4 4M12 13v4M8 21h8M10 17h4"/></svg>Лига</button><button data-t="ss"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20V10M12 20V4M19 20v-7"/></svg>Статы</button></nav>
+<nav id="nv" style="display:none" aria-label="Разделы игры"><div class="nb"><i class="mk"></i>Club</div><button data-t="st"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="8" rx="9" ry="4"/><path d="M3 8v8c0 2.2 4 4 9 4s9-1.8 9-4V8"/></svg>Стадион</button><button data-t="pk"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2.5"/><circle cx="12" cy="12" r="3.5"/></svg>Паки</button><button data-t="sq"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3L3 6l2 4 3-1v11h8V9l3 1 2-4-5-3a4 4 0 01-8 0z"/></svg>Состав</button><button data-t="fx"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Туры</button><button data-t="lg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4h8v5a4 4 0 01-8 0zM8 6H4v1a4 4 0 004 4M16 6h4v1a4 4 0 01-4 4M12 13v4M8 21h8M10 17h4"/></svg>Лига</button><button data-t="ss"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20V10M12 20V4M19 20v-7"/></svg>Статы</button><button data-t="qs"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4h8v5a4 4 0 01-8 0zM12 13v3M8 21h8M10 16h4"/><path d="M5 5H3v2a3 3 0 003 3M19 5h2v2a3 3 0 01-3 3"/></svg>Задания</button><button data-t="sc"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5M11 8v6M8 11h6"/></svg>Скаут</button></nav>
 <div id="lp"></div>
 <div class="modal" id="md" role="dialog" aria-modal="true"></div>
 <div id="au"></div>
@@ -829,7 +836,7 @@ function view(){document.body.classList.remove("mdt");if(tab!=="fx")unwatchMatch
   m.querySelectorAll(".op").forEach(b=>b.onclick=async()=>{try{b.disabled=true;const r=await rpc("open_pack",{p_tier:+b.dataset.i});await refresh();view();reveal(+b.dataset.i,r.pack_id,r.offer.map(Number))}catch(e){alert(msg(e))}});
   m.querySelectorAll(".rs").forEach(b=>b.onclick=()=>{const p=PEND.find(x=>x.id==b.dataset.id);choose(p.id,p.offer.map(Number),1)});PS&&contractWire()}
  if(tab==="sq")sqEnter();
- if(tab==="fx")fixtures();if(tab==="lg")league();if(tab==="ss")stats()}
+ if(tab==="qs")quests();if(tab==="sc")scout();if(tab==="fx")fixtures();if(tab==="lg")league();if(tab==="ss")stats()}
 async function act(f){try{await f();await refresh();view()}catch(e){alert(msg(e))}}
 function reveal(t,pid,offer){const b=Math.max(...offer.map(i=>rar(PL[i].rating)));
  const m=modal(`<div class="hero">${packEl(t)}</div><div class="burst"></div>${Array.from({length:16},(_,i)=>`<s style="--a:${i*22.5}deg;--d:${110+Math.random()*150|0}px"></s>`).join("")}`);
@@ -838,7 +845,40 @@ function choose(pid,offer,fx){const sel=new Set();
  const draw=f=>{const m=modal(`<h3>Выбери 3 из 10</h3><div class="cards">${offer.map((id,n)=>card(id,(sel.has(id)?"sel":sel.size>=3?"dim":"")+(f?" deal":"")).replace('class="cd','style="--i:'+n+'" class="cd')).join("")}</div><button class="b" id="x" ${sel.size<3?"disabled":""}>Забрать (${sel.size}/3)</button><button class="g" id="lt" style="color:#fff;border-color:#ffffff40">Выбрать позже</button>`);
   m.querySelectorAll(".cd").forEach(e=>e.onclick=()=>{const id=+e.dataset.id;sel.has(id)?sel.delete(id):sel.size<3&&sel.add(id);draw()});
   $("#lt").onclick=closeM;
-  $("#x").onclick=async()=>{try{const r=await rpc("claim_pack",{p_pack:pid,p_picks:[...sel]});await refresh();closeM();view();if(r.dups)toast(`<b>Копии: +${r.dups}</b><small>Повторы сохранены. Из них можно собрать контракт во вкладке «Паки»</small>`)}catch(e){alert(msg(e))}}};draw(fx)}
+  $("#x").onclick=async()=>{try{const r=await rpc("claim_pack",{p_pack:pid,p_picks:[...sel]});await refresh();closeM();view();if(r.boost)toast(`<b>Выпал буст!</b><small>${BST[r.boost][0]} — применяй во вкладке «Скаут»</small>`);if(r.dups)toast(`<b>Копии: +${r.dups}</b><small>Повторы сохранены. Из них можно собрать контракт во вкладке «Паки»</small>`)}catch(e){alert(msg(e))}}};draw(fx)}
+
+// ---------- задания, ачивки, бусты, скаут ----------
+const BST={x3:["Тройной удар ×3","Очки одного игрока ×3 на тур"],all:["Командный заряд ×1.5","Очки всех 11 игроков ×1.5 на тур"]};
+const rwd=x=>x.rt==="coins"?CN+x.rv:"Пак: "+PKS[x.rv][0];
+const hm=t=>{const h=Math.floor(t/3600),m=Math.floor(t%3600/60);return h+" ч "+m+" мин"};
+function qrow(x,k){const ok=x.p>=x.goal;return`<div class="qr${x.done?" dn":""}"><div><b>${esc(x.ttl)}</b><small>${esc(x.dsc)} · ${x.p}/${x.goal} · ${rwd(x)}</small><div class="bar"><i style="width:${Math.min(100,x.p/x.goal*100)}%"></i></div></div><button class="b" data-qc="${x.id}" data-k="${k}" ${ok&&!x.done?"":"disabled"}>${x.done?"Получено":ok?"Забрать":rwd(x)}</button></div>`}
+async function quests(){const m=$("#m");m.innerHTML=LOAD;
+ try{const [q,a]=await Promise.all([rpc("quest_status"),rpc("ach_status")]);if(tab!=="qs")return;
+  const dn=q.quests.filter(x=>x.done).length;
+  m.innerHTML=`<div class="box"><div class="qh"><h3>Ежедневные задания</h3><small>${dn}/${q.quests.length} · обновятся через ${hm(q.left)}</small></div>${q.quests.map(x=>qrow(x,"q")).join("")}</div><div class="box"><div class="qh"><h3>Достижения</h3><small>${a.filter(x=>x.done).length}/${a.length}</small></div>${[...a].sort((x,y)=>(x.done-y.done)||((y.p/y.goal)-(x.p/x.goal))).map(x=>qrow(x,"a")).join("")}</div>`;
+  m.querySelectorAll("[data-qc]").forEach(b=>b.onclick=async()=>{b.disabled=true;try{const r=await rpc(b.dataset.k==="q"?"quest_claim":"ach_claim",{p_id:b.dataset.qc});await refresh();view();toast(r.rt==="coins"?`<b>+${r.rv} монет</b>`:`<b>Получен пак: ${PKS[r.rv][0]}</b><small>Открой его во вкладке «Паки»</small>`)}catch(e){alert(msg(e));b.disabled=false}})
+ }catch(e){m.innerHTML=ERRV(e)}}
+let SCP="ALL";
+function teamPow(){const T={};(MT||[]).forEach(x=>{if(!(x.finished||x.ft)||x.home_goals==null||x.away_goals==null)return;
+ [[x.home,x.home_goals,x.away_goals],[x.away,x.away_goals,x.home_goals]].forEach(([n,g,c])=>{const t=T[n]||(T[n]={p:0,d:0,n:0});t.n++;t.d+=g-c;t.p+=g>c?3:g==c?1:0})});
+ const P={};for(const n in T)P[n]=T[n].p/T[n].n+T[n].d/T[n].n*.5;return P}
+async function scout(){const m=$("#m");m.innerHTML=LOAD;
+ try{if(!MT)await patchMT();const bs=(await sb.from("user_boosts").select("*").order("id")).data||[];if(tab!=="sc")return;
+  const P=teamPow(),v=Object.values(P),mn=Math.min(...v,0),mx=Math.max(...v,1),mid=(mn+mx)/2;
+  const fx={};(MT||[]).filter(x=>x.round===RND).forEach(x=>{[[x.home,x.away,1],[x.away,x.home,0]].forEach(([t,o,h])=>{const op=P[o]??mid;let e=(mx-op)/((mx-mn)||1)+(h?.1:-.05);(fx[t]=fx[t]||[]).push({o,h,e:Math.max(0,Math.min(1,e))})})});
+  const lk=RK&&new Date(RK)<=Date.now(),act=bs.filter(b=>b.used_round===RND),free=bs.filter(b=>b.used_round==null);
+  const ez=e=>e>=.62?3:e>=.38?2:1,ezt=["","Сложный","Средний","Лёгкий"];
+  const brow=(b,a)=>`<div class="qr"><div><b>${BST[b.kind][0]}</b><small>${BST[b.kind][1]}${a&&b.player_id&&PL[b.player_id]?" · "+esc(PL[b.player_id].name):""}</small></div>${a?`<button class="g" data-bc="${b.id}" ${lk?"disabled":""}>Снять</button>`:`<button class="b" data-bu="${b.id}" data-k="${b.kind}" ${lk||act.length||!RND?"disabled":""}>Применить</button>`}</div>`;
+  const L=[...OWN].map(id=>PL[id]).filter(p=>p&&fx[p.team]).map(p=>{const f=fx[p.team],e=f.reduce((a,x)=>a+x.e,0)/f.length;return{p,f,e}}).filter(x=>SCP==="ALL"||x.p.position===SCP).sort((a,b)=>b.e-a.e||b.p.rating-a.p.rating).slice(0,25);
+  m.innerHTML=`<div class="box"><div class="qh"><h3>Бусты на тур${RND?" "+RND:""}</h3><small>${lk?"тур уже начался":RK?"до старта: "+hm((new Date(RK)-Date.now())/1e3):""}</small></div>${act.map(b=>brow(b,1)).join("")}${free.map(b=>brow(b,0)).join("")}${bs.some(b=>b.used_round==null||b.used_round===RND)?"":"<small>Бустов нет. Они выпадают при выборе игроков из паков (золото — чаще всего).</small>"}${act.length?"":"<small>Один буст на тур. Для ×3 сначала сохрани состав.</small>"}</div>
+  <div class="box"><h3>Скаут: лёгкие соперники</h3><small>Оценка по очкам и разнице мячей в АПЛ, дома — плюс. Показаны твои игроки.</small><div class="tabs" style="margin:10px 0">${["ALL","GK","DEF","MID","FWD"].map(q=>`<button class="rc${q===SCP?" on":""}" data-sp="${q}">${q==="ALL"?"Все":q}</button>`).join("")}</div>${L.map(({p,f,e})=>{const z=ez(e);return`<div class="sco"><b class="rb r${rar(p.rating)}">${p.rating}</b><div class="pi"><div>${esc(p.name)}${LU.xi.includes(p.id)?' <small>· в составе</small>':""}</div><small>${p.position} · ${f.map(x=>(x.h?"дома":"в гостях")+" vs "+esc(x.o)).join(", ")}</small></div><span class="bst ez${z}">${ezt[z]}</span></div>`}).join("")||"<small>Нет данных на ближайший тур</small>"}</div>`;
+  m.querySelectorAll("[data-sp]").forEach(b=>b.onclick=()=>{SCP=b.dataset.sp;scout()});
+  m.querySelectorAll("[data-bc]").forEach(b=>b.onclick=()=>act2(()=>rpc("boost_cancel",{p_id:+b.dataset.bc})));
+  m.querySelectorAll("[data-bu]").forEach(b=>b.onclick=()=>{const id=+b.dataset.bu;if(b.dataset.k==="all")return act2(()=>rpc("boost_use",{p_id:id}));
+   const w=modal(`<h3>Кому дать ×3?</h3><small>Игрок из сохранённого состава</small>${LU.xi.filter(x=>x!=null).map(x=>`<div class="pl" data-bp="${x}"><b class="rb r${rar(PL[x].rating)}">${PL[x].rating}</b><div class="pi"><div>${esc(PL[x].name)}</div><small>${PL[x].position}${(fx[PL[x].team]||[]).length?" · vs "+esc(fx[PL[x].team][0].o):""}</small></div></div>`).join("")}`);
+   w.querySelectorAll("[data-bp]").forEach(e=>e.onclick=()=>{closeM();act2(()=>rpc("boost_use",{p_id:id,p_player:+e.dataset.bp}))})})
+ }catch(e){m.innerHTML=ERRV(e)}}
+async function act2(f){try{await f();await refresh();view()}catch(e){alert(msg(e))}}
 // ---------- контракты ----------
 const CTN=5;
 const left=i=>PS?Math.max(0,PS.limits[i]-PS.used[i]):99;

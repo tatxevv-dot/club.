@@ -775,6 +775,11 @@ header #co{padding:0 9px!important;font-size:13px}
 <div id="toasts" aria-live="polite"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script>
+(function(){const M={"Paris Saint-Germain":"PSG","Paris Saint Germain":"PSG","Manchester United":"MUN","Manchester City":"MCI","Tottenham Hotspur":"TOT","Newcastle United":"NEW","Nottingham Forest":"NFO","Wolverhampton Wanderers":"WOL","Brighton & Hove Albion":"BHA","West Ham United":"WHU","Bayern Munich":"BAY","Bayer Leverkusen":"B04","Borussia Dortmund":"BVB","Borussia Monchengladbach":"BMG","Eintracht Frankfurt":"SGE","Atletico Madrid":"ATM","Atl\u00e9tico Madrid":"ATM","Athletic Club":"ATH","Real Madrid":"RMA","Real Sociedad":"RSO","Real Betis":"BET","Olympique Lyonnais":"OL","Olympique de Marseille":"OM","Inter Milan":"INT","AC Milan":"MIL","Sporting CP":"SCP","Club Brugge":"BRU","Red Bull Salzburg":"RBS","Shakhtar Donetsk":"SHA","Slovan Bratislava":"SLO"};
+window.TAB=function(t){t=String(t==null?"":t);if(t.length<=11)return t;if(M[t])return M[t];const w=t.replace(/[-.&]/g," ").split(/\s+/).filter(Boolean);if(w.length>1)return w.map(x=>x[0]).join("").toUpperCase().slice(0,4);return t.slice(0,3).toUpperCase()}})();
+</script>
+
+<script>
 const SB_URL="https://pvocjvvzkvzhckilhokx.supabase.co";
 const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB2b2NqdnZ6a3Z6aGNraWxob2t4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEzMjEyNzEsImV4cCI6MjEwNjg5NzI3MX0.UkWtFCI0LME9DBx6ZRGuzB_BnvBKlEVLynIgzWmRdUg";
 const sb0=supabase.createClient(SB_URL,SB_KEY);
@@ -869,7 +874,7 @@ async function boot0(){
  const {data:{session}}=await sb.auth.getSession();if(!session){landing();return}$("#lp").style.display="none";
  $("#m").innerHTML=LOAD.replace("class=\"bl\"","class=\"bl full\"");
  try{
-  await loadComps();if(!Object.keys(PL).length){const {data,error}=await sb.from("players").select("id,name,team,position,rating,last_change,photo,updated_at");if(error)throw error;data.forEach(p=>PL[p.id]=p)}
+  await loadComps();if(!Object.keys(PL).length){for(let f=0;;f+=1000){const {data,error}=await sb.from("players").select("id,name,team,position,rating,last_change,photo,updated_at").order("id").range(f,f+999);if(error)throw error;data.forEach(p=>PL[p.id]=p);if(data.length<1000)break}}
   const {data:pf}=await sb.from("profiles").select("*").maybeSingle();
   if(!pf){onboard();return}
   PF=pf;await refresh();$("#nv").style.display="flex";document.body.classList.add("app");if(INV()){tab="lg";LGS="l"}view();tourAuto();liveInit();scoreInit()
@@ -1377,7 +1382,7 @@ async function pinfo(id,name){modal('<div class="mw na">'+LOAD+'</div>');
  if(!p){modal('<div class="mw box"><small>Игрок не найден</small></div>');return}
  try{const st=await rpc("player_stats",{p_id:p.id});if(st)for(const[k,v]of Object.entries(st))if(p[k]==null&&v!=null)p[k]=v}catch(x){}
  const rows=Object.entries(PIL).filter(([k])=>p[k]!=null).map(([k,l])=>`<div class="row"><span>${l}</span><b>${esc(p[k])}</b></div>`).join("");
- modal(`<div class="mw"><div class="cards" style="justify-content:center"><div class="cd r${rar(p.rating)}" style="width:120px;height:168px">${phImg(p)}<div class="o" style="font-size:40px">${p.rating}</div><div class="n" style="font-size:13px">${esc(p.name)}</div><div class="c" style="font-size:11px">${p.position} · ${bdg(p.team,1)}${esc(p.team)}</div></div></div><div class="box" style="margin-top:12px"><h3>${esc(p.name)}</h3><div class="row"><span>Позиция</span><b>${p.position}</b></div><div class="row"><span>Клуб</span><b data-team="${esc(p.team)}" style="display:flex;align-items:center;gap:6px">${bdg(p.team)}${esc(p.team)}</b></div><div class="row"><span>Рейтинг</span><b>${p.rating}${p.last_change?" ("+(p.last_change>0?"+":"")+p.last_change+")":""}</b></div>${rows||"<small>Статистики пока нет.</small>"}</div></div>`)}
+ modal(`<div class="mw"><div class="cards" style="justify-content:center"><div class="cd r${rar(p.rating)}" style="width:120px;height:168px">${phImg(p)}<div class="o" style="font-size:40px">${p.rating}</div><div class="n" style="font-size:13px">${esc(p.name)}</div><div class="c" style="font-size:11px">${p.position} · ${bdg(p.team,1)}${esc(TAB(p.team))}</div></div></div><div class="box" style="margin-top:12px"><h3>${esc(p.name)}</h3><div class="row"><span>Позиция</span><b>${p.position}</b></div><div class="row"><span>Клуб</span><b data-team="${esc(p.team)}" title="${esc(p.team)}" style="display:flex;align-items:center;gap:6px">${bdg(p.team)}${esc(TAB(p.team))}</b></div><div class="row"><span>Рейтинг</span><b>${p.rating}${p.last_change?" ("+(p.last_change>0?"+":"")+p.last_change+")":""}</b></div>${rows||"<small>Статистики пока нет.</small>"}</div></div>`)}
 document.addEventListener("click",e=>{const mp=e.target.closest("[data-mp]");if(mp&&mp.dataset.mm)return pmatch(+mp.dataset.mm,+mp.dataset.mp);const t=e.target.closest("#col .cd,.pc,#lst .st,#lup .pl,#ldw .pl");if(!t)return;
  if(t.dataset.id)return pinfo(+t.dataset.id);
  pinfo(0,t.classList.contains("pc")?t.querySelector("span").textContent:t.querySelectorAll("div")[1].textContent)});
@@ -1407,7 +1412,7 @@ async function pmatch(mid,pid){SVI.p=0;const md=$("#md"),open=md.style.display==
   const fin=x&&(x.finished||x.ft),rate=fin?r.rating:(r.live_rating??r.rating),gk=p.position==="GK",v=k=>k==="rating"?rate:r[k],
    fm=(k,n)=>k==="rating"?`<b class="rt ${rg(n)}">${rf(n)}</b>`:k==="starts"?`<b>${n>0?"Да":"Нет"}</b>`:`<b>${/^x/.test(k)?Number(n).toFixed(2):esc(n)}</b>`,
    secs=PSEC(gk).map(([t,ks,o])=>{const rows=ks.filter(([k,,al])=>{const n=v(k);return n!=null&&(al||Number(n)>0)}).map(([k,l])=>`<div class="row"><span>${l}</span>${fm(k,v(k))}</div>`).join("");return rows?[t,rows]:null}).filter(Boolean);
-  modal(`<div class="mw"><div class="cards" style="justify-content:center"><div class="cd r${rar(p.rating)}" style="width:120px;height:168px">${phImg(p)}<div class="o" style="font-size:40px">${rf(rate)}</div><div class="n" style="font-size:13px">${esc(p.name)}</div><div class="c" style="font-size:11px">${p.position} · ${bdg(p.team,1)}${esc(p.team)}</div></div></div><small style="display:block;text-align:center;margin-top:8px">Оценка за этот матч</small><div class="box" style="margin-top:12px"><h3>${esc(p.name)}</h3>${x?`<div class="row"><span>Матч</span><b>${esc(x.home)} ${x.home_goals??"-"}:${x.away_goals??"-"} ${esc(x.away)}</b></div><div class="row"><span>Тур</span><b>${x.round}</b></div>`:""}</div>${secs.length?`<div class="box">${tabsHtml("p",secs)}</div>`:""}</div>`)}
+  modal(`<div class="mw"><div class="cards" style="justify-content:center"><div class="cd r${rar(p.rating)}" style="width:120px;height:168px">${phImg(p)}<div class="o" style="font-size:40px">${rf(rate)}</div><div class="n" style="font-size:13px">${esc(p.name)}</div><div class="c" style="font-size:11px">${p.position} · ${bdg(p.team,1)}${esc(TAB(p.team))}</div></div></div><small style="display:block;text-align:center;margin-top:8px">Оценка за этот матч</small><div class="box" style="margin-top:12px"><h3>${esc(p.name)}</h3>${x?`<div class="row"><span>Матч</span><b>${esc(x.home)} ${x.home_goals??"-"}:${x.away_goals??"-"} ${esc(x.away)}</b></div><div class="row"><span>Тур</span><b>${x.round}</b></div>`:""}</div>${secs.length?`<div class="box">${tabsHtml("p",secs)}</div>`:""}</div>`)}
  catch(e){modal('<div class="mw box"><small>'+esc(e.message)+'</small></div>')}}
 const SVI={m:0,p:0};
 function tabsHtml(kind,secs){const i=Math.min(SVI[kind]||0,secs.length-1);
@@ -1586,18 +1591,16 @@ const blob=await zip.generateAsync({type:"blob"});const a=document.createElement
 })}
 </script>
 <style id="face-cards">
-.cd{--fr:rgba(255,255,255,.35);--fg:rgba(255,255,255,.12)}
+.cd{--fr:rgba(255,255,255,.35);--fg:rgba(255,255,255,.12);justify-content:flex-start!important}
 .cd.r1{--fr:#6aa8f5;--fg:rgba(96,156,240,.35)}
 .cd.r2{--fr:#f2b933;--fg:rgba(240,176,40,.4)}
 .cd.r3{--fr:#e8c76a;--fg:rgba(232,199,106,.5)}
-.cd .ph{position:absolute!important;right:6%!important;left:auto!important;top:15%!important;width:58%!important;height:auto!important;aspect-ratio:1/1;border-radius:50%;object-fit:cover!important;object-position:50% 12%!important;-webkit-mask-image:none!important;mask-image:none!important;z-index:1!important;
+.cd .ph{position:absolute!important;right:5%!important;left:auto!important;top:7%!important;width:50%!important;height:auto!important;aspect-ratio:1/1;border-radius:50%;object-fit:cover!important;object-position:50% 12%!important;-webkit-mask-image:none!important;mask-image:none!important;z-index:1!important;
 background:radial-gradient(circle at 50% 30%,rgba(255,255,255,.38),rgba(255,255,255,.06) 70%);
-border:2px solid var(--fr);box-shadow:0 0 0 3px var(--fg),0 8px 18px -6px rgba(0,0,0,.6),inset 0 -10px 16px -8px rgba(0,0,0,.35)}
-.cd .o,.cd .n,.cd .c{position:relative;z-index:2}
-.cd .o{text-shadow:0 1px 6px rgba(0,0,0,.35)}
-.cd .n{text-shadow:0 1px 6px rgba(0,0,0,.35)}
-.czt .cd .ph{top:17%!important;width:62%!important;border-width:3px}
-.cd.zc .ph{width:60%!important}
+border:2px solid var(--fr);box-shadow:0 0 0 2px var(--fg),0 6px 14px -6px rgba(0,0,0,.6),inset 0 -8px 12px -8px rgba(0,0,0,.35)}
+.cd .o{position:relative;z-index:2;text-shadow:0 1px 6px rgba(0,0,0,.35)}
+.cd .n{position:relative;z-index:2;margin-top:auto!important;text-shadow:0 1px 6px rgba(0,0,0,.35)}
+.cd .c{position:relative;z-index:2;margin-top:3px}
 html[data-theme=light] .cd .ph{background:radial-gradient(circle at 50% 30%,rgba(255,255,255,.9),rgba(16,22,36,.06) 75%)}
 </style>
 </body></html>

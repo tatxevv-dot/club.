@@ -822,7 +822,7 @@ const coins=n=>{const e=$("#co"),a=CV,t=performance.now();CV=n;const f=x=>{const
 const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const SL=["GK","DEF","DEF","DEF","DEF","MID","MID","MID","FWD","FWD","FWD"];
 const PKS=[["Бронза",100],["Серебро",400],["Золото",1500]];
-const rar=o=>o>=90?3:o>=86?2:o>=82?1:0;
+const rar=o=>o>=90?3:o>=86?2:o>=80?1:o>=70?4:0;
 let QTY={},PS=null,CT=[],PL={},PF=null,OWN=new Set(),LU={xi:Array(11).fill(null),bn:[null,null,null],cap:null},RND=null,RK=null,tab="st",PEND=[],SC=[],LG=[],LGV=null;
 const costOf=k=>Math.round([100,150,300][k]*Math.pow([1.7,1.7,1.8][k],PF.stadium[["inc","cap","mus"][k]]));
 const inc=()=>Math.round(60*(1+.5*PF.stadium.inc)),capH=()=>4+.5*PF.stadium.cap;
@@ -1595,12 +1595,16 @@ const blob=await zip.generateAsync({type:"blob"});const a=document.createElement
 .cd.r1{--fr:#6aa8f5;--fg:rgba(96,156,240,.35)}
 .cd.r2{--fr:#f2b933;--fg:rgba(240,176,40,.4)}
 .cd.r3{--fr:#e8c76a;--fg:rgba(232,199,106,.5)}
-.cd .ph{position:absolute!important;right:5%!important;left:auto!important;top:7%!important;width:50%!important;height:auto!important;aspect-ratio:1/1;border-radius:50%;object-fit:cover!important;object-position:50% 12%!important;-webkit-mask-image:none!important;mask-image:none!important;z-index:1!important;
+.cd .ph{position:absolute!important;right:4%!important;left:auto!important;top:15%!important;width:60%!important;height:auto!important;aspect-ratio:1/1;border-radius:50%;object-fit:cover!important;object-position:50% 12%!important;-webkit-mask-image:none!important;mask-image:none!important;z-index:1!important;
 background:radial-gradient(circle at 50% 30%,rgba(255,255,255,.38),rgba(255,255,255,.06) 70%);
 border:2px solid var(--fr);box-shadow:0 0 0 2px var(--fg),0 6px 14px -6px rgba(0,0,0,.6),inset 0 -8px 12px -8px rgba(0,0,0,.35)}
-.cd .o{position:relative;z-index:2;text-shadow:0 1px 6px rgba(0,0,0,.35)}
+.cd .o{position:relative;z-index:2;text-shadow:0 1px 6px rgba(0,0,0,.45),0 0 3px rgba(0,0,0,.25)}
 .cd .n{position:relative;z-index:2;margin-top:auto!important;text-shadow:0 1px 6px rgba(0,0,0,.35)}
 .cd .c{position:relative;z-index:2;margin-top:3px}
 html[data-theme=light] .cd .ph{background:radial-gradient(circle at 50% 30%,rgba(255,255,255,.9),rgba(16,22,36,.06) 75%)}
+.cd.r4{--fr:#5fcf9a;--fg:rgba(80,200,140,.35);background:linear-gradient(165deg,rgba(110,205,160,.36),rgba(50,120,90,.12));border-color:rgba(130,215,175,.45)}
+.rb.r4{background:rgba(110,205,160,.24);border-color:rgba(130,215,175,.45)}
+.cd.zc.r4,.czt .cd.r4{--gl:rgba(80,200,140,.7)}
+html[data-theme=light] .cd.r4{background:linear-gradient(165deg,#e3f7ec,#bfe6d1)}
 </style>
 </body></html>

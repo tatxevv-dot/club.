@@ -762,8 +762,8 @@ let CLG="epl";try{CLG=localStorage.getItem("club_lg")||"epl"}catch(e){}
 let COMPS=[{slug:"epl",short:"АПЛ",name:"Английская Премьер-лига",schema_name:"public"}],LOGO={};
 const SCH_OF=s=>(COMPS.find(c=>c.slug===s)||{schema_name:"public"}).schema_name;
 const sb=new Proxy(sb0,{get(o,k){if(k==="from")return t=>o.schema(SCH_OF(CLG)).from(t);if(k==="rpc")return(f,a,opt)=>o.schema(SCH_OF(CLG)).rpc(f,a,opt);const v=o[k];return typeof v==="function"?v.bind(o):v}});
-const lgSel=()=>`<select class="lgsel" aria-label="Лига">${COMPS.map(c=>`<option value="${c.slug}"${c.slug===CLG?" selected":""}>${c.short}</option>`).join("")}</select>`;
-document.addEventListener("change",e=>{const s=e.target;if(s&&s.classList&&s.classList.contains("lgsel")){try{localStorage.setItem("club_lg",s.value)}catch(x){}location.reload()}});
+const lgSel=()=>`<button type="button" class="lgsel" aria-label="Сменить лигу">${(COMPS.find(c=>c.slug===CLG)||COMPS[0]).short}</button>`;
+document.addEventListener("click",e=>{const s=e.target.closest&&e.target.closest(".lgsel");if(!s)return;modal(`<div class="box"><h3>Выбери лигу</h3><div style="display:grid;gap:8px;margin-top:12px">${COMPS.map(c=>`<button class="b${c.slug===CLG?"":" g"}" data-lg="${c.slug}">${c.name}</button>`).join("")}</div></div>`);document.querySelectorAll("#md [data-lg]").forEach(x=>x.onclick=()=>{if(x.dataset.lg===CLG){closeM();return}try{localStorage.setItem("club_lg",x.dataset.lg)}catch(z){}location.reload()})});
 async function loadComps(){try{const {data}=await sb0.from("competitions").select("*").eq("active",true).order("sort");if(data&&data.length)COMPS=data;if(!COMPS.find(c=>c.slug===CLG))CLG=COMPS[0].slug;const c=COMPS.find(c=>c.slug===CLG);document.title="Club | "+c.name;document.querySelectorAll("header .lgsel").forEach(e=>e.remove());const h=document.querySelector("header");if(h)h.insertAdjacentHTML("afterbegin",lgSel());const {data:ti}=await sb.from("team_info").select("team,logo");LOGO={};(ti||[]).forEach(r=>{if(r.logo)LOGO[r.team]=r.logo})}catch(e){}}
 const LOAD='<div class="bl" role="status" aria-label="Загрузка"><i class="mk"></i></div>';
 let FRESH=0,HT=0;
@@ -1158,7 +1158,7 @@ async function league(){const m=$("#lgb");if(!m)return;m.innerHTML=LOAD;
   if($("#ljb")){const inv=INV();if(inv){$("#lj").value=inv;$("#lj").insertAdjacentHTML("beforebegin","<small>Тебя пригласили в лигу. Нажми «Вступить по коду».</small>")}$("#ljb").onclick=async()=>{try{await rpc("join_league",{p_code:$("#lj").value.trim()});try{sessionStorage.removeItem("club_inv")}catch(e){}league()}catch(e){alert(msg(e))}}}
  hold(m)}catch(e){m.innerHTML=ERRV(e)}}
 document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{if(b.dataset.t===tab)FXM=null;tab=b.dataset.t;view()});
-$("#hp").onclick=()=>tour(0);$("#hl").onclick=async()=>{if(PF&&confirm("Выйти из аккаунта?")){await sb.auth.signOut();PF=null;landing()}};
+$("#hp").onclick=()=>tour(0);$("#hl").onclick=()=>{if(!PF)return;modal(`<div class="box"><h3>Выйти из аккаунта?</h3><div style="display:grid;gap:8px;margin-top:12px"><button class="b" id="lyes">Выйти</button><button class="b g" id="lno">Остаться</button></div></div>`);$("#lno").onclick=closeM;$("#lyes").onclick=async()=>{closeM();await sb.auth.signOut();PF=null;landing()}};
 
 // ---------- 3D стадион ----------
 const UPG=[["inc","Трибуны","Доход в час +50%",()=>inc()+" монет/ч"],["cap","Касса","Вместимость +0,5 ч",()=>capH()+" ч"],["mus","Музей","Шанс редких в паках +10%",()=>"+"+PF.stadium.mus*10+"%"]];

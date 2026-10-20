@@ -1566,4 +1566,23 @@ setInterval(()=>{if(PF&&tab==="st"&&$("#md").style.display!=="flex")tickStad()},
  }
  ["#md","#au"].forEach(function(s){var e=$(s);if(e)new MutationObserver(sync).observe(e,{attributes:true,attributeFilter:["style","class"]})});
 })();
-</script></body></html>
+</script><script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+if(new URLSearchParams(location.search).has("export")){window.addEventListener("load",()=>{
+const b=document.createElement("button");b.textContent="СКАЧАТЬ ФОТО ИГРОКОВ";b.style.cssText="position:fixed;z-index:99999;top:10px;left:10px;right:10px;padding:18px;font-size:18px;font-weight:700;background:#22c55e;color:#000;border:0;border-radius:12px";
+const st=document.createElement("div");st.style.cssText="position:fixed;z-index:99999;top:80px;left:10px;right:10px;padding:10px;background:#000;color:#fff;font-size:14px;border-radius:8px";
+document.body.append(b,st);
+b.onclick=async()=>{b.disabled=true;
+let all=[],f=0;for(;;){const{data,error}=await sb0.from("players").select("*").range(f,f+999);if(error){st.textContent="Ошибка: "+error.message;return}all.push(...data);st.textContent="Загружено игроков: "+all.length;if(data.length<1000)break;f+=1000}
+const PH=["premierleague26","premierleague25","premierleague"];
+const urls=p=>/^http/.test(p.photo)?[p.photo]:PH.map((s,i)=>`https://resources.premierleague.com/${s}/photos/players/110x140/${i==2?"p":""}${p.photo}.png`);
+const L=p=>(p.league||p.comp||p.competition||p.league_slug||p.comp_slug||"all")+"";
+const zip=new JSZip();let ok=0,bad=[],i=0;const list=all.filter(p=>p.photo),Q=[...list];
+const one=async p=>{for(const u of urls(p)){try{const r=await fetch(u);if(r.ok){const bl=await r.blob();if(bl.size>500){zip.file(L(p)+"/"+p.id+"_"+String(p.name).replace(/[^\w\u0400-\u04FF]+/g,"_")+".png",bl);ok++;return}}}catch(e){}}bad.push(p.id+" "+p.name)};
+await Promise.all(Array.from({length:8},async()=>{while(Q.length){await one(Q.pop());i++;if(i%20==0)st.textContent="Фото: "+i+"/"+list.length+" (ок "+ok+")"}}));
+zip.file("_fields.txt",Object.keys(all[0]).join("\n"));zip.file("_failed.txt",bad.join("\n"));
+st.textContent="Собираю архив... ок "+ok+", не вышло "+bad.length;
+const a=document.createElement("a");a.href=URL.createObjectURL(await zip.generateAsync({type:"blob"}));a.download="players.zip";a.click();st.textContent="Готово: "+ok+" фото, не скачано "+bad.length};
+})}
+</script>
+</body></html>

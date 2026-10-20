@@ -903,7 +903,7 @@ async function news(){const dr=()=>{const e=$("#nws");if(e)e.innerHTML=NW.length
  if(NW)return dr();try{const{data,error}=await sb.from("news").select("title,url,source,published_at").order("published_at",{ascending:false}).limit(8);if(error)throw error;NW=data}catch(x){NW=[]}dr()}
 const fixtures=()=>{const m=$("#m");document.body.classList.toggle("mdt",!!FXM);if(FXM){FRESH=0;return mdetail(FXM)}unwatchMatch();
  if(FRESH){FRESH=0;m.innerHTML=LOAD;tmo(loadMT(),8000).then(()=>{if(tab!=="fx"||FXM)return;m.innerHTML=fxShell("");fxList($("#fxl"),id=>{FXM=id;fixtures()},1);hold(m,news())});return}
- m.innerHTML=fxShell("");fxList($("#fxl"),id=>{FXM=id;fixtures()});news()};
+ m.innerHTML=fxShell("");fxList($("#fxl"),id=>{FXM=id;fixtures()});hold(m,news())};
 async function fxList(h,open,nf){const live=()=>h.isConnected&&(h.id==="lfx"||tab==="fx"&&!FXM);
  const draw=()=>{if(!live()){FXD.delete(draw);return}FXD.add(draw);const cr=curR();FXR=FXR||cr;const g={};MT.filter(x=>x.round===FXR).forEach(x=>(g[fmtD(x.kickoff)]??=[]).push(x));
   h.innerHTML=`<div class="rs">${Array.from({length:38},(_,i)=>`<button class="rc${i+1===FXR?" on":""}${i+1===cr?" cur":""}" data-r="${i+1}">${i+1}</button>`).join("")}</div>`+lvStrip(h)+(Object.entries(g).map(([d,a])=>`<div class="dl">${d}</div><div class="${h.id==="lfx"?"":"box"}">${a.map(x=>mrow(x)).join("")}</div>`).join("")||"<p class='mu'>Матчей нет</p>");

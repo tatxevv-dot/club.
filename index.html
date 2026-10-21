@@ -1655,4 +1655,83 @@ const L=document.querySelector("#lp");
 if(L&&L.style.display==="block"){LTOP=null;ltop().then(()=>{scatter(L)})}
 })();
 </script>
+<script>
+(function(){
+const OPEN="club_open";
+function act(o){
+ const go=()=>{o.t==="p"?pinfo(o.id):teamPage(o.n)};
+ if(o.lg===CLG){go();return}
+ try{sessionStorage.setItem(OPEN,JSON.stringify(o));localStorage.setItem("club_lg",o.lg)}catch(e){}
+ location.reload()
+}
+try{const r=sessionStorage.getItem(OPEN);if(r){sessionStorage.removeItem(OPEN);const o=JSON.parse(r);let n=0;const t=setInterval(()=>{n++;const h=document.querySelector("header");if(n>80){clearInterval(t);return}if(h&&h.style.display!=="none"&&Object.keys(PL).length&&document.querySelector("#md")){clearInterval(t);if(o.lg===CLG)setTimeout(()=>{o.t==="p"?pinfo(o.id):teamPage(o.n)},300)}},250)}}catch(e){}
+const hp=document.querySelector("#hp");
+if(hp){const b=document.createElement("button");b.id="hs";b.className=hp.className;b.setAttribute("aria-label","Поиск");b.title="Поиск";b.innerHTML='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/></svg>';hp.insertAdjacentElement("beforebegin",b);b.onclick=openS}
+let T=0,Q=0;
+function openS(){
+ modal('<div class="mw"><div class="box"><h3>Поиск</h3><input id="sq" type="search" placeholder="Игрок или команда" autocomplete="off" style="width:100%;box-sizing:border-box;margin-top:10px"><div id="sr" style="margin-top:12px;max-height:60vh;overflow:auto"><small class="emp">Введи минимум 2 буквы. Ищу по всем лигам.</small></div></div></div>');
+ const i=document.querySelector("#sq"),r=document.querySelector("#sr");
+ setTimeout(()=>i.focus(),50);
+ i.oninput=()=>{clearTimeout(T);const q=i.value.trim().replace(/[%,()*]/g," ").trim();
+  if(q.length<2){r.innerHTML='<small class="emp">Введи минимум 2 буквы. Ищу по всем лигам.</small>';return}
+  T=setTimeout(()=>run(q,r),300)};
+ r.onclick=e=>{const p=e.target.closest("[data-sp]"),t=e.target.closest("[data-st]"),x=p||t;if(!x)return;closeM();setTimeout(()=>act(p?{t:"p",id:+p.dataset.sp,lg:p.dataset.lg}:{t:"t",n:t.dataset.st,lg:t.dataset.lg}),50)}
+}
+async function run(q,r){
+ const id=++Q;r.innerHTML=LOAD;
+ try{
+  if(COMPS.length<2)await loadComps();
+  const {data,error}=await sb0.rpc("search_all",{q});
+  if(error)throw error;
+  if(id!==Q)return;
+  const cm={};COMPS.forEach(c=>cm[c.slug]=c);
+  const teams=[],pls=[];
+  (data||[]).forEach(x=>{const c=cm[x.slug];if(!c)return;if(x.k==="t")teams.push({n:x.team,c});else pls.push({p:x,c})});
+  pls.sort((a,b)=>b.p.rating-a.p.rating);
+  const th=teams.slice(0,10).map(t=>'<div class="pl" role="button" tabindex="0" data-st="'+esc(t.n)+'" data-lg="'+t.c.slug+'"><div class="pi"><div>'+esc(t.n)+'</div><small>'+esc(t.c.short||t.c.name)+'</small></div></div>').join("");
+  const ph=pls.slice(0,25).map(({p,c})=>'<div class="pl" role="button" tabindex="0" data-sp="'+p.id+'" data-lg="'+c.slug+'"><b class="rb r'+rar(p.rating)+'">'+p.rating+'</b><div class="pi"><div>'+esc(p.name)+'</div><small>'+esc(p.position)+' · '+esc(p.team)+' · '+esc(c.short||c.name)+'</small></div></div>').join("");
+  r.innerHTML=(th?'<h3 style="margin:4px 0 6px">Команды</h3>'+th:"")+(ph?'<h3 style="margin:12px 0 6px">Игроки</h3>'+ph:"")||'<small class="emp">Ничего не найдено</small>';
+ }catch(e){if(id===Q)r.innerHTML='<small class="emp">Ошибка поиска, попробуй ещё раз</small>'}
+}
+})();
+</script>
+<script>
+(function(){
+const hp=document.querySelector("#hp");if(!hp)return;
+const b=document.createElement("button");b.id="hpr";b.className=hp.className;b.setAttribute("aria-label","Прогнозы");b.title="Прогнозы";
+b.innerHTML='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>';
+hp.insertAdjacentElement("beforebegin",b);
+let D=null;
+const fd=t=>new Date(t).toLocaleString("ru-RU",{weekday:"short",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"});
+const K=[["H","П1"],["D","Х"],["A","П2"]];
+function row(m){
+ const locked=m.finished||new Date(m.kickoff)<=new Date();
+ const sc=m.finished&&m.home_goals!=null?m.home_goals+":"+m.away_goals:(locked?"идёт":"");
+ const res=m.settled?(m.won?'<b style="color:#4ade80">+'+m.reward+'</b>':'<b style="color:#f87171">✗</b>'):"";
+ return '<div class="box" style="margin:8px 0;padding:10px"><small>'+fd(m.kickoff)+' · тур '+m.round+(sc?' · '+sc:'')+'</small>'
+  +'<div style="display:flex;justify-content:space-between;gap:8px;margin:6px 0;font-weight:600"><span>'+esc(TAB(m.home))+'</span><span style="opacity:.6">—</span><span style="text-align:right">'+esc(TAB(m.away))+'</span></div>'
+  +'<div style="display:flex;gap:6px;align-items:center">'+K.map(([k,l])=>'<button class="'+(m.pick===k?'b':'g')+'" data-m="'+m.id+'" data-k="'+k+'" style="flex:1;min-height:40px"'+(locked?' disabled':'')+'>'+l+'</button>').join("")+(res?'<span style="min-width:36px;text-align:center">'+res+'</span>':"")+'</div></div>';
+}
+function render(){
+ const r=document.querySelector("#pr");if(!r||!D)return;
+ const st=D.stats||{},ms=D.matches||[],hs=D.history||[];
+ r.innerHTML='<small>Угадай исход матча: победа хозяев (П1), ничья (Х) или победа гостей (П2). За каждый верный прогноз — <b>'+D.reward+' монет</b>. Менять выбор можно до начала матча.</small>'
+  +'<div class="stats" style="margin:12px 0"><div class="stat"><b>'+(st.won||0)+'/'+(st.total||0)+'</b><span>угадано</span></div><div class="stat"><b>'+(st.coins||0)+'</b><span>монет выиграно</span></div></div>'
+  +(ms.length?ms.map(row).join(""):'<small class="emp">Ближайших матчей пока нет</small>')
+  +(hs.length?'<h3 style="margin:14px 0 6px">Последние результаты</h3>'+hs.map(h=>'<div class="pl"><div class="pi"><div>'+esc(TAB(h.home))+' '+h.home_goals+':'+h.away_goals+' '+esc(TAB(h.away))+'</div><small>Твой прогноз: '+({H:"П1",D:"Х",A:"П2"}[h.pick])+'</small></div><b style="color:'+(h.won?'#4ade80':'#f87171')+'">'+(h.won?'+'+h.reward:'✗')+'</b></div>').join(""):"");
+}
+async function load(){
+ try{D=await rpc("predict_status");render();
+  if(D.earned>0){toast("<b>+"+D.earned+" монет</b><small>За верные прогнозы</small>");try{await refresh()}catch(e){}}
+ }catch(e){const r=document.querySelector("#pr");if(r)r.innerHTML='<small class="emp">'+esc(msg(e))+'</small>'}
+}
+b.onclick=()=>{modal('<div class="mw"><div class="box"><h3>Прогнозы</h3><div id="pr">'+LOAD+'</div></div></div>');load()};
+document.addEventListener("click",async e=>{
+ const x=e.target.closest("#pr [data-k]");if(!x||x.disabled)return;
+ const id=+x.dataset.m,k=x.dataset.k,m=(D.matches||[]).find(v=>v.id===id);if(!m)return;
+ const old=m.pick;m.pick=k;render();
+ try{await rpc("predict",{p_match:id,p_pick:k})}catch(err){m.pick=old;render();alert(msg(err))}
+});
+})();
+</script>
 </body></html>

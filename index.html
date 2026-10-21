@@ -782,7 +782,7 @@ header #co{padding:0 8px!important;font-size:12.5px!important;display:inline-fle
 </style></head><body><noscript><style>#bs{display:none}</style><main style="position:static;padding:32px 20px;max-width:560px;margin:0 auto"><h1>Club</h1><p>Fantasy-футбол по топ-5 лигам и Лиге чемпионов: собери клуб из реальных игроков, открывай паки и соревнуйся с друзьями в лигах.</p><p>Для игры нужен включённый JavaScript.</p></main></noscript><div id="bs"><div class="bl" role="status" aria-label="Загрузка"><i class="mk"></i></div></div><script>setTimeout(function(){var e=document.getElementById("bs");e&&e.remove()},12000)</script>
 <header style="display:none"><div class="lgo"><i class="mk"></i><span id="pt"></span></div><div class="hr"><button id="hp" hidden style="display:none!important" aria-hidden="true"></button><button id="hl" title="Выйти из аккаунта"></button><span id="co" title="Монеты"></span></div></header>
 <main id="m"></main><button id="mx" class="g" aria-label="Закрыть матч">✕</button>
-<nav id="nv" style="display:none" aria-label="Разделы игры"><div class="nb"><i class="mk"></i>Club</div><button data-t="st"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="8" rx="9" ry="4"/><path d="M3 8v8c0 2.2 4 4 9 4s9-1.8 9-4V8"/></svg>Стадион</button><button data-t="pk"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2.5"/><circle cx="12" cy="12" r="3.5"/></svg>Паки</button><button data-t="sq"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3L3 6l2 4 3-1v11h8V9l3 1 2-4-5-3a4 4 0 01-8 0z"/></svg>Состав</button><button data-t="fx"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Туры</button><button data-t="lg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4h8v5a4 4 0 01-8 0zM8 6H4v1a4 4 0 004 4M16 6h4v1a4 4 0 01-4 4M12 13v4M8 21h8M10 17h4"/></svg>Лига</button><button data-t="du"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 4.5l5 5M4 20l7-7M13 11l-2-2 6-6 5 5-6 6zM3 21l3-3"/></svg>Дуэли</button><button data-t="qs"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4h8v5a4 4 0 01-8 0zM12 13v3M8 21h8M10 16h4"/><path d="M5 5H3v2a3 3 0 003 3M19 5h2v2a3 3 0 01-3 3"/></svg>Задания</button><button data-t="sc"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5M11 8v6M8 11h6"/></svg>Скаут</button></nav>
+<nav id="nv" style="display:none" aria-label="Разделы игры"><div class="nb"><i class="mk"></i>Club</div><button data-t="st"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="8" rx="9" ry="4"/><path d="M3 8v8c0 2.2 4 4 9 4s9-1.8 9-4V8"/></svg>Стадион</button><button data-t="pk"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2.5"/><circle cx="12" cy="12" r="3.5"/></svg>Паки</button><button data-t="sq"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3L3 6l2 4 3-1v11h8V9l3 1 2-4-5-3a4 4 0 01-8 0z"/></svg>Состав</button><button data-t="fx"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Туры</button><button type="button" id="mb" aria-haspopup="true" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>Прочее</button></nav>
 <div id="lp"></div>
 <div class="modal" id="md" role="dialog" aria-modal="true"></div>
 <div id="au"></div>
@@ -828,7 +828,8 @@ function setTheme(t,btn){if(!btn){applyTheme(t);return}if(t===THM)return;
   a.onfinish=()=>{applyTheme(t);const f=o.animate([{opacity:1},{opacity:0}],{duration:320,easing:"ease-out",fill:"forwards"});f.onfinish=done;f.oncancel=done}}catch(e){applyTheme(t)}}
 document.addEventListener("click",e=>{const b=e.target.closest("[data-th]");if(b)setTheme(THM==="dark"?"light":"dark",b)});
 window.alert=t=>toast("<b>"+esc(t)+"</b>");
-const setTitle=()=>{const b=document.querySelector('#nv button[data-t="'+tab+'"]'),t=$("#pt");if(t)t.textContent=b?b.textContent:""};
+const MORE=[["lg","Лиги",'<path d="M8 4h8v5a4 4 0 01-8 0zM8 6H4v1a4 4 0 004 4M16 6h4v1a4 4 0 01-4 4M12 13v4M8 21h8M10 17h4"/>'],["ss","Статистика",'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>'],["qs","Задания",'<path d="M9 11l3 3 8-8M20 12v7a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h9"/>'],["sc","Скаут",'<circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/>'],["du","Дуэли",'<path d="M14.5 4.5l5 5M4 20l7-7M13 11l-2-2 6-6 5 5-6 6zM3 21l3-3"/>']];
+const setTitle=()=>{const b=document.querySelector('#nv button[data-t="'+tab+'"]'),mo=MORE.find(x=>x[0]===tab),t=$("#pt");if(t)t.textContent=b?b.textContent:mo?mo[1]:""};
 const CN='<i class="cn"></i>',TN=["БРОНЗА","СЕРЕБРО","ЗОЛОТО"];let LT,CV=0;
 document.documentElement.style.setProperty("--zz",(()=>{let t=[],b=[];for(let i=0;i<=10;i++){t.push(i*10+"% "+(i%2?0:3)+"%");b.push(i*10+"% "+(i%2?100:97)+"%")}return"polygon("+t.concat(b.reverse()).join(",")+")"})());
 const packEl=(t,x="")=>`<div class="pack t${t} ${x}"><i></i><small>CLUB</small><em>10</em><b>${TN[t]}</b></div>`;
@@ -953,9 +954,15 @@ function duRender(){if(tab!=="du"||!DU)return;const m=$("#m"),me=PF.id,d=DU,mine
  m.querySelectorAll(".dcs .cd").forEach(e=>e.onclick=()=>{DSC=+e.dataset.id;duRender()});m.querySelectorAll(".dch button").forEach(b=>b.onclick=()=>{const s=b.dataset.s,i=DSS.indexOf(s);if(i>=0)DSS.splice(i,1);else{if(DSS.length>=2)DSS.shift();DSS.push(s)}duRender()});
  if($("#dok"))$("#dok").onclick=async()=>{$("#dok").disabled=true;try{DU=atk?await rpc("duel_attack",{p_duel:d.id,p_card:DSC,p_stats:DSS}):await rpc("duel_defend",{p_duel:d.id,p_card:DSC});DSC=null;DSS=[];duRender()}catch(e){alert(msg(e));duRender()}}}
 
+
+// ---------- меню «Прочее» ----------
+function closeMM(){const e=$("#mm");if(e)e.remove();const b=$("#mb");if(b)b.setAttribute("aria-expanded","false")}
+(()=>{const st=document.createElement("style");st.textContent=`#mm{position:fixed;z-index:30;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));width:min(260px,calc(100% - 24px));padding:6px;border-radius:var(--r3);background:rgb(var(--ab,24,28,26));border:1px solid var(--ln2);box-shadow:0 18px 40px -8px rgba(0,0,0,.7)}#mm button{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;background:none;border:0;border-radius:var(--r2);color:var(--tx);font:500 15px var(--f);text-align:left}#mm button:hover,#mm button.on{background:rgba(var(--wh),.1)}#mm svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}@media(min-width:900px){#mm{left:calc(var(--sb) + 8px);transform:none;bottom:20px}}`;document.head.appendChild(st);
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("#mb");if(b){if($("#mm")){closeMM();return}const d=document.createElement("div");d.id="mm";d.setAttribute("role","menu");d.innerHTML=MORE.map(x=>`<button role="menuitem" data-m="${x[0]}" class="${x[0]===tab?"on":""}"><svg viewBox="0 0 24 24">${x[2]}</svg>${x[1]}</button>`).join("");document.body.appendChild(d);b.setAttribute("aria-expanded","true");d.querySelectorAll("button").forEach(x=>x.onclick=()=>{tab=x.dataset.m;closeMM();view()});return}
+if(!(e.target.closest&&e.target.closest("#mm")))closeMM()});document.addEventListener("keydown",e=>{if(e.key==="Escape")closeMM()})})();
 // ---------- экраны ----------
 function view(){document.body.classList.remove("mdt");if(tab!=="fx")unwatchMatch();if(tab!=="du")duStop();$("header").style.display="";{const h=$("#hl");h.innerHTML='<span>'+esc(PF.nickname)+'</span><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>';h.setAttribute("aria-label",PF.nickname+": выйти из аккаунта");h.title="Выйти из аккаунта"}coins(PF.coins);setTitle();
- document.querySelectorAll("nav button").forEach(b=>{const on=b.dataset.t===tab;b.classList.toggle("on",on);on?b.setAttribute("aria-current","page"):b.removeAttribute("aria-current")});const m=$("#m");if(LT!==tab)m.scrollTop=0;FRESH=LT!==tab;m.className=FRESH?"in":"";LT=tab;
+ document.querySelectorAll("nav button[data-t]").forEach(b=>{const on=b.dataset.t===tab;b.classList.toggle("on",on);on?b.setAttribute("aria-current","page"):b.removeAttribute("aria-current")});const m=$("#m");if(LT!==tab)m.scrollTop=0;FRESH=LT!==tab;m.className=FRESH?"in":"";LT=tab;
  if(tab==="st")return stad();if(0){const pe=pend(),mx=capH()*inc();
   m.innerHTML=`<div class="box"><h3>Касса стадиона</h3><div class="row"><b style="font-size:26px;letter-spacing:-1px">${CN}${pe}</b><button class="b" id="cl" ${pe<1?"disabled":""}>Забрать</button></div><div class="bar"><i style="width:${Math.min(100,pe/mx*100)}%"></i></div><small>Доход ${inc()}/ч · касса вмещает ${capH()} ч.</small></div><div class="box"><h3>Улучшения</h3>${[["Трибуны","Доход в час +50%","inc"],["Касса","Вместимость +0,5 ч","cap"],["Музей","Шанс редких в паках +10%","mus"]].map((u,k)=>`<div class="row"><div>${u[0]} · ур. ${PF.stadium[u[2]]}<br><small>${u[1]}</small></div><button class="b up" data-k="${u[2]}" data-c="${k}" ${PF.coins<costOf(k)?"disabled":""}>${CN}${costOf(k)}</button></div>`).join("")}</div>`;
   $("#cl").onclick=()=>act(()=>rpc("collect"));m.querySelectorAll(".up").forEach(b=>b.onclick=()=>act(()=>rpc("upgrade",{kind:b.dataset.k})))}
@@ -963,7 +970,7 @@ function view(){document.body.classList.remove("mdt");if(tab!=="fx")unwatchMatch
   m.querySelectorAll(".op").forEach(b=>b.onclick=async()=>{try{b.disabled=true;const r=await rpc("open_pack",{p_tier:+b.dataset.i});await refresh();view();reveal(+b.dataset.i,r.pack_id,r.offer.map(Number))}catch(e){alert(msg(e))}});
   m.querySelectorAll(".rs").forEach(b=>b.onclick=()=>{const p=PEND.find(x=>x.id==b.dataset.id);choose(p.id,p.offer.map(Number),1)});PS&&contractWire()}
  if(tab==="sq")sqEnter();
- if(tab==="qs")quests();if(tab==="sc")scout();if(tab==="fx")fixtures();if(tab==="lg")lgHub();if(tab==="du")duels()}
+ if(tab==="qs")quests();if(tab==="sc")scout();if(tab==="fx")fixtures();if(tab==="lg"){LGS="l";lgHub()}if(tab==="ss"){LGS="s";lgHub()}if(tab==="du")duels();{const mb=$("#mb");if(mb){const o=MORE.some(x=>x[0]===tab);mb.classList.toggle("on",o);mb.setAttribute("aria-expanded","false")}closeMM()}}
 async function act(f){try{await f();await refresh();view()}catch(e){alert(msg(e))}}
 function reveal(t,pid,offer){const b=Math.max(...offer.map(i=>i<0?3:rar(PL[i].rating)));
  const m=modal(`<div class="hero">${packEl(t)}</div><div class="burst"></div>${Array.from({length:16},(_,i)=>`<s style="--a:${i*22.5}deg;--d:${110+Math.random()*150|0}px"></s>`).join("")}`);
@@ -1242,7 +1249,7 @@ async function league(){const m=$("#lgb");if(!m)return;m.innerHTML=LOAD;
   if($("#lc"))$("#lc").onclick=async()=>{try{const c=await rpc("create_league",{p_name:$("#ln").value});alert("Лига создана. Код для друзей: "+c);league()}catch(e){alert(msg(e))}};
   if($("#ljb")){const inv=INV();if(inv){$("#lj").value=inv;$("#lj").insertAdjacentHTML("beforebegin","<small>Тебя пригласили в лигу. Нажми «Вступить по коду».</small>")}$("#ljb").onclick=async()=>{try{await rpc("join_league",{p_code:$("#lj").value.trim()});try{sessionStorage.removeItem("club_inv")}catch(e){}league()}catch(e){alert(msg(e))}}}
  hold(m)}catch(e){m.innerHTML=ERRV(e)}}
-document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{if(b.dataset.t===tab)FXM=null;tab=b.dataset.t;view()});
+document.querySelectorAll("nav button[data-t]").forEach(b=>b.onclick=()=>{if(b.dataset.t===tab)FXM=null;tab=b.dataset.t;view()});
 $("#hl").onclick=()=>{if(!PF)return;modal(`<div class="box"><h3>Выйти из аккаунта?</h3><div style="display:grid;gap:8px;margin-top:12px"><button class="b" id="lyes">Выйти</button><button class="b g" id="lno">Остаться</button></div></div>`);$("#lno").onclick=closeM;$("#lyes").onclick=async()=>{closeM();await sb.auth.signOut();PF=null;landing()}};
 
 // ---------- 3D стадион ----------
@@ -1448,8 +1455,7 @@ document.addEventListener("click",e=>{const mp=e.target.closest("[data-mp]");if(
  pinfo(0,t.classList.contains("pc")?t.querySelector("span").textContent:t.querySelectorAll("div")[1].textContent)});
 // ---------- статистика в игре ----------
 let LGS="l";
-function lgHub(){const m=$("#m");m.innerHTML='<div class="tabs" id="lgs" style="margin-bottom:12px"><button class="rc'+(LGS==="l"?" on":"")+'" data-s="l">Лиги</button><button class="rc'+(LGS==="s"?" on":"")+'" data-s="s">Статистика</button></div><div id="lgb"></div>';
- m.querySelectorAll("#lgs button").forEach(b=>b.onclick=()=>{if(LGS===b.dataset.s)return;LGS=b.dataset.s;lgHub()});LGS==="s"?stats():league()}
+function lgHub(){const m=$("#m");m.innerHTML='<div id="lgb"></div>';LGS==="s"?stats():league()}
 async function stats(){const m=$("#lgb");if(!m)return;m.innerHTML=LOAD;
  try{LD=await rpc("landing_data");
   m.innerHTML='<div id="lfan" style="display:none"></div><div class="box fw"><h3>Статистика команд</h3><div class="tabs" id="ttb"></div><div id="tms">'+LOAD+'</div></div><div class="box fw"><h3>Статистика сезона</h3><div class="tabs" id="ltb"></div><div id="lst"></div></div><div class="box"><h3>Растут</h3><div id="lup"></div></div><div class="box"><h3>Падают</h3><div id="ldw"></div></div><div class="box fw"><h3>Игра в цифрах</h3><div class="stats" id="lcn"></div></div><div class="box fw"><h3>Лиги сообщества</h3><div id="llg"></div></div>';
@@ -1506,7 +1512,7 @@ async function teamStats0(){if(!MT)await patchMT();const e=$("#tms");if(!e)retur
 // ---------- обучение ----------
 let TE=null;
 const TS=[
- {sel:"#nv",t:"Меню игры",x:"Семь разделов: стадион, паки, состав, туры, лига со статистикой, задания и скаут. Быстро пройдёмся по каждому."},
+ {sel:"#nv",t:"Меню игры",x:"Четыре главных раздела (стадион, паки, состав, туры) и меню «Прочее»: лиги, статистика, задания, скаут и дуэли. скаут. Быстро пройдёмся по каждому."},
  {tab:"st",sel:"#co",t:"Монеты",x:"Твоя валюта. На монеты покупаешь паки и улучшаешь стадион."},
  {tab:"st",sel:"#stg",t:"Твой стадион",x:"Он сам приносит монеты каждый час. Нажимай на трибуны, кассу и музей, чтобы улучшать их."},
  {tab:"st",sel:"#cl",t:"Забирай доход",x:"Монеты копятся в кассе, пока она не заполнится. Заходи и жми «Забрать»."},

@@ -967,7 +967,7 @@ document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest
 
 // ---------- «Прочее»: меню вырастает из кнопки ----------
 (()=>{const st=document.createElement("style");st.textContent=`#mb.open{color:var(--tx);background:linear-gradient(180deg,rgba(var(--wh),.17),rgba(var(--wh),.07))}
-#mm{transform:none!important;animation:mmg .34s cubic-bezier(.2,.9,.25,1.12) both!important}
+#mm{box-shadow:0 4px 22px rgba(0,0,0,.16)!important;transform:none!important;animation:mmg .34s cubic-bezier(.2,.9,.25,1.12) both!important}
 #mm.out{animation:mmo .2s ease-in both!important}
 #mm::after{content:"";position:absolute;bottom:-6px;left:calc(var(--tp,50%) - 6px);width:12px;height:12px;background:inherit;border:1px solid var(--ln2);border-width:0 1px 1px 0;transform:rotate(45deg);border-radius:0 0 3px 0}
 #mm[data-side="r"]::after{bottom:calc(var(--tp,20px) - 6px);left:-7px;border-width:0 0 1px 1px;border-radius:0 0 0 3px}

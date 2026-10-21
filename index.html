@@ -1196,7 +1196,7 @@ async function league(){const m=$("#lgb");if(!m)return;m.innerHTML=LOAD;
   if($("#ljb")){const inv=INV();if(inv){$("#lj").value=inv;$("#lj").insertAdjacentHTML("beforebegin","<small>Тебя пригласили в лигу. Нажми «Вступить по коду».</small>")}$("#ljb").onclick=async()=>{try{await rpc("join_league",{p_code:$("#lj").value.trim()});try{sessionStorage.removeItem("club_inv")}catch(e){}league()}catch(e){alert(msg(e))}}}
  hold(m)}catch(e){m.innerHTML=ERRV(e)}}
 document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{if(b.dataset.t===tab)FXM=null;tab=b.dataset.t;view()});
-$("#hp").onclick=()=>tour(0);$("#hl").onclick=()=>{if(!PF)return;modal(`<div class="box"><h3>Выйти из аккаунта?</h3><div style="display:grid;gap:8px;margin-top:12px"><button class="b" id="lyes">Выйти</button><button class="b g" id="lno">Остаться</button></div></div>`);$("#lno").onclick=closeM;$("#lyes").onclick=async()=>{closeM();await sb.auth.signOut();PF=null;landing()}};
+$("#hl").onclick=()=>{if(!PF)return;modal(`<div class="box"><h3>Выйти из аккаунта?</h3><div style="display:grid;gap:8px;margin-top:12px"><button class="b" id="lyes">Выйти</button><button class="b g" id="lno">Остаться</button></div></div>`);$("#lno").onclick=closeM;$("#lyes").onclick=async()=>{closeM();await sb.auth.signOut();PF=null;landing()}};
 
 // ---------- 3D стадион ----------
 const UPG=[["inc","Трибуны","Доход в час +50%",()=>inc()+" монет/ч"],["cap","Касса","Вместимость +0,5 ч",()=>capH()+" ч"],["mus","Музей","Шанс редких в паках +10%",()=>"+"+PF.stadium.mus*10+"%"]];

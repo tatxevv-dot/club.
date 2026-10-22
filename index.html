@@ -1317,52 +1317,72 @@ function scene(S){
  el=(x,y,z,rx,ry,f)=>{const[u,v]=Q(x,y,z).split(",");return`<ellipse cx="${u}" cy="${v}" rx="${rx}" ry="${ry}" fill="${f}"/>`},
  bx=(x0,y0,x1,y1,h,k,z=0)=>pl([[x0,y0,z+h],[x1,y0,z+h],[x1,y1,z+h],[x0,y1,z+h]],k[0])+pl([[x1,y0,z],[x1,y1,z],[x1,y1,z+h],[x1,y0,z+h]],k[1])+pl([[x0,y1,z],[x1,y1,z],[x1,y1,z+h],[x0,y1,z+h]],k[2]);
  const pal=a>=6?["#efd78e","#c9a24a","#8a6a22"]:a>=3?["#dfe5ee","#9aa5b6","#5f6a7b"]:["#9aa3b2","#677082","#434b5a"],
-  gold=["#efd78e","#c9a24a","#8a6a22"],hB=14+A*6,hL=hB*.85,hR=hB*.6,hF=hB*.5;
+  gold=["#efd78e","#c9a24a","#8a6a22"],hB=20+A*5;
  const tree=(x,y)=>ln([[x,y,0],[x,y,7]],"#6b4a2b",3)+ci(x,y,12,7,"#2d7a4f")+ci(x,y,17,5,"#3a9163");
  const pin=(k,i,x,y,z,t)=>{const[u,v]=Q(x,y,z).split(",");return`<g class="pin" data-x="${u}" data-y="${+v-16}"><g class="pn"><rect x="-50" y="-12" width="100" height="22" rx="11" fill="#0a0b0ed9" stroke="#ffffff55"/><text y="3" text-anchor="middle" fill="#fff" font-size="11" font-weight="700" font-family="Onest,sans-serif">${t} · ${S[k]}${PF.coins>=costOf(i)?" ＋":""}</text></g></g>`};
  const can=i=>PF.coins>=costOf(i)?" can":"";
- const TH=70+A*4,tw=(x,y)=>{const[u,v]=Q(x,y,0).split(","),[w,z]=Q(x,y,TH).split(",");return`<line x1="${u}" y1="${v}" x2="${w}" y2="${z}" stroke="#aab4e8" stroke-width="3"/><circle cx="${w}" cy="${z}" r="${16+A}" fill="#fff6c833"/><circle cx="${w}" cy="${z}" r="${6+A/2}" fill="#fff6c8"/>`+(a>=4?pl([[x,y,TH],[x*.3-16,y*.3,0],[x*.3+16,y*.3,0]],"#fff6c812"):"")};
- // земля и дорожки
- const g=Math.min(150+T*3,190),gy=Math.min(110+T*2,145);
- let s=pl([[-g,-gy,0],[g,-gy,0],[g,gy,0],[-g,gy,0]],"#ffffff10","stroke='#ffffff1f'");
- if(T>=6)s+=pl([[-130,-104,0],[130,-104,0],[130,104,0],[-130,104,0]],"#ffffff14");
- if(T>=3)s+=tree(-150,-95)+tree(150,-95)+tree(-170,40);
+ const TH=60+A*3,tw=(x,y)=>{const[u,v]=Q(x,y,0).split(","),[w,z]=Q(x,y,TH).split(",");return`<line x1="${u}" y1="${v}" x2="${w}" y2="${z}" stroke="#aab4e8" stroke-width="3"/><circle cx="${w}" cy="${z}" r="${16+A}" fill="#fff6c833"/><circle cx="${w}" cy="${z}" r="${6+A/2}" fill="#fff6c8"/>`};
+ // оттенок
+ const sh=(hex,f)=>{const n=parseInt(hex.slice(1),16),k=v=>Math.max(0,Math.min(255,Math.round(v*f)));return`rgb(${k(n>>16&255)},${k(n>>8&255)},${k(n&255)})`};
+ // скруглённая форма чаши
+ const SE=(ax,ay,t)=>{const co=Math.cos(t),si=Math.sin(t);return[ax*Math.sign(co)*Math.pow(Math.abs(co),.714),ay*Math.sign(si)*Math.pow(Math.abs(si),.714)]};
+ const IN=[122,92],K1=1.17,K2=1.344,NS=60,RP=(k,t,z)=>{const[x,y]=SE(IN[0]*k,IN[1]*k,t);return[x,y,z]};
+ const hAt=t=>{const[x,y]=SE(164,124,t);return hB*Math.max(.4,.72-.36*(x/164+y/124)/2)};
+ // земля
+ const gr=[];for(let i=0;i<48;i++){const t=i/48*6.2832;gr.push([Math.cos(t)*215,Math.sin(t)*140,0])}
+ let s=pl(gr,"#ffffff10","stroke='#ffffff1f'");
+ if(T>=6){const g2=gr.map(p=>[p[0]*.9,p[1]*.9,0]);s+=pl(g2,"#ffffff14")}
+ if(T>=3)s+=tree(-190,95)+tree(190,95)+tree(-200,60)+tree(200,70);
  // музей
- const bh=16+M*2.2;let mu=bx(-150,-22,-122,16,bh,["#e6dfd0","#b2a98f","#7d7660"]);
- if(M>=1)for(let x=-146;x<=-126;x+=6.5)mu+=ln([[x,16,2],[x,16,bh-2]],"#ffffffa0",2);
- if(M>=6)mu+=bx(-150,-46,-122,-24,bh*.6,["#e6dfd0","#b2a98f","#7d7660"])+bx(-150,18,-122,40,bh*.6,["#e6dfd0","#b2a98f","#7d7660"]);
- if(M>=2)for(let i=0;i<4;i++)mu+=el(-136,-3,bh+i*3.5,17-i*3.5,8.5-i*1.7,["#b8ad90","#c9bfa3","#dbd3bd","#ece6d6"][i]);
+ const bh=16+M*2.2,mk=["#e6dfd0","#b2a98f","#7d7660"];let mu=bx(-218,-22,-190,16,bh,mk);
+ if(M>=1)for(let x=-214;x<=-194;x+=6.5)mu+=ln([[x,16,2],[x,16,bh-2]],"#ffffffa0",2);
+ if(M>=6)mu+=bx(-218,-46,-190,-24,bh*.6,mk)+bx(-218,18,-190,40,bh*.6,mk);
+ if(M>=2)for(let i=0;i<4;i++)mu+=el(-204,-3,bh+i*3.5,17-i*3.5,8.5-i*1.7,["#b8ad90","#c9bfa3","#dbd3bd","#ece6d6"][i]);
  const dt=bh+(M>=2?14:0);
- if(M>=4)mu+=pl([[-141,-3,dt],[-131,-3,dt],[-136,-3,dt+12+M*2]],"#bfefffcc");
- if(M>=8)mu+=ln([[-136,-3,dt+14+M*2],[-136,-3,dt+20+M*2]],"#e6c25a",2.5)+ci(-136,-3,dt+24+M*2,5,"#e6c25a");
- if(M>=10)mu+=ci(-136,-3,dt+30+M*2,3,"#fff","class='sp'")+ci(-146,-3,bh+8,2.5,"#fff","class='sp'");
- // трибуны
- const col=["#e8eaee","#9ca3af","#c7f464","#6b7280"],R=2+Math.floor(A/2),N=Math.min(a*9,80);let cr="",rw="";
- for(let r=1;r<=R;r++)rw+=ln([[-120,-70,r*hB/(R+1)],[120,-70,r*hB/(R+1)]],"#00000033",1)+ln([[-95,-70,r*hL/(R+1)],[-95,70,r*hL/(R+1)]],"#00000033",1);
- for(let i=0;i<N;i++){const r=i%R;cr+=ci(-112+(i*53)%224,-70,(r+.7)*hB/(R+1),1.5,col[i%4])+ci(-95,-62+(i*47)%124,(r+.7)*hL/(R+1),1.5,col[(i+1)%4])}
- const rf=["#eef0f4","#a7afbc","#6b7381"];let roof="";
- if(a>=3){roof+=bx(-124,-102,124,-60,3,rf,hB+14);for(let x=-110;x<=110;x+=44)roof+=ln([[x,-70,hB],[x,-70,hB+14]],"#cfd6ff",2)}
- if(a>=6)roof+=bx(-124,-74,-88,74,3,rf,hL+14);
- if(a>=8)roof+=pl([[-40,-60,hB+17],[40,-60,hB+17],[40,-60,hB+29],[-40,-60,hB+29]],"#c7f464","class='led'");
+ if(M>=4)mu+=pl([[-209,-3,dt],[-199,-3,dt],[-204,-3,dt+12+M*2]],"#bfefffcc");
+ if(M>=8)mu+=ln([[-204,-3,dt+14+M*2],[-204,-3,dt+20+M*2]],"#e6c25a",2.5)+ci(-204,-3,dt+24+M*2,5,"#e6c25a");
+ if(M>=10)mu+=ci(-204,-3,dt+30+M*2,3,"#fff","class='sp'")+ci(-214,-3,bh+8,2.5,"#fff","class='sp'");
+ // чаша стадиона
+ const col=["#e8eaee","#9ca3af","#c7f464","#6b7280"],rfc=["#eef0f4","#dde1e9"];
+ const BK=[],FR=[];
+ for(let i=0;i<NS;i++){
+  const t0=i/NS*6.2832,t1=(i+1)/NS*6.2832,tm=(t0+t1)/2,h0=hAt(t0),h1=hAt(t1),hm=hAt(tm),[mx,my]=SE(164,124,tm),d=mx+my,
+   lt=.8+.26*Math.cos(tm-2.3),acc=i%10<2&&a>=2,ev=i%2?.94:1,
+   zm=(h,k)=>3+(h-3)*k,
+   lo=pl([RP(1,t0,3),RP(1,t1,3),RP(K1,t1,zm(h1,.5)),RP(K1,t0,zm(h0,.5))],acc?sh("#c7f464",lt*.85):sh(pal[0],lt*ev)),
+   up=pl([RP(K1,t0,zm(h0,.5)+3),RP(K1,t1,zm(h1,.5)+3),RP(K2,t1,h1),RP(K2,t0,h0)],sh(pal[1],lt*ev)),
+   wl=pl([RP(K2,t0,0),RP(K2,t1,0),RP(K2,t1,h1),RP(K2,t0,h0)],sh(pal[1],lt*.78))
+    +(a>=8?pl([RP(K2,t0,h0*.8),RP(K2,t1,h1*.8),RP(K2,t1,h1*.9),RP(K2,t0,h0*.9)],"#c7f464","class='led'"):"")
+    +(i%3===0?ln([RP(K2,t0,0),RP(K2,t0,h0)],"#00000026",1):""),
+   rf=a>=3?pl([RP(1.1,t0,h0+10),RP(1.1,t1,h1+10),RP(1.42,t1,h1+15),RP(1.42,t0,h0+15)],sh(rfc[i%2],lt*1.02)):"";
+  (d<0?BK:FR).push({d,lo:lo+up,wl,rf,i,t:tm,h:hm})}
+ const build=(arr,withWall)=>{arr.sort((p,q)=>p.d-q.d);let o=arr.map(p=>p.lo).join("");
+  const N=Math.min(a*9,80)*2;for(let j=0;j<N;j++){const t=j*2.399%6.2832,u=.15+((j*37)%80)/100,[px,py]=SE(164,124,t),dd=px+py;if((dd<0)!==!withWall)continue;const h=hAt(t),k=1+(K2-1)*u;o+=ci(...(()=>{const[x,y]=SE(IN[0]*k,IN[1]*k,t);return[x,y,3+(h-3)*u*.97+1]})(),1.5,col[j%4])}
+  if(withWall)o+=arr.map(p=>p.wl).join("");
+  o+=arr.map(p=>p.rf).join("");return o};
+ const bowlBack=build(BK,false),bowlFront=build(FR,true);
  // касса
- const kh=12+C*2.2,top=kh+(C>=4?10:0);let ks=bx(122,-18,148,12,kh,gold);
- if(C>=2)for(let i=0;i<4;i++)ks+=pl([[122+i*6.5,12,kh*.7],[128.5+i*6.5,12,kh*.7],[128.5+i*6.5,18,kh*.7-4],[122+i*6.5,18,kh*.7-4]],i%2?"#e8eaee":"#8a909c");
- if(C>=4)ks+=bx(124,-14,146,8,10,["#ffe9a0","#e0b13a","#a97d16"],kh);
- if(C>=9)ks+=bx(120,-20,150,14,3,["#fff0b5","#f0c24a","#b8861a"],top);
- if(C>=12)for(const[x,y]of[[122,12],[148,12],[148,-18]])ks+=ln([[x,y,0],[x,y,top]],"#fff0b5",3);
- if(C>=6)ks+=ci(135,-3,top+(C>=9?3:0)+14,9,"#e6c25a")+ci(135,-3,top+(C>=9?3:0)+14,5.5,"none","stroke='#946c10' stroke-width='1.5'");
- if(C>=15)ks+=ci(135,-3,top+40,16,"#fff6c844")+ln([[135,-3,top+3],[135,-3,top+30]],"#e6c25a",3);
- for(let i=0;i<Math.min(C,8);i++)ks+=ci(128+i*2.2,22+i*1.6,6,2,"#ffd0a0")+ci(128+i*2.2,22+i*1.6,2,2.6,col[i%4]);
- // сборка
- let pit="";for(let i=0;i<6;i++)pit+=pl([[-95+i*31.7,-70,0],[-63.3+i*31.7,-70,0],[-63.3+i*31.7,70,0],[-95+i*31.7,70,0]],i%2?"#17583a":"#1c6845");
+ const kh=12+C*2.2,top=kh+(C>=4?10:0);let ks=bx(190,-18,216,12,kh,gold);
+ if(C>=2)for(let i=0;i<4;i++)ks+=pl([[190+i*6.5,12,kh*.7],[196.5+i*6.5,12,kh*.7],[196.5+i*6.5,18,kh*.7-4],[190+i*6.5,18,kh*.7-4]],i%2?"#e8eaee":"#8a909c");
+ if(C>=4)ks+=bx(192,-14,214,8,10,["#ffe9a0","#e0b13a","#a97d16"],kh);
+ if(C>=9)ks+=bx(188,-20,218,14,3,["#fff0b5","#f0c24a","#b8861a"],top);
+ if(C>=12)for(const[x,y]of[[190,12],[216,12],[216,-18]])ks+=ln([[x,y,0],[x,y,top]],"#fff0b5",3);
+ if(C>=6)ks+=ci(203,-3,top+(C>=9?3:0)+14,9,"#e6c25a")+ci(203,-3,top+(C>=9?3:0)+14,5.5,"none","stroke='#946c10' stroke-width='1.5'");
+ if(C>=15)ks+=ci(203,-3,top+40,16,"#fff6c844")+ln([[203,-3,top+3],[203,-3,top+30]],"#e6c25a",3);
+ for(let i=0;i<Math.min(C,8);i++)ks+=ci(196+i*2.2,22+i*1.6,6,2,"#ffd0a0")+ci(196+i*2.2,22+i*1.6,2,2.6,col[i%4]);
+ // поле
+ const ring=[];for(let i=0;i<60;i++)ring.push(RP(1,i/60*6.2832,0));
+ let pit=pl(ring,"#134a30")+ln([...ring,ring[0]],"#c7f464",1.6);
+ for(let i=0;i<6;i++)pit+=pl([[-95+i*31.7,-70,0],[-63.3+i*31.7,-70,0],[-63.3+i*31.7,70,0],[-95+i*31.7,70,0]],i%2?"#17583a":"#1c6845");
  let ci2="";for(let i=0;i<28;i++){const t=i/28*6.283;ci2+=Q(Math.cos(t)*22,Math.sin(t)*22,0)+" "}
- const fl=T>=12?[-90,-45,0,45,90].map((x,i)=>ln([[x,100,0],[x,100,16]],"#ddd",1.5)+pl([[x,100,16],[x,100,10],[x+10,100,13]],col[i%4])).join(""):"";
- return s+`<g class="hs${can(2)}" data-k="mus">${mu}${pin("mus",2,-136,-3,dt+(M>=4?M*2+22:18),"Музей")}</g>`+tw(-128,-100)+tw(128,-100)
- +`<g class="hs${can(0)}" data-k="inc">${bx(-120,-95,120,-70,hB,pal)}${bx(-120,-70,-95,70,hL,pal)}${rw}${cr}</g>`
+ const fl=T>=12?[-90,-45,0,45,90].map((x,i)=>ln([[x,138,0],[x,138,16]],"#ddd",1.5)+pl([[x,138,16],[x,138,10],[x+10,138,13]],col[i%4])).join(""):"";
+ const inP=pin("inc",0,0,-124,hB+(a>=3?34:14),"Трибуны");
+ return s+`<g class="hs${can(2)}" data-k="mus">${mu}${pin("mus",2,-204,-3,dt+(M>=4?M*2+22:18),"Музей")}</g>`+tw(-160,-112)+tw(160,-112)
+ +`<g class="hs${can(0)}" data-k="inc">${bowlBack}</g>`
  +pit+ln([[0,-70,0],[0,70,0]],"#ffffffb0")+`<polygon points="${ci2}" fill="none" stroke="#ffffffb0" stroke-width="1.6"/>`+ln([[-95,-70,0],[95,-70,0],[95,70,0],[-95,70,0],[-95,-70,0]],"#ffffffb0")
- +`<g class="hs${can(0)}" data-k="inc">${bx(95,-70,120,70,hR,pal)}${bx(-120,70,120,95,hF,pal)}${roof}${pin("inc",0,0,-95,hB+(a>=3?32:8),"Трибуны")}</g>`
- +`<g class="hs${can(1)}" data-k="cap">${ks}${pin("cap",1,135,-3,top+(C>=6?32:12),"Касса")}</g>`
- +tw(-128,100)+tw(128,100)+(T>=3?tree(150,100)+tree(-150,100):"")+fl+TVIS()}
+ +`<g class="hs${can(0)}" data-k="inc">${bowlFront}${inP}</g>`
+ +`<g class="hs${can(1)}" data-k="cap">${ks}${pin("cap",1,203,-3,top+(C>=6?32:12),"Касса")}</g>`
+ +tw(-160,112)+tw(160,112)+fl+TVIS()}
 function stad(){const m=$("#m"),S=PF.stadium,pe=pend(),mx=capH()*inc();
  m.innerHTML=`<div class="stg" id="stg"><svg class="sv" viewBox="0 0 700 450"><g id="cam">${scene(S)}</g></svg><div class="zc"><button data-z="1" aria-label="Приблизить">+</button><button data-z="-1" aria-label="Отдалить">−</button><button data-z="0" aria-label="Сбросить">⌂</button></div><small class="zh">Колесо или щипок: масштаб. Перетаскивание: движение.</small></div><div class="box"><h3>Касса стадиона</h3><div class="row"><b id="pe" style="font-size:26px;letter-spacing:-1px">${CN}${pe}</b><button class="b" id="cl" ${pe<1?"disabled":""}>Забрать</button></div><div class="bar"><i id="pb" style="width:${Math.min(100,pe/mx*100)}%"></i></div><small>Доход ${inc()}/ч · касса вмещает ${capH()} ч.</small></div><div id="tr"></div><div class="box"><h3>Твой стадион</h3>${UPG.map(u=>`<div class="row"><span>${u[1]} · ур. ${S[u[0]]}</span><b>${u[3]()}</b></div>`).join("")}<small>Нажимай на трибуны, кассу и музей, чтобы улучшить их. С каждым уровнем стадион меняется.</small></div>`;
  $("#cl").onclick=()=>act(()=>rpc("collect"));

@@ -843,7 +843,9 @@ const costOf=k=>Math.round([100,150,300][k]*Math.pow([1.7,1.7,1.8][k],PF.stadium
 const inc=()=>Math.round(60*(1+.5*PF.stadium.inc)),capH=()=>4+.5*PF.stadium.cap;
 const pend=()=>Math.floor(Math.min((Date.now()-new Date(PF.last_collect))/36e5,capH())*inc());
 const tr=p=>p.last_change?` <small style="color:${p.last_change>0?"var(--ok)":"var(--bad)"}">${p.last_change>0?"▲":"▼"}${Math.abs(p.last_change)}</small>`:"";
-const IMC=new Set();addEventListener("load",e=>{const t=e.target;if(t&&t.tagName==="IMG"&&t.src)IMC.add(t.src)},true);const lz=u=>IMC.has(u)?'decoding="sync"':'loading="lazy" decoding="async"';
+const IMC=new Set(),IMK=new Map();addEventListener("load",e=>{const t=e.target;if(t&&t.tagName==="IMG"&&t.src&&!IMC.has(t.src)){IMC.add(t.src);try{const k=new Image();k.referrerPolicy="no-referrer";k.decoding="sync";k.src=t.src;IMK.set(t.src,k)}catch(x){}}},true);
+try{new MutationObserver(ms=>{for(const m of ms)for(const n of m.addedNodes){if(n.nodeType!==1)continue;const l=n.tagName==="IMG"?[n]:n.querySelectorAll?n.querySelectorAll("img"):[];for(const i of l)if(IMC.has(i.src)){i.loading="eager";i.decoding="sync"}}}).observe(document.documentElement,{childList:true,subtree:true})}catch(x){}
+const lz=u=>IMC.has(u)?'decoding="sync"':'loading="lazy" decoding="async"';
 const PH=["premierleague26","premierleague25","premierleague"];let PHI=0;
 const phUrl=(c,i)=>/^http/.test(c)?c:`https://resources.premierleague.com/${PH[i]}/photos/players/110x140/${i==2?"p":""}${c}.png`;
 const phImg=p=>p.photo?`<img class="ph" referrerpolicy="no-referrer" ${lz(phUrl(p.photo,PHI))} alt="" src="${phUrl(p.photo,PHI)}" data-c="${esc(p.photo)}" data-i="${PHI}">`:"";

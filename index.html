@@ -1274,11 +1274,13 @@ function fillL0(D){if(!D||!$("#lcn"))return;const c=D.counts||{},nf=v=>v==null?"
  $("#lfan").innerHTML=(D.stars||[]).map(p=>zcard(p.photo?p:Object.assign({},p,{photo:(PM[p.id]||PM[p.name]||{}).photo}))).join("");
  $("#lcn").innerHTML=[[c.users,"клубов в игре"],[c.players,"игроков в базе"],[c.played,"матчей сыграно"],[c.leagues,"лиг сообщества"]].map(a=>`<div class="stat"><b>${nf(a[0])}</b><span>${a[1]}</span></div>`).join("");
  $("#llg").innerHTML=(D.leagues||[]).length?`<div class="box">${D.leagues.map((l,i)=>`<div class="pl"><b class="rb r0">${i+1}</b><div class="pi"><div>${esc(l.name)}</div><small>Лидер: ${esc(l.leader||"-")} · ${Math.round(l.pts||0)} очк.</small></div><span class="dp">${ico("us")}${l.members}</span></div>`).join("")}</div>`:'<div class="box"><small>Активных лиг пока нет. Создай первую и позови друзей.</small></div>';
- const pl=p=>`<div class="pl"><b class="rb r${rar(p.rating)}">${p.rating}</b><div class="pi"><div>${esc(p.name)}</div><small>${p.position} · <span data-team="${esc(p.team)}">${bdg(p.team,1)}${esc(p.team)}</span></small></div><span class="dp ${p.last_change>0?"up":"dw"}">${ico(p.last_change>0?"up":"dn")}${Math.abs(p.last_change)}</span></div>`;
+ const rph=x=>{try{const q=x.photo||(PM[x.id]||PM[x.name]||(typeof PL!=="undefined"&&PL[x.id])||{}).photo;return q?`<span class="rp"><img class="ph pg" referrerpolicy="no-referrer" loading="lazy" decoding="async" alt="" src="${phUrl(q,PHI)}" data-c="${esc(q)}" data-i="${PHI}"></span>`:`<span class="rp tm">${bdg(x.team)}</span>`}catch(e){return""}};
+ const pl=p=>`<div class="pl sp" data-n="${esc(p.name)}">${rph(p)}<b class="rb r${rar(p.rating)}">${p.rating}</b><div class="pi"><div>${esc(p.name)}</div><small>${p.position} · <span data-team="${esc(p.team)}">${bdg(p.team,1)}${esc(p.team)}</span></small></div><span class="dp ${p.last_change>0?"up":"dw"}">${ico(p.last_change>0?"up":"dn")}${Math.abs(p.last_change)}</span></div>`;
  $("#lup").innerHTML=lst(D.risers,pl);$("#ldw").innerHTML=lst(D.fallers,pl);
  const T={scorers:["Бомбардиры",10],assists:["Ассистенты",10],avg:["Средняя оценка",10]},a=D[STB]||[],mx=STB==="avg"?10:Math.max(1,...a.map(x=>+x.v));
  $("#ltb").innerHTML=Object.entries(T).map(([k,v])=>`<button class="rc${k===STB?" on":""}" data-k="${k}">${v[0]}</button>`).join("");
- $("#lst").innerHTML=lst(a,(x,i)=>`<div class="st"><i style="width:${x.v/mx*100}%"></i><span class="rk">${i+1}</span><div style="flex:1;min-width:0"><div>${esc(x.name)}</div><small><span data-team="${esc(x.team)}">${esc(x.team)}</span></small></div><b>${x.v}</b></div>`);
+ $("#lst").innerHTML=lst(a,(x,i)=>`<div class="st sp" data-n="${esc(x.name)}"><i style="width:${x.v/mx*100}%"></i>${rph(x)}<span class="rk">${i+1}</span><div style="flex:1;min-width:0"><div>${esc(x.name)}</div><small><span data-team="${esc(x.team)}">${esc(x.team)}</span></small></div><b>${x.v}</b></div>`);
+ (async()=>{try{const ms=[...document.querySelectorAll("#lp .sp .rp.tm")].map(e=>e.parentNode);if(!ms.length)return;const names=[...new Set(ms.map(e=>e.dataset.n))];const {data}=await sb0.schema(sch).from("players").select("name,photo").in("name",names).not("photo","is",null);const m={};(data||[]).forEach(r=>{if(!m[r.name])m[r.name]=r.photo});ms.forEach(e=>{const q=m[e.dataset.n];if(!q)return;const r=e.querySelector(".rp");r.classList.remove("tm");r.innerHTML=`<img class="ph pg" referrerpolicy="no-referrer" alt="" src="${phUrl(q,PHI)}" data-c="${esc(q)}" data-i="${PHI}">`})}catch(e){}})();
  $("#ltb").querySelectorAll(".rc").forEach(b=>b.onclick=()=>{STB=b.dataset.k;fillL(D)})}
 async function league(){const m=$("#lgb");if(!m)return;m.innerHTML=LOAD;
  try{const [g,mine]=await Promise.all([rpc("global_table"),rpc("my_leagues")]);LG=mine;const tbs=await Promise.all(mine.map(l=>rpc("league_table",{p_league:l.id})));
@@ -1549,7 +1551,7 @@ async function teamStats0(){if(!MT)await patchMT();const e=$("#tms");if(!e)retur
  const T={tbl:"Таблица",gf:"Атака",ga:"Защита",cs:"Сухие матчи"},val=x=>TSB==="tbl"?x.pts:TSB==="gf"?x.gf:TSB==="ga"?x.ga:x.cs,
   a=[...tb].sort((x,y)=>TSB==="tbl"?0:TSB==="ga"?(val(x)-val(y)||y.pts-x.pts):(val(y)-val(x)||y.pts-x.pts)),mx=Math.max(1,...a.map(val));
  $("#ttb").innerHTML=Object.entries(T).map(([k,v])=>`<button class="rc${k===TSB?" on":""}" data-k="${k}">${v}</button>`).join("");
- e.innerHTML=a.map((x,i)=>{const v=val(x),w=TSB==="ga"?(mx-v)/mx*100:v/mx*100;return`<div class="st" data-team="${esc(x.n)}"><i style="width:${Math.max(4,w)}%"></i><span class="rk">${i+1}</span>${bdg(x.n)}<div style="flex:1;min-width:0"><div>${esc(x.n)}</div><small>${x.p} игр · ${x.w}-${x.d}-${x.l} · ${x.gf}:${x.ga}</small></div><b>${v}</b></div>`}).join("");
+ e.innerHTML=a.map((x,i)=>{const v=val(x),w=TSB==="ga"?(mx-v)/mx*100:v/mx*100;return`<div class="st sp" data-team="${esc(x.n)}"><i style="width:${Math.max(4,w)}%"></i><span class="rp tm">${bdg(x.n)}</span><span class="rk">${i+1}</span><div style="flex:1;min-width:0"><div>${esc(x.n)}</div><small>${x.p} игр · ${x.w}-${x.d}-${x.l} · ${x.gf}:${x.ga}</small></div><b>${v}</b></div>`}).join("");
  $("#ttb").querySelectorAll(".rc").forEach(b=>b.onclick=()=>{TSB=b.dataset.k;teamStats()})}
 // ---------- обучение ----------
 let TE=null;
@@ -1842,10 +1844,10 @@ document.addEventListener("click",async e=>{
 });
 })();
 </script>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400..600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400..800&display=swap" rel="stylesheet">
 <style id="redesign">
 /* ===== Club — professional redesign: editorial serif + emerald on ink/paper ===== */
-:root{--fs:"Newsreader",Georgia,"Times New Roman",serif;--r1:8px;--r2:10px;--r3:14px;--r4:20px;
+:root{--fs:Manrope,system-ui,sans-serif;--f:Manrope,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--r1:8px;--r2:10px;--r3:14px;--r4:20px;
  --bg:#0a1017;--tx:#eef2f6;--tx2:#b4bfcc;--mu:#8593a3;--ac:#4fd1a1;--ac2:#78e0ba;--act:#4fd1a1;--ink:#04140d;
  --wh:255,255,255;--bk:10,16,23;--ab:17,26,36;--sf:#111a24;--sf2:#16212d;
  --ln:rgba(255,255,255,.09);--ln2:rgba(255,255,255,.16);--g1:var(--sf);--g2:var(--sf);--hi:transparent;
@@ -1858,8 +1860,8 @@ html,body{background:var(--bg)}
 body::before,html[data-theme=light] body::before{background:radial-gradient(900px 480px at 85% -8%,rgba(var(--wh),.05),transparent 70%),var(--bg)}
 body{font-weight:400;letter-spacing:.002em}
 /* type */
-h1,h2,.al h2,.cta h2,.sh h2,.lh h1{font-family:var(--fs);font-weight:500;letter-spacing:-.025em}
-.lh h1{font-size:clamp(42px,6vw,80px);line-height:1.03;max-width:11em}
+h1,h2,.al h2,.cta h2,.sh h2,.lh h1{font-family:var(--fs);font-weight:700;letter-spacing:-.035em}
+.lh h1{font-size:clamp(38px,5.4vw,70px);line-height:1.06;max-width:12em}
 .lh h1 .dm{color:var(--ac)}
 .sh h2,.cta h2{font-size:clamp(30px,4vw,50px);line-height:1.08}
 .lead{font-weight:400;font-size:18px;line-height:1.6;color:var(--tx2);max-width:30em}
@@ -1869,7 +1871,7 @@ h1,h2,.al h2,.cta h2,.sh h2,.lh h1{font-family:var(--fs);font-weight:500;letter-
 /* nav */
 header,.lb{background:rgba(var(--bk),.82);-webkit-backdrop-filter:blur(16px) saturate(150%);backdrop-filter:blur(16px) saturate(150%);border-bottom:1px solid var(--ln)}
 .lb .lw{height:68px}
-.lgo{font-family:var(--fs);font-size:23px;font-weight:600;letter-spacing:-.02em}
+.lgo{font-family:var(--fs);font-size:21px;font-weight:800;letter-spacing:-.02em}
 .mk{background:var(--ac);border-radius:7px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
 .lk{font-size:14px;font-weight:500;color:var(--tx2);padding:8px 12px;border-radius:var(--r2);transition:color .2s,background .2s}
 .lk:hover{color:var(--tx);background:rgba(var(--wh),.06)}
@@ -1896,16 +1898,16 @@ input:focus,select:focus,html[data-theme=light] input:focus,html[data-theme=ligh
 @media(min-width:760px){.lstp{grid-template-columns:repeat(4,1fr)}.lstc+.lstc{border-left:1px solid var(--ln)}.lstc,.lstc:first-child{padding:28px}}
 .lstc,.lstc:first-child{background:var(--sf);border:1px solid var(--ln)!important;border-radius:var(--r3);padding:28px;box-shadow:var(--sh);position:relative}
 .lstc b{font:500 15px/1 var(--f);letter-spacing:.08em;color:var(--ac);display:inline-flex;padding:7px 11px;border:1px solid var(--ln2);border-radius:999px}
-.lstc h3{font-family:var(--fs);font-size:23px;font-weight:500;margin:22px 0 10px;letter-spacing:-.015em}
+.lstc h3{font-family:var(--fs);font-size:19px;font-weight:700;margin:22px 0 10px;letter-spacing:-.015em}
 /* features */
 .fgr{gap:20px;border:0}
 .fc2,.fc2:not(:nth-child(3n+1)),.fc2:nth-child(even){background:var(--sf);border:1px solid var(--ln)!important;border-radius:var(--r3);padding:30px;box-shadow:var(--sh);transition:transform .25s var(--ease),border-color .25s}
 .fc2:hover{transform:translateY(-3px);border-color:var(--ln2)!important}
 .fi{width:46px;height:46px;border:0;border-radius:var(--r2);background:rgba(var(--wh),.06);margin-bottom:22px}
 .fi .i{stroke:var(--ac)}
-.fc2 h3{font-family:var(--fs);font-size:22px;font-weight:500}
+.fc2 h3{font-family:var(--fs);font-size:18px;font-weight:700}
 /* packs */
-.pkc2 b{font-family:var(--fs);font-size:21px;font-weight:500}
+.pkc2 b{font-weight:700}
 /* faq */
 .faq{border:0;display:grid;gap:12px}
 .faq details{background:var(--sf);border:1px solid var(--ln);border-radius:var(--r3);padding:0 24px;transition:border-color .2s}
@@ -1924,7 +1926,7 @@ input:focus,select:focus,html[data-theme=light] input:focus,html[data-theme=ligh
 .ft{background:rgba(var(--wh),.03);padding-top:56px}
 /* app surfaces */
 .box,.tile,.stage{background:var(--sf);border:1px solid var(--ln);border-radius:var(--r3);box-shadow:var(--sh);padding:22px}
-.box h3,.tile h3{font-family:var(--fs);font-size:19px;font-weight:500}
+.box h3,.tile h3{font-size:17px;font-weight:700}
 .tst,#ttp{background:var(--sf);border:1px solid var(--ln2);border-radius:var(--r3);box-shadow:var(--sh)}
 .rc.on{background:var(--ac);color:var(--ink)}
 .cd{border-radius:var(--r3);box-shadow:var(--sh)}
@@ -1937,5 +1939,25 @@ input:focus,select:focus,html[data-theme=light] input:focus,html[data-theme=ligh
 html[data-theme=light] .pitch,.pitch{border-radius:var(--r3)}
 html[data-theme=light] .pitch{background:#e7efe9}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ===== rows with player photo / team crest, fading to the right ===== */
+.st.sp,.pl.sp{position:relative;overflow:hidden;min-height:78px;padding:10px 16px 10px 12px;gap:14px;background:var(--sf);border:1px solid var(--ln);border-radius:var(--r3)}
+.st.sp+.st.sp,.pl.sp+.pl.sp{margin-top:8px}
+.st.sp>i{background:linear-gradient(90deg,rgba(var(--wh),.0),rgba(var(--wh),.07));z-index:0}
+.rp{position:absolute;left:0;top:0;bottom:0;width:58%;z-index:0;pointer-events:none;overflow:hidden;
+ background:linear-gradient(90deg,rgba(var(--wh),.13),rgba(var(--wh),.04) 55%,transparent);}
+.rp::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--ac),transparent 70%);opacity:.18}
+.rp .pg{position:absolute;left:34px;bottom:-6px;height:122%;width:auto;max-width:none;object-fit:contain;filter:drop-shadow(0 6px 10px rgba(0,0,0,.28));
+ -webkit-mask-image:linear-gradient(90deg,#000 62%,transparent 100%);mask-image:linear-gradient(90deg,#000 62%,transparent 100%)}
+.rp.tm .tlg,.rp.tm .tb{position:absolute;left:44px;top:50%;width:58px;height:58px;transform:translateY(-50%);opacity:.9;filter:drop-shadow(0 4px 8px rgba(0,0,0,.25))}
+.rp.tm::after{content:"";position:absolute;inset:0;backdrop-filter:blur(0)}
+.st.sp>*:not(.rp):not(i),.pl.sp>*:not(.rp){position:relative;z-index:1}
+.st.sp .rk,.pl.sp .rb{flex:none}.pl.sp .rp .pg{left:50px}
+.st.sp>div,.pl.sp .pi{padding-left:70px}
+.st.sp .tlg,.pl.sp .pi .tlg{width:18px;height:18px}
+.st.sp[data-team] .rp.tm+.rk{}
+.st.sp b:last-child{font-size:20px;font-weight:800}
+.st.sp .rk{font-weight:800;font-size:15px;color:var(--tx)}
+@media(max-width:520px){.rp{width:64%}.rp .pg{left:28px}.st.sp>div,.pl.sp .pi{padding-left:62px}}
 </style>
 </body></html>

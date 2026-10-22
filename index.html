@@ -843,9 +843,10 @@ const costOf=k=>Math.round([100,150,300][k]*Math.pow([1.7,1.7,1.8][k],PF.stadium
 const inc=()=>Math.round(60*(1+.5*PF.stadium.inc)),capH=()=>4+.5*PF.stadium.cap;
 const pend=()=>Math.floor(Math.min((Date.now()-new Date(PF.last_collect))/36e5,capH())*inc());
 const tr=p=>p.last_change?` <small style="color:${p.last_change>0?"var(--ok)":"var(--bad)"}">${p.last_change>0?"▲":"▼"}${Math.abs(p.last_change)}</small>`:"";
+const IMC=new Set();addEventListener("load",e=>{const t=e.target;if(t&&t.tagName==="IMG"&&t.src)IMC.add(t.src)},true);const lz=u=>IMC.has(u)?'decoding="sync"':'loading="lazy" decoding="async"';
 const PH=["premierleague26","premierleague25","premierleague"];let PHI=0;
 const phUrl=(c,i)=>/^http/.test(c)?c:`https://resources.premierleague.com/${PH[i]}/photos/players/110x140/${i==2?"p":""}${c}.png`;
-const phImg=p=>p.photo?`<img class="ph" referrerpolicy="no-referrer" loading="lazy" decoding="async" alt="" src="${phUrl(p.photo,PHI)}" data-c="${esc(p.photo)}" data-i="${PHI}">`:"";
+const phImg=p=>p.photo?`<img class="ph" referrerpolicy="no-referrer" ${lz(phUrl(p.photo,PHI))} alt="" src="${phUrl(p.photo,PHI)}" data-c="${esc(p.photo)}" data-i="${PHI}">`:"";
 addEventListener("error",e=>{const t=e.target;if(!t.classList||!t.classList.contains("ph"))return;const i=+t.dataset.i+1;if(i<PH.length&&!/^http/.test(t.dataset.c)){t.dataset.i=i;t.src=phUrl(t.dataset.c,i)}else t.remove()},true);
 addEventListener("load",e=>{const t=e.target;if(t.classList&&t.classList.contains("ph"))PHI=+t.dataset.i},true);
 const card=(id,ex="")=>{const p=PL[id];return `<div class="cd r${rar(p.rating)} ${ex}" data-id="${id}">${phImg(p)}${QTY[id]>1?`<i class="qt">×${QTY[id]}</i>`:""}<div class="o">${p.rating}${tr(p)}</div><div class="n">${esc(p.name)}</div><div class="c"><b>${p.position}</b>${bdg(p.team,1)||tchip(p.team)}</div></div>`};
@@ -893,7 +894,7 @@ async function boot0(){
   await loadComps();if(!Object.keys(PL).length){for(let f=0;;f+=1000){const {data,error}=await sb.from("players").select("id,name,team,position,rating,last_change,photo,updated_at").order("id").range(f,f+999);if(error)throw error;data.forEach(p=>PL[p.id]=p);if(data.length<1000)break}}
   const {data:pf}=await sb.from("profiles").select("*").maybeSingle();
   if(!pf){onboard();return}
-  PF=pf;await refresh();$("#nv").style.display="flex";document.body.classList.add("app");if(INV()){tab="lg";LGS="l"}else if(duInv()){tab="du"}view();tourAuto();liveInit();scoreInit()
+  PF=pf;await refresh();$("#nv").style.display="flex";document.body.classList.add("app");if(INV()){tab="lg";LGS="l"}else if(duInv()&&!sessionStorage.getItem("club_dugo")){try{sessionStorage.setItem("club_dugo","1")}catch(e){}tab="du"}view();tourAuto();liveInit();scoreInit()
  }catch(e){$("#m").innerHTML=`<div class="box"><h3>Ошибка</h3>${esc(e.message)}<br><button class="b" id="rt" style="margin-top:8px">Повторить</button></div>`;$("#rt").onclick=boot}}
 async function refresh(){
  const [pf,cd,pp,sc,lu,nr,ps]=await Promise.all([sb.from("profiles").select("*").single(),sb.from("user_cards").select("*"),sb.from("pending_packs").select("*").order("id"),sb.from("round_scores").select("round,points").order("round",{ascending:false}),sb.from("lineups").select("*").order("round",{ascending:false}).limit(1),rpc("next_round"),rpc("pack_status").catch(()=>null)]);
@@ -1112,7 +1113,7 @@ const TCODE={"Arsenal":[3,57],"Aston Villa":[7,58],"Bournemouth":[91,1044],"Bren
 const BU=[t=>`https://crests.football-data.org/${t[1]}.png`,t=>`https://crests.football-data.org/${t[1]}.svg`,t=>`https://resources.premierleague.com/premierleague25/badges/70/t${t[0]}.png`,t=>`https://resources.premierleague.com/premierleague/badges/70/t${t[0]}.png`,t=>`https://resources.premierleague.com/premierleague/badges/t${t[0]}.png`];let BPI=0;
 const bUrl=(n,i)=>TCODE[n]?BU[i](TCODE[n]):(i===0?LOGO[n]||"":"");const BN=n=>TCODE[n]?BU.length:1;
 const tchip=(n,l)=>{const w=n.split(" ");return`<i class="tb"${l?` data-team="${esc(n)}"`:""}>${esc((w.length>1?w.map(x=>x[0]).join(""):n.slice(0,3)).toUpperCase())}</i>`};
-const bdg=(n,s,l)=>(TCODE[n]||LOGO[n])?`<img class="tlg${s?" s":""}" referrerpolicy="no-referrer" loading="lazy" decoding="async" alt="" src="${bUrl(n,BPI)}" data-i="${BPI}" data-n="${esc(n)}"${s?' data-s="1"':""}${l?` data-team="${esc(n)}"`:""}>`:s?"":tchip(n,l);
+const bdg=(n,s,l)=>(TCODE[n]||LOGO[n])?`<img class="tlg${s?" s":""}" referrerpolicy="no-referrer" ${lz(bUrl(n,BPI))} alt="" src="${bUrl(n,BPI)}" data-i="${BPI}" data-n="${esc(n)}"${s?' data-s="1"':""}${l?` data-team="${esc(n)}"`:""}>`:s?"":tchip(n,l);
 addEventListener("error",e=>{const t=e.target;if(!t.classList||!t.classList.contains("tlg"))return;const i=+t.dataset.i+1;if(i<BN(t.dataset.n)){t.dataset.i=i;t.src=bUrl(t.dataset.n,i)}else if(t.dataset.s)t.remove();else t.outerHTML=tchip(t.dataset.n,t.hasAttribute("data-team"))},true);
 addEventListener("load",e=>{const t=e.target;if(t.classList&&t.classList.contains("tlg"))BPI=+t.dataset.i},true);
 const rg=v=>v==null?"n":v>=8?"h":v>=7?"g":v>=6?"m":"l",rf=v=>v==null?"-":Number(v).toFixed(1).replace(/^10\.0$/,"10"),sg=v=>(v>0?"+":"")+Number(v).toFixed(1);

@@ -1143,6 +1143,7 @@ let MT=null,FXR=null,FXM=null;
 const TCODE={"Arsenal":[3,57],"Aston Villa":[7,58],"Bournemouth":[91,1044],"Brentford":[94,402],"Brighton":[36,397],"Chelsea":[8,61],"Coventry City":[9,1076],"Crystal Palace":[31,354],"Everton":[11,62],"Fulham":[54,63],"Hull City":[88,322],"Ipswich Town":[40,349],"Leeds":[2,341],"Liverpool":[14,64],"Man City":[43,65],"Man Utd":[1,66],"Newcastle":[4,67],"Nott'm Forest":[17,351],"Spurs":[6,73],"Sunderland":[56,71]};
 const BU=[t=>`https://crests.football-data.org/${t[1]}.png`,t=>`https://crests.football-data.org/${t[1]}.svg`,t=>`https://resources.premierleague.com/premierleague25/badges/70/t${t[0]}.png`,t=>`https://resources.premierleague.com/premierleague/badges/70/t${t[0]}.png`,t=>`https://resources.premierleague.com/premierleague/badges/t${t[0]}.png`];let BPI=0;
 const bUrl=(n,i)=>TCODE[n]?BU[i](TCODE[n]):(i===0?LOGO[n]||"":"");const BN=n=>TCODE[n]?BU.length:1;
+const TCOL={"Arsenal":"#C8242B","Aston Villa":"#6C1D45","Bournemouth":"#B50E1D","Brentford":"#D4202A","Brighton":"#0057B8","Chelsea":"#034694","Coventry City":"#3E86C0","Crystal Palace":"#1B458F","Everton":"#003399","Fulham":"#3A3A3C","Hull City":"#D9831A","Ipswich Town":"#3A64A3","Leeds":"#1D428A","Liverpool":"#C8102E","Man City":"#4F97CC","Man Utd":"#DA291C","Newcastle":"#2B2B2E","Nott'm Forest":"#DD0000","Spurs":"#132257","Sunderland":"#EB172B"};
 const tchip=(n,l)=>{const w=n.split(" ");return`<i class="tb"${l?` data-team="${esc(n)}"`:""}>${esc((w.length>1?w.map(x=>x[0]).join(""):n.slice(0,3)).toUpperCase())}</i>`};
 const bdg=(n,s,l)=>(TCODE[n]||LOGO[n])?`<img class="tlg${s?" s":""}" referrerpolicy="no-referrer" ${lz(bUrl(n,BPI))} alt="" src="${bUrl(n,BPI)}" data-i="${BPI}" data-n="${esc(n)}"${s?' data-s="1"':""}${l?` data-team="${esc(n)}"`:""}>`:s?"":tchip(n,l);
 addEventListener("error",e=>{const t=e.target;if(!t.classList||!t.classList.contains("tlg"))return;const i=+t.dataset.i+1;if(i<BN(t.dataset.n)){t.dataset.i=i;t.src=bUrl(t.dataset.n,i)}else if(t.dataset.s)t.remove();else t.outerHTML=tchip(t.dataset.n,t.hasAttribute("data-team"))},true);
@@ -1241,6 +1242,28 @@ async function lmatch(id,q){if(!q)SVI.m=0;const x=MT.find(v=>v.id===id);if(!q){L
 function tstand(){const T={};(MT||[]).forEach(x=>{if(!(x.finished||x.ft)||x.home_goals==null||x.away_goals==null)return;
  [[x.home,x.home_goals,x.away_goals],[x.away,x.away_goals,x.home_goals]].forEach(([t,f,a])=>{const s=T[t]??={n:t,p:0,w:0,d:0,l:0,gf:0,ga:0,pts:0,cs:0};s.p++;s.gf+=f;s.ga+=a;if(a===0)s.cs++;if(f>a){s.w++;s.pts+=3}else if(f===a){s.d++;s.pts++}else s.l++})});
  return Object.values(T).sort((a,b)=>b.pts-a.pts||(b.gf-b.ga)-(a.gf-a.ga)||b.gf-a.gf)}
+const EVG='<svg viewBox="0 0 24 24">'+'<circle cx="12" cy="12" r="11.5" fill="#fff"/><circle cx="12" cy="12" r="11.5" fill="none" stroke="rgba(0,0,0,.12)"/><defs><clipPath id="bc"><circle cx="12" cy="12" r="9.3"/></clipPath></defs><circle cx="12" cy="12" r="9.3" fill="#fff"/><g clip-path="url(#bc)" fill="#14161b"><circle cx="17.05" cy="5.04" r="2.3"/><circle cx="20.18" cy="14.66" r="2.3"/><circle cx="12" cy="20.6" r="2.3"/><circle cx="3.82" cy="14.66" r="2.3"/><circle cx="6.94" cy="5.04" r="2.3"/></g><path d="M12 8.4L17.05 5.04M12 8.4L6.94 5.04M15.42 10.89L17.05 5.04M15.42 10.89L20.18 14.66M14.11 14.91L20.18 14.66M14.11 14.91L12 20.6M9.89 14.91L12 20.6M9.89 14.91L3.82 14.66M8.58 10.89L3.82 14.66M8.58 10.89L6.94 5.04" stroke="#14161b" stroke-width="1.1" stroke-linecap="round" fill="none"/><polygon points="12,8.4 15.42,10.89 14.11,14.91 9.89,14.91 8.58,10.89" fill="#14161b"/><circle cx="12" cy="12" r="9.3" fill="none" stroke="#14161b" stroke-width="1.7"/>'+'</svg>',EVA='<svg viewBox="0 0 24 24">'+'<circle cx="12" cy="12" r="11.5" fill="#fff"/><circle cx="12" cy="12" r="11.5" fill="none" stroke="rgba(0,0,0,.12)"/><path d="M6.800 18L12 5.500 17.200 18M8.900 13.600h6.200" stroke="#14161b" stroke-width="2.600" stroke-linecap="round" stroke-linejoin="round" fill="none"/>'+'</svg>';
+let TTAB="o";
+
+async function teamStats(n){let pls=[];try{const{data}=await sb.from("players").select("*").eq("team",n).limit(60);pls=data||[]}catch(e){}
+ if(!pls.length)pls=Object.values(PL).filter(p=>p.team===n);
+ if(!pls.length)return'<div class="box"><small>Статистики пока нет</small></div>';
+ const v=(p,k)=>p[k]==null?0:+p[k]||0,c=(p,k)=>p[k]==null?"–":p[k];
+ const top=(k,l)=>{const a=[...pls].sort((a,b)=>v(b,k)-v(a,k))[0];return a&&v(a,k)>0?`<div class="sld" data-pid="${a.id}"><div class="sla">${phImg(a)}</div><small>${l}</small><b>${k==="rating"?rf(a[k]):v(a,k)}</b><span>${esc(a.name)}</span></div>`:""};
+ const rows=[...pls].sort((a,b)=>v(b,"goals")-v(a,"goals")||v(b,"assists")-v(a,"assists")||v(b,"rating")-v(a,"rating"));
+ return`<div class="sldr">${top("goals","Голы")}${top("assists","Ассисты")}${top("rating","Рейтинг")}</div><div class="box tcard"><h3>Игроки</h3><div class="sth"><span>Игрок</span><span>И</span><span>Г</span><span>А</span><span>ЖК</span><span>КК</span></div>${rows.map(p=>`<div class="str" data-pid="${p.id}"><span class="stn"><b class="rb r${rar(p.rating)}">${p.rating}</b><i>${esc(p.name)}<small>${p.position||""}</small></i></span><span>${c(p,"appearances")}</span><span>${c(p,"goals")}</span><span>${c(p,"assists")}</span><span>${c(p,"yellow_cards")}</span><span>${c(p,"red_cards")}</span></div>`).join("")}</div>`}
+async function teamLineup(n,x){
+ if(!x)return'<div class="box"><small>Сыгранных матчей пока нет</small></div>';
+ let R,E;try{[R,E]=await Promise.all([rpc("match_detail",{p_match:x.id}),rpc("match_extra",{p_match:x.id}).catch(()=>null)])}catch(e){return'<div class="box"><small>'+esc(e.message)+'</small></div>'}
+ const nz=s=>String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim(),lt=s=>nz(s).split(/\s+/).pop(),sd=x.home===n?"home":"away",C={};
+ ((E&&E.timeline)||[]).forEach(e=>{if(e.side!==sd)return;const ad=(nm,k)=>{if(!nm)return;const q=lt(nm);(C[q]=C[q]||{})[k]=((C[q]||{})[k]||0)+1};if(e.type==="goal"){ad(e.player,"g");ad(e.player2,"a")}else if(e.type==="pen_goal")ad(e.player,"g")});
+ const rows=R.filter(p=>p.pl_team===n).sort((a,b)=>b.mins-a.mins),k=rows.find(p=>p.pl_pos==="GK"),st=k?[k,...rows.filter(p=>p!==k).slice(0,10)]:rows.slice(0,11);
+ const pp=p=>{const o=C[lt(p.pl_name)]||{},ph=PL[p.pl_id]||{};return`<div class="lpp" data-pid="${p.pl_id}"><div class="lav">${phImg(ph)}<b class="lrt ${rg(p.rate)}">${rf(p.rate)}</b></div><div class="lev">${o.a?`<i>${EVA}${o.a}</i>`:""}${o.g?`<i>${EVG}${o.g}</i>`:""}</div><span>${esc(p.pl_name)}</span></div>`};
+ const pit=["FWD","MID","DEF","GK"].map(q=>{const a=st.filter(p=>p.pl_pos===q);return a.length?`<div class="lnr">${a.map(pp).join("")}</div>`:""}).join("");
+ let all=Object.values(PL).filter(p=>p.team===n);if(!all.length){try{const{data}=await sb.from("players").select("id,name,team,position,rating,last_change,photo").eq("team",n).limit(60);all=data||[]}catch(e){}}
+ const G=[["GK","Вратари"],["DEF","Защитники"],["MID","Полузащитники"],["FWD","Нападающие"]];
+ const full=G.map(([q,l])=>{const a=all.filter(p=>p.position===q).sort((a,b)=>b.rating-a.rating);return a.length?`<div class="dl">${l}</div>${a.map(p=>`<div class="pl" data-pid="${p.id}"><b class="rb r${rar(p.rating)}">${p.rating}</b><div class="pi"><div>${esc(p.name)}</div><small>${p.position}</small></div></div>`).join("")}`:""}).join("");
+ return`<div class="box tcard"><h3>Последний состав</h3>${mrow(x)}</div><div class="lpit">${pit}</div><div class="box tcard"><h3>Все игроки</h3>${full||"<small>Игроков пока нет</small>"}</div>`}
 async function teamPage(n){const pv=NAVB;TMN=n;
  modal('<div class="mw tp na">'+LOAD+'</div>');
  if(!MT)await patchMT();
@@ -1257,21 +1280,32 @@ async function teamPage(n){const pv=NAVB;TMN=n;
   tb=tstand(),pos=tb.findIndex(s=>s.n===n),S=tb[pos]||{p:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
   res=x=>{const h=x.home===n,f=h?x.home_goals:x.away_goals,a=h?x.away_goals:x.home_goals;return f>a?["В","g"]:f===a?["Н","m"]:["П","l"]},
   frm=done.slice(-5).map(x=>{const r=res(x);return`<b class="rt ${r[1]}" data-mid="${x.id}" title="${esc(x.home)} ${x.home_goals}:${x.away_goals} ${esc(x.away)}">${r[0]}</b>`}).join("");
- const html=`<div class="mw tp"><div class="box"><div class="th"><div class="thc">${bdg(n)}</div><div><h2>${esc(n)}</h2><small>${pos>=0?"Место "+(pos+1)+" · ":""}${S.pts} очк. · ${S.p} матч.</small></div></div>${frm?`<div class="row" style="margin-top:14px"><small>Форма</small><div class="frm">${frm}</div></div>`:""}</div>
+ const tc=TCOL[n]||`hsl(${[...n].reduce((h,c)=>(h*31+c.charCodeAt(0))%360,7)} 55% 36%)`,
+  nx=next[0],fl=done.slice(-5),
+  nxh=nx?`<div class="box tcard"><h3>Ближайший матч</h3><div class="row"><small>${fmtD(nx.kickoff)}</small><small class="chp">Тур ${nx.round}</small></div>${mrow(nx)}</div>`:"",
+  flh=fl.length?`<div class="box tcard"><h3>Форма команды</h3><div class="fcs">${fl.map((x,i)=>{const h=x.home===n,f=h?x.home_goals:x.away_goals,g=h?x.away_goals:x.home_goals,o=h?x.away:x.home,r=res(x)[1];return`<div class="fcol${i===fl.length-1?" lastf":""}"><b class="fch ${r}" data-mid="${x.id}">${f} - ${g}</b>${bdg(o,0,1)}</div>`}).join("")}</div></div>`:"";
+ const vis=k=>k===TTAB?"":" hidden",TBS=[["o","Обзор"],["m","Матчи"],["t","Таблица"],["s","Статы"],["l","Состав"]],
+  mH=`<div class="box tcard"><h3>Все туры (${all.length})</h3>${all.map(x=>`<div class="dl">Тур ${x.round} · ${fmtD(x.kickoff)}</div>${mrow(x)}`).join("")||"<small>Матчей нет</small>"}</div>`,
+  tH=`<div class="box tcard"><h3>Таблица</h3><div class="tbh"><span>#</span><span>Команда</span><span>И</span><span>В</span><span>Н</span><span>П</span><span>РМ</span><span>О</span></div>${tb.map((q,i)=>`<div class="tbr${q.n===n?" me":""}"><span>${i+1}</span><span class="tbn" data-team="${esc(q.n)}">${bdg(q.n,1)}<b>${esc(q.n)}</b></span><span>${q.p}</span><span>${q.w}</span><span>${q.d}</span><span>${q.l}</span><span>${q.gf-q.ga>0?"+":""}${q.gf-q.ga}</span><span><b>${q.pts}</b></span></div>`).join("")}</div>`;
+ const html=`<div class="mw tp" style="--tc:${tc}"><div class="thero"><div class="thr"><div class="thl">${bdg(n)}</div><div class="tht"><h2>${esc(n)}</h2><small>${pos>=0?"Место "+(pos+1)+" · ":""}${S.pts} очк. · ${S.p} матч.</small></div></div><div class="ttabs">${TBS.map(([k,l])=>`<button data-tt="${k}" class="${k===TTAB?"on":""}">${l}</button>`).join("")}</div></div><div class="tts" data-s="o"${vis("o")}>${nxh}${flh}
 <div class="box"><h3>Сезон</h3><div class="stats"><div class="stat"><b>${pos>=0?pos+1:"-"}</b><span>место</span></div><div class="stat"><b>${S.pts}</b><span>очков</span></div><div class="stat"><b>${S.w}-${S.d}-${S.l}</b><span>В-Н-П</span></div><div class="stat"><b>${S.gf}:${S.ga}</b><span>голы (${S.gf-S.ga>0?"+":""}${S.gf-S.ga})</span></div></div></div>
 ${next.length?`<div class="box"><div class="th2"><h3>Ближайшие матчи</h3><button class="g" data-all="m">Все 38 туров</button></div>${next.map(x=>mrow(x)).join("")}</div>`:""}
 ${last.length?`<div class="box"><div class="th2"><h3>Последние результаты</h3><button class="g" data-all="m">Все 38 туров</button></div>${last.map(x=>mrow(x)).join("")}</div>`:""}
-<div class="box"><div class="th2"><h3>Лучшие игроки</h3><button class="g" data-all="p">Все игроки</button></div>${pls.length?pls.map(p=>`<div class="pl" data-pid="${p.id}"><b class="rb r${rar(p.rating)}">${p.rating}</b><div class="pi"><div>${esc(p.name)}</div><small>${p.position}</small></div>${p.last_change?`<span class="dp ${p.last_change>0?"up":"dw"}">${ico(p.last_change>0?"up":"dn")}${Math.abs(p.last_change)}</span>`:""}</div>`).join(""):"<small>Игроков пока нет</small>"}</div></div>`;
- const m=modal(html),back=f=>{NAVB=()=>{LMID=null;unwatchMatch();NAVB=pv;teamPage(n)};f()};
+<div class="box"><div class="th2"><h3>Лучшие игроки</h3><button class="g" data-all="p">Все игроки</button></div>${pls.length?pls.map(p=>`<div class="pl" data-pid="${p.id}"><b class="rb r${rar(p.rating)}">${p.rating}</b><div class="pi"><div>${esc(p.name)}</div><small>${p.position}</small></div>${p.last_change?`<span class="dp ${p.last_change>0?"up":"dw"}">${ico(p.last_change>0?"up":"dn")}${Math.abs(p.last_change)}</span>`:""}</div>`).join(""):"<small>Игроков пока нет</small>"}</div></div><div class="tts" data-s="m"${vis("m")}>${mH}</div><div class="tts" data-s="t"${vis("t")}>${tH}</div><div class="tts" data-s="s"${vis("s")}>${LOAD}</div><div class="tts" data-s="l"${vis("l")}>${LOAD}</div></div>`;
+ const m=modal(html),back=f=>{SCRS.push($("#md").scrollTop);TOPF=1;NAVB=()=>{LMID=null;unwatchMatch();NAVB=pv;teamPage(n)};f()};
  m.querySelectorAll(".mt").forEach(e=>e.onclick=()=>back(()=>lmatch(+e.dataset.id)));
  m.querySelectorAll("[data-mid]").forEach(e=>e.onclick=()=>back(()=>lmatch(+e.dataset.mid)));
  m.querySelectorAll("[data-pid]").forEach(e=>e.onclick=()=>back(()=>pinfo(+e.dataset.pid)));
- m.querySelectorAll("[data-all]").forEach(e=>e.onclick=()=>back(()=>teamAll(n,e.dataset.all)))}
+ m.querySelectorAll("[data-all]").forEach(e=>e.onclick=()=>back(()=>teamAll(n,e.dataset.all)));
+ const sec=k=>m.querySelector('.tts[data-s="'+k+'"]'),ld={},wire=r=>{r.querySelectorAll(".mt").forEach(e=>e.onclick=()=>back(()=>lmatch(+e.dataset.id)));r.querySelectorAll("[data-mid]").forEach(e=>e.onclick=()=>back(()=>lmatch(+e.dataset.mid)));r.querySelectorAll("[data-pid]").forEach(e=>e.onclick=()=>back(()=>pinfo(+e.dataset.pid)))};
+ const show=async k=>{TTAB=k;m.querySelectorAll("[data-tt]").forEach(b=>b.classList.toggle("on",b.dataset.tt===k));m.querySelectorAll(".tts").forEach(e=>e.hidden=e.dataset.s!==k);
+  if((k==="s"||k==="l")&&!ld[k]){ld[k]=1;const h=await(k==="s"?teamStats(n):teamLineup(n,done[done.length-1]));const e=sec(k);if(e&&TMN===n){e.innerHTML=h;wire(e)}}};
+ m.querySelectorAll("[data-tt]").forEach(b=>b.onclick=()=>show(b.dataset.tt));if(TTAB==="s"||TTAB==="l")show(TTAB)}
 document.addEventListener("click",e=>{const t=e.target.closest("[data-team]");if(!t||t.closest("#tov"))return;const mt=t.closest(".mt");if(mt&&mt.style.cursor!=="default")return;
  e.stopPropagation();e.preventDefault();const n=t.dataset.team,md=$("#md"),open=md.style.display==="flex",pv=NAVB;
  if(open&&LMID){const id=LMID;LMID=null;unwatchMatch();SCRS.push($("#md").scrollTop);TOPF=1;NAVB=()=>{NAVB=pv;lmatch(id)}}
  else if(open&&TMN&&TMN!==n){const p=TMN;SCRS.push($("#md").scrollTop);TOPF=1;NAVB=()=>{NAVB=pv;teamPage(p)}}
- teamPage(n)},true);
+ TTAB="o";teamPage(n)},true);
 $("#mx").onclick=()=>{FXM=null;fixtures()};
 // ---------- главная для гостей ----------
 const IC={us:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 3-6 6.5-6s6.5 2.4 6.5 6M16 4.5a3.5 3.5 0 010 7M18 14c2.4.6 3.5 2.4 3.5 6"/>',cal:'<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/>',sh:'<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/>',tr:'<path d="M8 4h8v5a4 4 0 01-8 0zM8 6H4v1a4 4 0 004 4M16 6h4v1a4 4 0 01-4 4M12 13v4M8 21h8M10 17h4"/>',pk:'<rect x="5" y="3" width="14" height="18" rx="2.5"/><circle cx="12" cy="12" r="3.5"/>',sq:'<path d="M8 3L3 6l2 4 3-1v11h8V9l3 1 2-4-5-3a4 4 0 01-8 0z"/>',up:'<path d="M12 19V5M6 11l6-6 6 6"/>',dn:'<path d="M12 5v14M6 13l6 6 6-6"/>',ch:'<path d="M6 9l6 6 6-6"/>',ar:'<path d="M5 12h14M13 6l6 6-6 6"/>',bl:'<circle cx="12" cy="12" r="9"/><path d="M12 8l3.5 2.5-1.3 4h-4.4l-1.3-4zM12 3v5M15.5 10.5L20 9M14.2 14.5l2.8 3.8M9.8 14.5L7 18.3M8.5 10.5L4 9"/>'};
@@ -2156,5 +2190,51 @@ html body .frm{flex-wrap:wrap;min-width:0;max-width:100%}
 html body .frm .rt{width:36px;height:36px;font-size:13px}
 html body .row .frm{flex:1 1 0;min-width:0;justify-content:flex-end}
 html body .row>small{flex:none}
+/* ---- team page v3 ---- */
+.mw.tp{padding-top:0}
+.thero{margin:-64px -16px 0;padding:76px 20px 0;color:#fff;background:linear-gradient(180deg,var(--tc),color-mix(in srgb,var(--tc) 74%,#000))}
+.thr{display:flex;align-items:center;gap:16px}
+.thero .thl{flex:none;width:76px;height:76px;display:grid;place-items:center}
+.thero .tlg{width:76px;height:76px;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.3))}
+.thero .tb{width:76px;height:76px;font-size:22px;display:grid;place-items:center;background:rgba(255,255,255,.18);color:#fff;border-radius:50%}
+.thero h2{margin:0 0 4px;font-size:30px;line-height:1.05;font-weight:800;letter-spacing:-.03em;color:#fff}
+.thero small{color:rgba(255,255,255,.78);font-size:14px}
+.ttabs{display:flex;gap:4px;overflow-x:auto;margin:18px -20px 0;padding:0 14px;scrollbar-width:none}.ttabs::-webkit-scrollbar{display:none}
+.ttabs button{flex:none;background:none;border:0;border-bottom:3px solid transparent;border-radius:0;padding:14px 12px 12px;color:rgba(255,255,255,.62);font:600 16px/1 var(--f);min-height:0}
+.ttabs button.on{color:#fff;border-bottom-color:#fff}
+.modal:has(.thero) .x{background:rgba(255,255,255,.2)!important;border-color:rgba(255,255,255,.35)!important;color:#fff!important}
+.tts[hidden]{display:none}.tts{padding-top:2px}
+.tcard{margin-top:14px}.tcard h3{margin:0 0 12px;font-size:18px;font-weight:700}
+.tcard .chp{padding:4px 10px;border-radius:999px;background:rgba(0,0,0,.06);font-weight:600}
+.fcs{display:flex;justify-content:space-between;gap:6px}
+.fcol{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:10px;position:relative;padding-bottom:6px}
+.fch{display:block;width:100%;max-width:60px;padding:5px 0;text-align:center;border-radius:6px;font:700 13px/1.2 var(--f);color:#fff;cursor:pointer;font-variant-numeric:tabular-nums}
+.fch.g{background:#2e9a62}.fch.m{background:#7b8088}.fch.l{background:#d4443b}
+.fcol .tlg,.fcol .tb{width:32px;height:32px;object-fit:contain}
+.fcol.lastf::after{content:"";position:absolute;left:12%;right:12%;bottom:-4px;height:3px;border-radius:2px;background:var(--tx)}
+.tbh,.tbr{display:grid;grid-template-columns:22px 1fr 24px 24px 24px 24px 34px 30px;align-items:center;gap:2px;text-align:center;font-size:13px;font-variant-numeric:tabular-nums}
+.tbh{color:var(--mu);font-size:12px;padding:0 6px 8px}.tbr{padding:9px 6px;border-top:1px solid var(--ln)}
+.tbr .tbn{display:flex;align-items:center;gap:8px;text-align:left;min-width:0;cursor:pointer}.tbr .tbn b{font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.tbn .tlg{width:20px;height:20px;flex:none}
+.tbh span:nth-child(2){text-align:left}
+.tbr.me{background:color-mix(in srgb,var(--tc) 14%,transparent);box-shadow:inset 4px 0 0 var(--tc);border-radius:8px;font-weight:700;color:var(--tc)}.tbr.me .tbn b{font-weight:800}
+.sldr{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.sld{background:var(--sf,#fff);border:1px solid var(--ln);border-radius:16px;padding:12px 6px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer}
+.sld .sla{width:56px;height:56px;border-radius:50%;overflow:hidden;background:rgba(0,0,0,.06);margin-bottom:4px}.sld .ph{width:100%;height:100%;object-fit:cover;object-position:50% 12%;position:static}
+.sld small{color:var(--mu);font-size:11px}.sld b{font-size:24px;line-height:1.1;color:var(--tc)}.sld span{font-size:12px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sth,.str{display:grid;grid-template-columns:1fr 30px 30px 30px 34px 34px;gap:2px;align-items:center;text-align:center;font-size:13px;font-variant-numeric:tabular-nums}
+.sth{color:var(--mu);font-size:12px;padding-bottom:8px}.sth span:first-child{text-align:left}
+.str{padding:8px 0;border-top:1px solid var(--ln);cursor:pointer}
+.stn{display:flex;align-items:center;gap:8px;text-align:left;min-width:0}.stn i{font-style:normal;min-width:0;display:flex;flex-direction:column;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.stn small{font-size:11px;color:var(--mu)}
+.lpit{margin-top:14px;border-radius:20px;padding:22px 6px 18px;background:var(--sf,#fff);border:1px solid var(--ln);display:flex;flex-direction:column;gap:20px;background-image:linear-gradient(var(--ln),var(--ln));background-size:100% 1px;background-repeat:no-repeat;background-position:0 50%}
+.lnr{display:flex;justify-content:space-around;gap:4px}
+.lpp{flex:1 1 0;min-width:0;max-width:92px;display:flex;flex-direction:column;align-items:center;cursor:pointer}
+.lav{position:relative;width:52px;height:52px;border-radius:50%;background:#e8ecef}
+.lav .ph{position:static!important;display:block;width:100%;height:100%;object-fit:cover;object-position:50% 12%;border-radius:50%}
+.lrt{position:absolute;top:-6px;right:-14px;min-width:30px;padding:3px 6px;border-radius:999px;text-align:center;font:700 13px/1.1 var(--f);color:#fff;background:#8a9097}
+.lrt.h,.lrt.g{background:#3fae6a}.lrt.m{background:#e8832f}.lrt.l{background:#d4443b}
+.lev{display:flex;gap:4px;margin-top:-8px;min-height:20px;position:relative;z-index:1}
+.lev i{display:flex;align-items:center;gap:3px;padding:2px 7px 2px 3px;border-radius:999px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.18);font:700 12px/1 var(--f);font-style:normal;color:#14161b}
+.lev i svg{width:15px;height:15px}
+.lpp>span{margin-top:3px;font-size:13px;font-weight:500;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center}
 </style>
 </body></html>

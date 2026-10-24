@@ -1214,10 +1214,10 @@ function matchHtml(x,R,E,XR){const XT={home:{xg:0,xa:0},away:{xg:0,xa:0}},tm={};
  const best=R.filter(p=>p.rate!=null).sort((a,b)=>b.rate-a.rate)[0],mine=R.filter(p=>p.pts_user!=null),tot=mine.reduce((a,p)=>a+Number(p.pts_user),0);
  const nz=s=>String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim(),lt=s=>nz(s).split(/\s+/).pop(),PE={};
  ((E&&E.timeline)||[]).forEach(e=>{if(!e.side||!e.player)return;const ad=(n,k)=>{if(!n)return;const q=e.side+"|"+lt(n);(PE[q]=PE[q]||{})[k]=((PE[q]||{})[k]||0)+1};
-  switch(e.type){case"goal":ad(e.player,"g");ad(e.player2,"a");break;case"pen_goal":ad(e.player,"g");break;case"own_goal":ad(e.player,"og");break;case"yellow":ad(e.player,"y");break;case"red":ad(e.player,"r");break;case"sub":ad(e.player,"in");ad(e.player2,"out");break;default:if(/inj/i.test(e.type||""))ad(e.player,"inj")}});
+  switch(e.type){case"goal":ad(e.player,"g");ad(e.player2,"a");break;case"pen_goal":ad(e.player,"g");break;case"own_goal":ad(e.player,"og");break;case"yellow":ad(e.player,"y");break;case"red":ad(e.player,"r");break;case"sub":ad(e.player,"in");ad(e.player2,"out");if(e.player2&&e.minute!=null)PE[e.side+"|"+lt(e.player2)].om=e.minute+(e.extra?"+"+e.extra:"");break;default:if(/inj/i.test(e.type||""))ad(e.player,"inj")}});
  const SV=(c,b)=>`<svg viewBox="0 0 24 24" aria-hidden="true">${b}</svg>`,
  GI='<circle cx="12" cy="12" r="11.5" fill="#fff"/><circle cx="12" cy="12" r="11.5" fill="none" stroke="rgba(0,0,0,.12)"/><circle cx="12" cy="12" r="7.4" fill="#fff" stroke="#14161b" stroke-width="1.3"/><path d="M12 8.7l3.1 2.2-1.2 3.7h-3.8l-1.2-3.7z" fill="#14161b"/><path d="M12 8.7V5M15.1 10.9l3.4-1.1M13.9 14.6l2.2 3M10.1 14.6l-2.200 3M8.900 10.900L5.500 9.800" stroke="#14161b" stroke-width="1.2" stroke-linecap="round" fill="none"/>',
- AI='<circle cx="12" cy="12" r="11.5" fill="#fff"/><circle cx="12" cy="12" r="11.5" fill="none" stroke="rgba(0,0,0,.12)"/><path d="M4.6 14.8c0-1.300.9-2 2.100-2.400l3.300-1.200c.7-.3 1-.7 1.200-1.400l.4-1.600c.1-.4.400-.6.800-.6H18.600c.5 0 .8.4.8.9v6.300c0 .7-.5 1.200-1.200 1.200H5.800c-.7 0-1.200-.5-1.200-1.200z" fill="#14161b"/><path d="M10.800 9.800l2.300 4M13.500 8.400l2.500 5.600M16.200 8.200l1.600 5.800" stroke="#fff" stroke-width="1.100" stroke-linecap="round"/><path d="M6.500 16.200v1.700M9.800 16.200v1.700M13.200 16.200v1.700M16.500 16.200v1.700" stroke="#14161b" stroke-width="1.600" stroke-linecap="round"/>',
+ AI='<circle cx="12" cy="12" r="11.5" fill="#fff"/><circle cx="12" cy="12" r="11.5" fill="none" stroke="rgba(0,0,0,.12)"/><path d="M6.800 18L12 5.500 17.200 18M8.900 13.600h6.200" stroke="#14161b" stroke-width="2.600" stroke-linecap="round" stroke-linejoin="round" fill="none"/>',
  OG='<circle cx="12" cy="12" r="11.5" fill="#fff"/><circle cx="12" cy="12" r="11.5" fill="none" stroke="rgba(0,0,0,.12)"/><circle cx="12" cy="12" r="7.4" fill="#fff" stroke="#14161b" stroke-width="1.3"/><path d="M12 8.7l3.1 2.2-1.2 3.7h-3.8l-1.2-3.7z" fill="#14161b"/><path d="M12 8.7V5M15.1 10.9l3.4-1.1M13.9 14.6l2.2 3M10.1 14.6l-2.200 3M8.900 10.900L5.500 9.800" stroke="#14161b" stroke-width="1.2" stroke-linecap="round" fill="none"/><circle cx="12" cy="12" r="10.800" fill="none" stroke="#e5483f" stroke-width="1.800"/>',
  CY='<circle cx="12" cy="12" r="11.5" fill="#fff"/><circle cx="12" cy="12" r="11.5" fill="none" stroke="rgba(0,0,0,.12)"/><rect x="8" y="5" width="8" height="14" rx="1.800" fill="#f5c518"/>',
  CR='<circle cx="12" cy="12" r="11.5" fill="#fff"/><circle cx="12" cy="12" r="11.5" fill="none" stroke="rgba(0,0,0,.12)"/><rect x="8" y="5" width="8" height="14" rx="1.800" fill="#e5483f"/>',
@@ -1227,7 +1227,7 @@ function matchHtml(x,R,E,XR){const XT={home:{xg:0,xa:0},away:{xg:0,xa:0}},tm={};
  const pe=p=>{const o=PE[(p.pl_team===x.home?"home":"away")+"|"+lt(p.pl_name)];if(!o)return"";const n=v=>v>1?`<sup>${v}</sup>`:"";let s="";
   if(o.g)s+=`<i class="pi pg" title="Гол">${SV(0,GI)}${n(o.g)}</i>`;if(o.a)s+=`<i class="pi pa" title="Ассист">${SV(0,AI)}${n(o.a)}</i>`;if(o.og)s+=`<i class="pi pog" title="Автогол">${SV(0,OG)}</i>`;
   if(o.y)s+=`<i class="pi cy" title="Жёлтая">${SV(0,CY)}</i>`;if(o.r)s+=`<i class="pi cr" title="Красная">${SV(0,CR)}</i>`;if(o.inj)s+=`<i class="pi inj" title="Травма">${SV(0,XI)}</i>`;
-  if(o.out)s+=`<i class="pi out" title="Заменён">${SV(0,DI)}</i>`;if(o.in)s+=`<i class="pi inn" title="Вышел на замену">${SV(0,UI)}</i>`;
+  if(o.out)s+=`<i class="pi out" title="Заменён">${SV(0,DI)}${o.om?`<b class="pm">${o.om}'</b>`:""}</i>`;if(o.in)s+=`<i class="pi inn" title="Вышел на замену">${SV(0,UI)}</i>`;
   return s?`<span class="pe">${s}</span>`:""};
  const chip=p=>`<div class="pc${p.pts_user!=null?" mine":""}" data-mp="${p.pl_id}" data-mm="${x.id}"><b class="rt ${rg(p.rate)}">${rf(p.rate)}</b>${pe(p)}${p.is_cap?'<i class="cp">C</i>':""}<span>${esc(p.pl_name)}</span>${p.pts_user!=null?`<em class="pt">${sg(p.pts_user)}</em>`:""}</div>`;
  const half=(n,gl,rev)=>{const s=xi(side(n))[0],L=["GK","DEF","MID","FWD"].map(q=>s.filter(p=>p.pl_pos===q));if(rev)L.reverse();const lab=`<div class="tl"><span data-team="${esc(n)}">${esc(n)}</span><span>${gl??""}</span></div>`,ln=L.map(a=>`<div class="line">${a.map(chip).join("")}</div>`).join("");return rev?ln+lab:lab+ln};
@@ -2131,5 +2131,19 @@ html body .pc .pi{display:block;width:18px;height:18px;min-width:18px;padding:0;
 html body .pc .pi.cy,html body .pc .pi.cr,html body .pc .pi.pg,html body .pc .pi.pa,html body .pc .pi.pog,html body .pc .pi.inj,html body .pc .pi.out,html body .pc .pi.inn{width:18px;min-width:18px;height:18px;padding:0;background:none!important;box-shadow:none!important}
 html body .pc .pi svg{width:100%;height:100%;display:block;overflow:visible;filter:drop-shadow(0 1px 1.5px rgba(0,0,0,.28))}
 html body .pc .pi sup{box-shadow:none;border:1.5px solid #fff;padding:0 3px}
+/* ---- event icons: по углам карточки ---- */
+html body .pc .pe{position:absolute;top:0;left:50%;width:34px;height:34px;margin:0 0 0 -17px;display:block;pointer-events:none;z-index:3}
+html body .pc .pi{position:absolute;width:14px;height:14px;min-width:14px}
+html body .pc .pi.cy,html body .pc .pi.cr,html body .pc .pi.pg,html body .pc .pi.pa,html body .pc .pi.pog,html body .pc .pi.inj,html body .pc .pi.out,html body .pc .pi.inn{width:14px;min-width:14px;height:14px}
+html body .pc .pi.pg{top:-6px;left:-6px}
+html body .pc .pi.pa{top:9px;left:-8px}
+html body .pc .pi.out,html body .pc .pi.inn{top:-6px;right:-6px}
+html body .pc .pi.out~.pi.inn{top:auto;right:auto;bottom:-6px;left:50%;margin-left:-7px}
+html body .pc .pi.cy,html body .pc .pi.cr{top:9px;right:-8px}
+html body .pc .pi.cy~.pi.cr{top:20px}
+html body .pc .pi.inj{bottom:-6px;left:-6px}
+html body .pc .pi.pog{bottom:-6px;right:-6px}
+html body .pc .pi .pm{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);margin-bottom:1px;font:700 8px/1 var(--f);color:var(--tx);white-space:nowrap;text-shadow:0 0 2px #fff,0 0 2px #fff}
+html body .pc .pi sup{position:absolute;right:-5px;bottom:-4px;font-size:8px;line-height:1.2;padding:0 2px;border-width:1px}
 </style>
 </body></html>

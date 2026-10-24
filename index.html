@@ -2052,5 +2052,20 @@ html body .tst{animation:up .28s var(--ease)}
 @media(hover:none){html body .cd:hover{transform:none}}
 @media(prefers-reduced-motion:reduce){html body main.in>*,html body .tst{animation:none}}
 
+/* ---- mobile fixes v1.1 ---- */
+html body .trb{flex-wrap:wrap}
+html body .trb button{flex:1 1 150px;min-width:0;padding:0 14px;white-space:normal;line-height:1.2}
+html body .box,html body main>*{min-width:0;max-width:100%}
+html body .cd .n{white-space:normal;overflow:hidden;text-overflow:clip;overflow-wrap:break-word;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.1}
+@media(max-width:560px){
+ html body .pitch .cd .n,html body .cw .cd .n{font-size:10px;letter-spacing:-.01em}
+ html body .pitch .cd{padding:6px 5px 5px}
+ html body .mt{gap:4px;padding:12px 6px;align-items:center}
+ html body .mt>span{flex-direction:column;gap:6px;justify-content:flex-start;text-align:center;align-items:center}
+ html body .mt>span:first-child{flex-direction:column-reverse;justify-content:flex-start;text-align:center}
+ html body .mt b{white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:break-word;text-align:center;font-size:12px;line-height:1.2}
+ html body .mt>.sc{min-width:52px}
+}
+html body #hl svg.i{color:var(--tx2)}
 </style>
 </body></html>

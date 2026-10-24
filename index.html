@@ -1023,7 +1023,7 @@ document.addEventListener("click",e=>{const h=e.target.closest&&e.target.closest
 
 // ---------- экраны ----------
 function view(){document.body.classList.remove("mdt");if(tab!=="fx")unwatchMatch();if(tab!=="du")duStop();$("header").style.display="";{if(!PUL){PUL=1;pfLoad()}paintHl()}coins(PF.coins);setTitle();
- document.querySelectorAll("nav button[data-t]").forEach(b=>{const on=b.dataset.t===tab;b.classList.toggle("on",on);on?b.setAttribute("aria-current","page"):b.removeAttribute("aria-current")});const m=$("#m");if(LT!==tab)m.scrollTop=0;FRESH=LT!==tab;m.className=FRESH?"in":"";LT=tab;
+ document.querySelectorAll("nav button[data-t]").forEach(b=>{const on=b.dataset.t===tab;b.classList.toggle("on",on);on?b.setAttribute("aria-current","page"):b.removeAttribute("aria-current")});const m=$("#m");if(LT!==tab)window.scrollTo(0,0);FRESH=LT!==tab;m.className=FRESH?"in":"";LT=tab;
  if(tab==="st")return stad();if(0){const pe=pend(),mx=capH()*inc();
   m.innerHTML=`<div class="box"><h3>Касса стадиона</h3><div class="row"><b style="font-size:26px;letter-spacing:-1px">${CN}${pe}</b><button class="b" id="cl" ${pe<1?"disabled":""}>Забрать</button></div><div class="bar"><i style="width:${Math.min(100,pe/mx*100)}%"></i></div><small>Доход ${inc()}/ч · касса вмещает ${capH()} ч.</small></div><div class="box"><h3>Улучшения</h3>${[["Трибуны","Доход в час +50%","inc"],["Касса","Вместимость +0,5 ч","cap"],["Музей","Шанс редких в паках +10%","mus"]].map((u,k)=>`<div class="row"><div>${u[0]} · ур. ${PF.stadium[u[2]]}<br><small>${u[1]}</small></div><button class="b up" data-k="${u[2]}" data-c="${k}" ${PF.coins<costOf(k)?"disabled":""}>${CN}${costOf(k)}</button></div>`).join("")}</div>`;
   $("#cl").onclick=()=>act(()=>rpc("collect"));m.querySelectorAll(".up").forEach(b=>b.onclick=()=>act(()=>rpc("upgrade",{kind:b.dataset.k})))}
@@ -2145,5 +2145,9 @@ html body .pc .pi.inj{bottom:-6px;left:-6px}
 html body .pc .pi.pog{bottom:-6px;right:-6px}
 html body .pc .pi .pm{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);margin-bottom:1px;font:700 8px/1 var(--f);color:var(--tx);white-space:nowrap;text-shadow:0 0 2px #fff,0 0 2px #fff}
 html body .pc .pi sup{position:absolute;right:-5px;bottom:-4px;font-size:8px;line-height:1.2;padding:0 2px;border-width:1px}
+/* ---- прокрутка всей страницей: контент уходит под плавающую панель Safari ---- */
+html{height:auto;min-height:100%}
+html body{height:auto;min-height:100dvh;overflow:visible;overflow-x:hidden;overscroll-behavior:auto}
+html body main{position:relative;top:auto;bottom:auto;left:auto;right:auto;margin-left:var(--sb);overflow:visible;overscroll-behavior:auto;min-height:100dvh}
 </style>
 </body></html>

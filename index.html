@@ -1229,10 +1229,16 @@ function matchHtml(x,R,E,XR){const XT={home:{xg:0,xa:0},away:{xg:0,xa:0}},tm={};
  const nz=s=>String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim(),lt=s=>nz(s).split(/\s+/).pop(),PE={};
  ((E&&E.timeline)||[]).forEach(e=>{if(!e.side||!e.player)return;const ad=(n,k)=>{if(!n)return;const q=e.side+"|"+lt(n);(PE[q]=PE[q]||{})[k]=((PE[q]||{})[k]||0)+1};
   switch(e.type){case"goal":ad(e.player,"g");ad(e.player2,"a");break;case"pen_goal":ad(e.player,"g");break;case"own_goal":ad(e.player,"og");break;case"yellow":ad(e.player,"y");break;case"red":ad(e.player,"r");break;case"sub":ad(e.player,"in");ad(e.player2,"out");break;default:if(/inj/i.test(e.type||""))ad(e.player,"inj")}});
+ const SV=(c,b)=>`<svg viewBox="0 0 24 24" aria-hidden="true">${b}</svg>`,
+ GI='<circle cx="12" cy="12" r="11" fill="#fff"/><polygon points="12,7.4 16.5,10.6 14.8,15.8 9.2,15.8 7.5,10.6" fill="#0b0f14"/><path d="M12 7.4V2.8M16.5 10.6l4.6-1.6M14.8 15.8l2.9 3.9M9.2 15.8l-2.9 3.9M7.5 10.6L2.9 9" stroke="#0b0f14" stroke-width="1.7" stroke-linecap="round" fill="none"/>',
+ AI='<path d="M5 12h12M12.5 6.5L18 12l-5.500 5.500" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>',
+ UI='<path d="M6.500 14.500L12 9l5.500 5.500" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>',
+ DI='<path d="M6.500 9.500L12 15l5.500-5.500" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>',
+ XI='<path d="M12 6.500v11M6.500 12h11" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" fill="none"/>';
  const pe=p=>{const o=PE[(p.pl_team===x.home?"home":"away")+"|"+lt(p.pl_name)];if(!o)return"";const n=v=>v>1?`<sup>${v}</sup>`:"";let s="";
-  if(o.g)s+=`<i class="pi" title="Гол">⚽${n(o.g)}</i>`;if(o.a)s+=`<i class="pi" title="Ассист">👟${n(o.a)}</i>`;if(o.og)s+=`<i class="pi bad" title="Автогол">⚽</i>`;
-  if(o.y)s+='<i class="pi cy" title="Жёлтая"></i>';if(o.r)s+='<i class="pi cr" title="Красная"></i>';if(o.inj)s+='<i class="pi inj" title="Травма">+</i>';
-  if(o.out)s+='<i class="pi out" title="Заменён">↩</i>';if(o.in)s+='<i class="pi inn" title="Вышел на замену">↪</i>';
+  if(o.g)s+=`<i class="pi pg" title="Гол">${SV(0,GI)}${n(o.g)}</i>`;if(o.a)s+=`<i class="pi pa" title="Ассист">${SV(0,AI)}${n(o.a)}</i>`;if(o.og)s+=`<i class="pi pog" title="Автогол">${SV(0,GI)}</i>`;
+  if(o.y)s+='<i class="pi cy" title="Жёлтая"></i>';if(o.r)s+='<i class="pi cr" title="Красная"></i>';if(o.inj)s+=`<i class="pi inj" title="Травма">${SV(0,XI)}</i>`;
+  if(o.out)s+=`<i class="pi out" title="Заменён">${SV(0,DI)}</i>`;if(o.in)s+=`<i class="pi inn" title="Вышел на замену">${SV(0,UI)}</i>`;
   return s?`<span class="pe">${s}</span>`:""};
  const chip=p=>`<div class="pc${p.pts_user!=null?" mine":""}" data-mp="${p.pl_id}" data-mm="${x.id}"><b class="rt ${rg(p.rate)}">${rf(p.rate)}</b>${pe(p)}${p.is_cap?'<i class="cp">C</i>':""}<span>${esc(p.pl_name)}</span>${p.pts_user!=null?`<em class="pt">${sg(p.pts_user)}</em>`:""}</div>`;
  const half=(n,gl,rev)=>{const s=xi(side(n))[0],L=["GK","DEF","MID","FWD"].map(q=>s.filter(p=>p.pl_pos===q));if(rev)L.reverse();const lab=`<div class="tl"><span data-team="${esc(n)}">${esc(n)}</span><span>${gl??""}</span></div>`,ln=L.map(a=>`<div class="line">${a.map(chip).join("")}</div>`).join("");return rev?ln+lab:lab+ln};
@@ -2114,5 +2120,19 @@ html body .ev.a>span:not(.evi){align-items:flex-start;text-align:left}
 html body .ev b{font-size:15px;font-weight:600}
 html body .ev small{font-size:11.5px;font-weight:400;opacity:.85}
 @media(max-width:560px){html body .ev b{font-size:14px}html body .ev small{font-size:11px}}
+
+/* ---- v1.5 свои иконки событий ---- */
+html body .pc .pe{top:-8px;margin-left:8px;width:40px;gap:3px}
+html body .pc .pi{width:18px;height:18px;min-width:18px;padding:0;border:0;border-radius:50%;background:#1b232d;color:#fff;box-shadow:0 0 0 1.5px rgba(8,12,16,.55),0 2px 4px rgba(0,0,0,.35);font-size:0}
+html body .pc .pi svg{width:100%;height:100%;display:block}
+html body .pc .pi.pg,html body .pc .pi.pog{background:transparent}
+html body .pc .pi.pog{filter:none;box-shadow:0 0 0 1.5px #e5483f,0 2px 4px rgba(0,0,0,.35)}
+html body .pc .pi.pa{background:#2fb67a;color:#04130c;padding:3px;width:18px}
+html body .pc .pi.out{background:#e5483f;color:#fff;padding:2px}
+html body .pc .pi.inn{background:#2fb67a;color:#04130c;padding:2px}
+html body .pc .pi.inj{background:#e5483f;color:#fff;padding:2px;border:0}
+html body .pc .pi.cy,html body .pc .pi.cr{width:12px;min-width:12px;height:16px;border-radius:3px;box-shadow:0 0 0 1.5px rgba(8,12,16,.55),0 2px 4px rgba(0,0,0,.35)}
+html body .pc .pi.cy{background:#f5c518}html body .pc .pi.cr{background:#e5483f}
+html body .pc .pi sup{right:-6px;bottom:-5px;font-size:9px;line-height:1.25;padding:0 3.5px;box-shadow:0 0 0 1.5px rgba(8,12,16,.55)}
 </style>
 </body></html>

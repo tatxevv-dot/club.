@@ -1623,7 +1623,7 @@ async function teamStats0(){if(!MT)await patchMT();const e=$("#tms");if(!e)retur
 // ---------- обучение ----------
 let TE=null;
 const TS=[
- {sel:"#nv",t:"Меню игры",x:"Четыре главных раздела (стадион, паки, состав, туры) и меню «Прочее»: лиги, статистика, задания, скаут и дуэли. скаут. Быстро пройдёмся по каждому."},
+ {sel:"#nv",t:"Меню игры",x:"Четыре главных раздела (стадион, паки, состав, туры) и меню «Прочее»: лиги, статистика, задания, скаут и дуэли. Быстро пройдёмся по каждому."},
  {tab:"st",sel:"#co",t:"Монеты",x:"Твоя валюта. На монеты покупаешь паки и улучшаешь стадион."},
  {tab:"st",sel:"#stg",t:"Твой стадион",x:"Он сам приносит монеты каждый час. Нажимай на трибуны, кассу и музей, чтобы улучшать их."},
  {tab:"st",sel:"#cl",t:"Забирай доход",x:"Монеты копятся в кассе, пока она не заполнится. Заходи и жми «Забрать»."},
@@ -1696,7 +1696,7 @@ setInterval(syncRatings,60000);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)syncRatings()});
 sb.auth.onAuthStateChange(ev=>{if(ev==="SIGNED_OUT"){scoreStop();landing()}});
 const MQ=matchMedia("(prefers-color-scheme: light)"),sysTheme=()=>MQ.matches?"light":"dark";
-setTheme("light");
+setTheme(sysTheme());
 boot();
 setInterval(()=>{if(PF&&tab==="st"&&$("#md").style.display!=="flex")tickStad()},15000);
 </script>
@@ -1946,5 +1946,111 @@ html[data-theme=light] .pitch{background:#e7efe9}
 .st.sp b:last-child{font-size:20px;font-weight:800}
 .st.sp .rk{font-weight:800;font-size:15px;color:var(--tx);width:22px}
 .pl.sp .pi .tlg{width:16px;height:16px}
+</style>
+<style id="club-design">
+/* Club design layer v1. Подключается ПОСЛЕДНИМ, после <style id="redesign">.
+   Система: один шрифт (Geologica), один акцент (изумруд), радиусы 8/12/16/22,
+   поверхности без свечения и градиентов, волосяные линии, тень только у плавающих слоёв. */
+
+:root{
+ --f:Geologica,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--fs:var(--f);
+ --r1:8px;--r2:12px;--r3:16px;--r4:22px;
+ --bg:#0b0f14;--sf:#121820;--sf2:#18202a;--tx:#edf1f5;--tx2:#b3bdc9;--mu:#8793a2;
+ --ac:#3fd39b;--ac2:#66e0b2;--act:#3fd39b;--ink:#04130c;
+ --ln:rgba(255,255,255,.08);--ln2:rgba(255,255,255,.15);
+ --sh:0 24px 48px -28px rgba(0,0,0,.7);
+ --ease:cubic-bezier(.23,1,.32,1);
+}
+:root[data-theme=light]{
+ --bg:#f5f3ee;--sf:#ffffff;--sf2:#faf8f4;--tx:#0e1a2b;--tx2:#3d4a5d;--mu:#667286;
+ --ac:#0b6b4f;--ac2:#095840;--act:#0b6b4f;--ink:#ffffff;
+ --ln:rgba(14,26,43,.10);--ln2:rgba(14,26,43,.20);
+ --sh:0 24px 48px -30px rgba(14,26,43,.28);
+}
+html body{font-family:var(--f);font-size:15px;line-height:1.55;font-variant-numeric:tabular-nums}
+html body::before{background:var(--bg)}
+
+/* ---- типографика ---- */
+html body h1,html body h2,html body h3{font-family:var(--f);text-wrap:balance}
+html body .lh h1{font-weight:700;font-size:clamp(40px,6vw,76px);line-height:1.02;letter-spacing:-.045em;max-width:11em}
+html body .sh h2,html body .cta h2{font-weight:700;font-size:clamp(28px,3.8vw,46px);line-height:1.08;letter-spacing:-.035em}
+html body .al h2{font-weight:700;font-size:26px;letter-spacing:-.03em}
+html body .lead,html body .sh p{text-wrap:pretty;color:var(--tx2)}
+html body .ey{font-weight:600;font-size:12px;letter-spacing:.12em;color:var(--ac)!important}
+html body .ey::before{width:18px}
+html body small,html body .mu{color:var(--mu);font-size:13px}
+
+/* ---- кнопки: единый ритм, 44px, отклик на нажатие ---- */
+html body button.b,html body button.g{min-height:44px;border-radius:var(--r2);font:600 14px/1 var(--f);letter-spacing:0;transition:transform .16s var(--ease),background-color .2s,border-color .2s,color .2s}
+html body button.b{background:var(--ac);color:var(--ink);border:1px solid var(--ac);box-shadow:none!important}
+html body button.b:hover{background:var(--ac2);border-color:var(--ac2);transform:none}
+html body button.g{background:transparent;border:1px solid var(--ln2);color:var(--tx);box-shadow:none}
+html body button.g:hover{background:rgba(var(--wh),.06);border-color:var(--tx2)}
+html body button.b:active,html body button.g:active{transform:scale(.97)}
+html body button:disabled{opacity:.4;cursor:not-allowed;transform:none}
+html body :focus-visible{outline:2px solid var(--ac);outline-offset:3px;border-radius:6px}
+html body .lbb button{min-height:44px}
+
+/* ---- поля ---- */
+html body input,html body select{height:48px;border-radius:var(--r2);background-color:var(--sf);border:1px solid var(--ln2);font-size:16px;transition:border-color .2s,box-shadow .2s}
+html body input:focus,html body select:focus{border-color:var(--ac);box-shadow:0 0 0 3px rgba(63,211,155,.18)}
+html[data-theme=light] body input:focus,html[data-theme=light] body select:focus{box-shadow:0 0 0 3px rgba(11,107,79,.16)}
+html body .err{min-height:20px}
+
+/* ---- поверхности ---- */
+html body .box,html body .tile,html body .stage{background:var(--sf);border:1px solid var(--ln);border-radius:var(--r3);box-shadow:none;padding:20px}
+html body .box>h3:first-child{font-size:16px;font-weight:650;letter-spacing:-.01em}
+html body .tst,html body #ttp,html body #pm,html body #pf,html body .ac{background:var(--sf);border:1px solid var(--ln2);border-radius:var(--r3);box-shadow:var(--sh);-webkit-backdrop-filter:none;backdrop-filter:none}
+html body .pl,html body .sb,html body .st,html body .mt,html body .tsl{background:var(--sf2);border:1px solid transparent;border-radius:var(--r2)}
+html body .mt:hover,html body .pl:hover{background:rgba(var(--wh),.07)}
+html body table td{background:var(--sf2)}
+
+/* ---- шапка и навигация ---- */
+html body header,html body .lb{background:rgba(var(--bk),.86);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom:1px solid var(--ln)}
+html body #nv{background:rgba(var(--bk),.92);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid var(--ln2);border-radius:var(--r4);box-shadow:var(--sh)}
+html body #nv button{border-radius:var(--r2);font-weight:500;min-height:48px}
+html body #nv button.on{background:rgba(var(--wh),.08);color:var(--tx);box-shadow:none}
+html body #nv button.on svg{color:var(--ac)}
+@media(min-width:900px){html body #nv{border-radius:0;border-width:0 1px 0 0;box-shadow:none}}
+@media(max-width:899px){html body #nv{left:0;transform:none;width:100%;bottom:0;border-radius:0;border-width:1px 0 0;padding:4px 6px calc(4px + env(safe-area-inset-bottom,0px))}}
+html body .rc{border-radius:var(--r1);min-height:36px;background:transparent;border:1px solid var(--ln)}
+html body .rc.on{background:var(--ac);border-color:var(--ac);color:var(--ink)}
+
+/* ---- карточки игроков: чистая рамка по редкости, без блика ---- */
+html body .cd{border-radius:var(--r2);box-shadow:none;border-width:1.5px;background:var(--sf2)}
+html body .cd::after{display:none}
+html body .cd.r0{border-color:var(--ln2)}
+html body .cd.r1{background:linear-gradient(170deg,rgba(106,168,245,.28),var(--sf2) 70%);border-color:#6aa8f5}
+html body .cd.r2{background:linear-gradient(170deg,rgba(242,185,51,.30),var(--sf2) 70%);border-color:#f2b933}
+html body .cd.r3{background:linear-gradient(170deg,#f6efd9,#d9cba0);border-color:#fff;color:#1c1606}
+html body .cd.r4{border-color:#cfd6e6}
+html body .cd .o{font-weight:800;letter-spacing:-.03em}
+html body .cd:hover{transform:translateY(-3px)}
+html body .cd.zc{animation:none;box-shadow:none}
+html body .cd.zc::after{display:none}
+html body .cd.zc:hover{box-shadow:0 0 0 2px var(--gl)}
+
+/* ---- лендинг ---- */
+html body .lh{padding:72px 0 96px;background:none}
+html body .sec{padding:104px 0}
+@media(max-width:700px){html body .sec{padding:60px 0}}
+html body .lstc,html body .fc2{background:var(--sf);border:1px solid var(--ln)!important;border-radius:var(--r3);box-shadow:none}
+html body .fc2:hover{transform:none;border-color:var(--ln2)!important}
+html body .fi{background:rgba(63,211,155,.12);border:0}
+html[data-theme=light] body .fi{background:rgba(11,107,79,.09)}
+html body .faq details{background:var(--sf);border:1px solid var(--ln);border-radius:var(--r3)}
+html body .cta{background:var(--sf)!important;color:var(--tx);border:1px solid var(--ln2)!important;box-shadow:none!important}
+html body .cta p{color:var(--tx2)}
+html body .cta button.b{background:var(--ac);color:var(--ink);border-color:var(--ac)}
+html body .cta button.g{color:var(--tx);border-color:var(--ln2)}
+html body .cta button.g:hover{background:rgba(var(--wh),.06);border-color:var(--tx2)}
+
+/* ---- движение: только transform/opacity, короткие, с запасным режимом ---- */
+html body main.in>*{animation:up .32s var(--ease) both}
+html body .modal,html body #au{animation:fi .16s ease-out}
+html body .tst{animation:up .28s var(--ease)}
+@media(hover:none){html body .cd:hover{transform:none}}
+@media(prefers-reduced-motion:reduce){html body main.in>*,html body .tst{animation:none}}
+
 </style>
 </body></html>

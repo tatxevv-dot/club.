@@ -846,9 +846,9 @@ const card=(id,ex="")=>{const p=PL[id];return `<div class="cd r${rar(p.rating)} 
 const msg=e=>({"not enough coins":"Не хватает монет","need 6 cards":"Нужно выбрать ровно 6 карточек","need 2-2-2":"Нужно 2 нападающих, 2 полузащитника и 2 защитника","must counter":"Против нападающего нужно ставить защитника, против защитника — нападающего","bad stake":"Выбери ставку из списка","nickname must be 2-20 chars":"Ник: от 2 до 20 символов","duplicate players":"Игрок указан дважды","no open round":"Нет открытого тура","league not found":"Лига с таким кодом не найдена","max level":"Максимальный уровень","daily pack limit":"Лимит этого пака на сегодня исчерпан","contract needs 5 cards":"Для контракта нужно ровно 5 карточек","cards not owned":"Этих карточек у тебя нет","only starters":"Тренироваться могут только игроки стартового состава","training full":"Все 3 слота тренировки заняты","too tired":"Игрок слишком устал: нужно минимум 5% выносливости","not logged in":"Нужно войти в аккаунт","need 5 cards":"Нужно выбрать ровно 5 карточек","max 1 goalkeeper":"Не больше 1 вратаря","already in duel":"Ты уже в дуэли","duel not found":"Дуэль не найдена. Проверь код и убедись, что у вас выбрана одна и та же лига (кнопка лиги вверху). Нельзя войти и в собственную дуэль.","not your turn":"Сейчас не твой ход","bad card":"Эта карточка недоступна","bad stats":"Выбери ровно 2 разных стата","stat limit":"Этот стат уже использован 2 раза в этой дуэли","pair used":"Такую пару статов ты уже использовал(а) в этой дуэли","max 2 forwards":"В составе не больше 2 нападающих","need defender and midfielder":"Нужен минимум 1 защитник и 1 полузащитник"}[e.message]||(/profiles_nick_uq/.test(e.message)?"Этот ник уже занят":/failed to fetch|network|load failed/i.test(e.message)?"Нет соединения. Проверь интернет и попробуй ещё раз.":/[А-Яа-яЁё]/.test(e.message)?e.message:(console.warn(e.message),"Что-то пошло не так. Попробуй ещё раз.")));
 async function rpc(fn,args){const {data,error}=await sb.rpc(fn,args);if(error)throw new Error(error.message);return data}
 let NAVB=null,TMN=null,MFOC=null;
-function modal(html){const m=$("#md");m.onclick=null;if(m.style.display!=="flex")MFOC=document.activeElement;m.className="modal";m.style.display="flex";m.innerHTML=html+'<button class="x" aria-label="Закрыть">✕</button>';m.querySelector(".x").onclick=closeM;m.setAttribute("aria-label",((m.querySelector("h1,h2,h3")||{}).textContent||"Окно").trim());m.tabIndex=-1;m.focus({preventScroll:true});
- if(NAVB){const b=document.createElement("button");b.className="x bk2";b.setAttribute("aria-label","Назад");b.textContent="←";b.onclick=()=>{const f=NAVB;NAVB=null;f&&f()};m.appendChild(b)}return m}
-let RVT;const closeM=()=>{clearTimeout(RVT);NAVB=null;TMN=null;$("#md").style.display="none";$("#md").onclick=null;{const f=MFOC;MFOC=null;f&&f.isConnected&&f.focus&&f.focus({preventScroll:true})}if(LMID){LMID=null;unwatchMatch()}};
+let SCRS=[],RST=null,TOPF=0;function modal(html){const m=$("#md"),op=m.style.display==="flex";m.onclick=null;if(m.style.display!=="flex")MFOC=document.activeElement;m.className="modal";m.style.display="flex";m.innerHTML=html+'<button class="x" aria-label="Закрыть">✕</button>';m.querySelector(".x").onclick=closeM;m.setAttribute("aria-label",((m.querySelector("h1,h2,h3")||{}).textContent||"Окно").trim());m.tabIndex=-1;m.focus({preventScroll:true});
+ if(NAVB){const b=document.createElement("button");b.className="x bk2";b.setAttribute("aria-label","Назад");b.textContent="←";b.onclick=()=>{const f=NAVB;NAVB=null;RST=SCRS.length?SCRS.pop():0;f&&f()};m.appendChild(b)}if(!op)m.scrollTop=0;else if(!html.includes("mw na")){if(RST!=null){m.scrollTop=RST;RST=null}else if(TOPF)m.scrollTop=0;TOPF=0}return m}
+let RVT;const closeM=()=>{clearTimeout(RVT);SCRS.length=0;RST=null;TOPF=0;NAVB=null;TMN=null;$("#md").style.display="none";$("#md").onclick=null;{const f=MFOC;MFOC=null;f&&f.isConnected&&f.focus&&f.focus({preventScroll:true})}if(LMID){LMID=null;unwatchMatch()}};
 
 // ---------- вход ----------
 const closeAuth=()=>{const A=$("#au");A.style.display="none";A.innerHTML=""};
@@ -1269,8 +1269,8 @@ ${last.length?`<div class="box"><div class="th2"><h3>Последние резу
  m.querySelectorAll("[data-all]").forEach(e=>e.onclick=()=>back(()=>teamAll(n,e.dataset.all)))}
 document.addEventListener("click",e=>{const t=e.target.closest("[data-team]");if(!t||t.closest("#tov"))return;const mt=t.closest(".mt");if(mt&&mt.style.cursor!=="default")return;
  e.stopPropagation();e.preventDefault();const n=t.dataset.team,md=$("#md"),open=md.style.display==="flex",pv=NAVB;
- if(open&&LMID){const id=LMID;LMID=null;unwatchMatch();NAVB=()=>{NAVB=pv;lmatch(id)}}
- else if(open&&TMN&&TMN!==n){const p=TMN;NAVB=()=>{NAVB=pv;teamPage(p)}}
+ if(open&&LMID){const id=LMID;LMID=null;unwatchMatch();SCRS.push($("#md").scrollTop);TOPF=1;NAVB=()=>{NAVB=pv;lmatch(id)}}
+ else if(open&&TMN&&TMN!==n){const p=TMN;SCRS.push($("#md").scrollTop);TOPF=1;NAVB=()=>{NAVB=pv;teamPage(p)}}
  teamPage(n)},true);
 $("#mx").onclick=()=>{FXM=null;fixtures()};
 // ---------- главная для гостей ----------
@@ -1584,7 +1584,7 @@ const PCM=[["minutes","Минуты",1],["rating","Оценка",1],["starts","�
 const PSEC=gk=>gk?[["Главное",PCM,1],["Вратарь",[["saves","Сейвы",1],["goals_conceded","Пропущено",1],["xgc","xGC (ожидаемо пропустить)",1],["pen_saved","Отбитые пенальти",0]]],PCD]
  :[["Главное",PCM,1],["Удары",[["xg","xG (ожидаемые голы)",1],["pen_missed","Незабитые пенальти",0]]],["Создание моментов",[["xa","xA (ожидаемые ассисты)",1]]],["Оборона",[["tackles","Отборы",1],["cbi","Выносы, блоки, перехваты",1],["recoveries","Подборы",1]]],PCD];
 async function pmatch(mid,pid){SVI.p=0;const md=$("#md"),open=md.style.display==="flex",pv=NAVB;
- if(open&&LMID){const id=LMID;LMID=null;unwatchMatch();NAVB=()=>{NAVB=pv;lmatch(id)}}
+ if(open&&LMID){const id=LMID;LMID=null;unwatchMatch();SCRS.push($("#md").scrollTop);TOPF=1;NAVB=()=>{NAVB=pv;lmatch(id)}}
  modal('<div class="mw na">'+LOAD+'</div>');
  try{const[a,b]=await Promise.all([sb.from("player_match_ratings").select("*").eq("match_id",mid).eq("player_id",pid).maybeSingle(),sb.from("players").select("id,name,team,position,rating,photo").eq("id",pid).maybeSingle()]);
   if(a.error)throw a.error;const r=a.data,p=b.data||PL[pid],x=MT&&MT.find(v=>v.id===mid);
@@ -2149,5 +2149,12 @@ html body .pc .pi sup{position:absolute;right:-5px;bottom:-4px;font-size:8px;lin
 html{height:auto;min-height:100%}
 html body{height:auto;min-height:100dvh;overflow:visible;overflow-x:hidden;overscroll-behavior:auto}
 html body main{position:relative;top:auto;bottom:auto;left:auto;right:auto;margin-left:var(--sb);overflow:visible;overscroll-behavior:auto;min-height:100dvh}
+/* ---- fixes v3 ---- */
+html body .pc .pi .pm{bottom:auto;left:auto;right:100%;top:50%;transform:translateY(-50%);margin:0 1px 0 0;font:700 8px/1 var(--f);text-shadow:0 0 2px #fff,0 0 3px #fff,0 0 3px #fff}
+html body .pc .pi sup{font-size:9px;font-weight:800;min-width:11px;text-align:center;padding:0 2px;line-height:1.25}
+html body .frm{flex-wrap:wrap;min-width:0;max-width:100%}
+html body .frm .rt{width:36px;height:36px;font-size:13px}
+html body .row .frm{flex:1 1 0;min-width:0;justify-content:flex-end}
+html body .row>small{flex:none}
 </style>
 </body></html>

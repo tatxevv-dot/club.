@@ -66,7 +66,7 @@ header{position:fixed;top:0;left:var(--sb);right:0;z-index:15;height:var(--top);
 header .lgo{font-size:17px;font-weight:650;min-width:0}
 header .lgo span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .hr{display:flex;gap:8px;align-items:center}
-#hp,#hl,#co,#th{height:44px;border-radius:10px;border:1px solid var(--ln2);background:linear-gradient(180deg,rgba(var(--wh),.11),rgba(var(--wh),.04));box-shadow:inset 0 1px 0 var(--hi);font-size:13.5px;font-weight:600;color:var(--tx)}
+#hp,#hl,#co,#th{height:44px;border-radius:10px;border:1px solid var(--ln2);background:linear-gradient(180deg,rgba(var(--wh),.11),rgba(var(--wh),.04));box-shadow:none;font-size:13.5px;font-weight:600;color:var(--tx)}
 #hp,#th{width:44px;padding:0}
 #th{display:grid;place-items:center}
 #hl{display:inline-flex;align-items:center;gap:6px;padding:0 12px;max-width:170px;white-space:nowrap}#hl span{min-width:0;overflow:hidden;text-overflow:ellipsis}#hl svg.i{flex:none;width:16px;height:16px;color:var(--mu)}@media(max-width:480px){#hl{max-width:108px}}
@@ -78,11 +78,11 @@ main{position:fixed;top:0;bottom:0;left:var(--sb);right:0;overflow-y:auto;overfl
 main::-webkit-scrollbar{display:none}
 main.in>*{animation:up .45s var(--ease) both}main.in>:nth-child(2){animation-delay:.05s}main.in>:nth-child(3){animation-delay:.1s}main.in>:nth-child(4){animation-delay:.15s}
 
-#nv{position:fixed;left:50%;bottom:calc(10px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:min(calc(100% - 20px),500px);z-index:20;padding:6px;gap:2px;border-radius:var(--r4);background:linear-gradient(180deg,rgba(var(--wh),.13),rgba(var(--wh),.05)),rgba(var(--bk),.55);border:1px solid var(--ln2);box-shadow:inset 0 1px 0 var(--hi),0 18px 40px -8px rgba(0,0,0,.7);-webkit-backdrop-filter:blur(26px) saturate(180%);backdrop-filter:blur(26px) saturate(180%)}
+#nv{position:fixed;left:50%;bottom:calc(10px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:min(calc(100% - 20px),500px);z-index:20;padding:6px;gap:2px;border-radius:var(--r4);background:linear-gradient(180deg,rgba(var(--wh),.13),rgba(var(--wh),.05)),rgba(var(--bk),.55);border:1px solid var(--ln2);box-shadow:0 18px 40px -8px rgba(0,0,0,.7);-webkit-backdrop-filter:blur(26px) saturate(180%);backdrop-filter:blur(26px) saturate(180%)}
 #nv .nb{display:none}
 #nv button{position:relative;flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:0;border-radius:var(--r2);padding:9px 0 7px;color:var(--mu);font:500 11px/1.1 var(--f);transition:background .2s,color .2s}
 #nv button:hover{color:var(--tx)}
-#nv button.on{color:var(--tx);background:linear-gradient(180deg,rgba(var(--wh),.17),rgba(var(--wh),.07));box-shadow:inset 0 1px 0 var(--hi)}
+#nv button.on{color:var(--tx);background:linear-gradient(180deg,rgba(var(--wh),.17),rgba(var(--wh),.07));box-shadow:none}
 #nv button.on svg{color:var(--act)}
 #nv svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 #nv button.lvd::after{content:"";position:absolute;top:7px;left:calc(50% + 8px);width:7px;height:7px;border-radius:50%;background:var(--lv);animation:pls 1.4s ease-in-out infinite}
@@ -101,7 +101,7 @@ main.in>*{animation:up .45s var(--ease) both}main.in>:nth-child(2){animation-del
 }
 
 /* ---------- surfaces ---------- */
-.box,.tile,.stage,.cta,#ttp,.tst{position:relative;background:linear-gradient(160deg,var(--g1),var(--g2));border:1px solid var(--ln);border-radius:var(--r3);box-shadow:inset 0 1px 0 var(--hi),var(--sh)}
+.box,.tile,.stage,.cta,#ttp,.tst{position:relative;background:linear-gradient(160deg,var(--g1),var(--g2));border:1px solid var(--ln);border-radius:var(--r3);box-shadow:var(--sh)}
 .box{padding:18px;margin-bottom:12px}
 .box>h3:first-child{margin-bottom:14px}
 .row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:10px 0}
@@ -112,15 +112,15 @@ main.in>*{animation:up .45s var(--ease) both}main.in>:nth-child(2){animation-del
 
 /* ---------- controls ---------- */
 button.b,button.g{min-height:44px;padding:0 18px;border-radius:var(--r2);font:600 14px/1 var(--f);display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap;-webkit-user-select:none;user-select:none;transition:transform .15s var(--ease),background .2s,border-color .2s,opacity .2s}
-button.b{background:var(--ac);color:var(--ink);border:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 1px 2px rgba(0,0,0,.4),0 12px 24px -14px rgba(0,0,0,.8)}
+button.b{background:var(--ac);color:var(--ink);border:0;box-shadow:0 1px 2px rgba(0,0,0,.4),0 12px 24px -14px rgba(0,0,0,.8)}
 button.b:hover{background:var(--ac2)}
 button.b:active,button.g:active{transform:scale(.97)}
 button.b:disabled{opacity:.38;cursor:not-allowed;box-shadow:none;transform:none}
-button.g{background:linear-gradient(180deg,rgba(var(--wh),.11),rgba(var(--wh),.04));border:1px solid var(--ln2);color:var(--tx);box-shadow:inset 0 1px 0 var(--hi)}
+button.g{background:linear-gradient(180deg,rgba(var(--wh),.11),rgba(var(--wh),.04));border:1px solid var(--ln2);color:var(--tx);box-shadow:none}
 button.g:hover{background:linear-gradient(180deg,rgba(var(--wh),.17),rgba(var(--wh),.07))}
 button.g:disabled{opacity:.4;cursor:not-allowed}
 button svg.i{width:16px;height:16px}
-input,select{width:100%;height:48px;margin:6px 0;padding:0 14px;border-radius:var(--r2);border:1px solid var(--ln2);background:rgba(var(--wh),.05);box-shadow:inset 0 1px 0 rgba(255,255,255,.06);font-size:16px;outline:0;transition:border-color .2s,box-shadow .2s,background .2s}
+input,select{width:100%;height:48px;margin:6px 0;padding:0 14px;border-radius:var(--r2);border:1px solid var(--ln2);background:rgba(var(--wh),.05);box-shadow:none;font-size:16px;outline:0;transition:border-color .2s,box-shadow .2s,background .2s}
 input::placeholder{color:var(--mu)}
 input:focus,select:focus{border-color:rgba(199,244,100,.7);background:rgba(var(--wh),.07);box-shadow:0 0 0 3px rgba(199,244,100,.16)}
 select{appearance:none;-webkit-appearance:none;padding-right:40px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b7bcc8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:18px}
@@ -145,7 +145,7 @@ tr.me td{background:rgba(199,244,100,.13);color:var(--tx)}tr.me td:first-child{c
 .pl+.pl{margin-top:6px}
 .pl .pi{min-width:0;flex:1}.pl .pi>div{font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #lup .pl,#ldw .pl{cursor:pointer}#lup .pl:hover,#ldw .pl:hover{background:rgba(var(--wh),.08)}
-.ic{flex:none;width:40px;height:40px;border-radius:var(--r2);display:grid;place-items:center;background:linear-gradient(145deg,rgba(var(--wh),.12),rgba(var(--wh),.04));border:1px solid var(--ln2);box-shadow:inset 0 1px 0 var(--hi);color:var(--act)}
+.ic{flex:none;width:40px;height:40px;border-radius:var(--r2);display:grid;place-items:center;background:linear-gradient(145deg,rgba(var(--wh),.12),rgba(var(--wh),.04));border:1px solid var(--ln2);box-shadow:none;color:var(--act)}
 svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .rb{flex:none;width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-size:14px;font-weight:700;font-variant-numeric:tabular-nums;background:rgba(var(--wh),.08);border:1px solid var(--ln2)}
 .rb.r1{background:rgba(176,200,235,.22);border-color:rgba(190,210,240,.4)}.rb.r2{background:rgba(226,184,92,.26);border-color:rgba(236,200,120,.5)}.rb.r3{background:#e9e0c6;border-color:#fff;color:#1c1606}
@@ -167,8 +167,8 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stro
 
 /* ---------- player cards ---------- */
 .cards{display:flex;flex-wrap:wrap;gap:8px}
-.cd{position:relative;width:66px;height:94px;border-radius:var(--r2);padding:7px 7px 6px;color:var(--tx);display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;overflow:hidden;border:1px solid rgba(255,255,255,.17);background:linear-gradient(165deg,rgba(255,255,255,.14),rgba(255,255,255,.04));box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 10px 20px -10px rgba(0,0,0,.8);transition:transform .2s var(--ease),box-shadow .2s}
-.cd::after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(158deg,rgba(255,255,255,.2),transparent 40%);pointer-events:none}
+.cd{position:relative;width:66px;height:94px;border-radius:var(--r2);padding:7px 7px 6px;color:var(--tx);display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;overflow:hidden;border:1px solid rgba(255,255,255,.17);background:linear-gradient(165deg,rgba(255,255,255,.14),rgba(255,255,255,.04));box-shadow:0 10px 20px -10px rgba(0,0,0,.8);transition:transform .2s var(--ease),box-shadow .2s}
+.cd::after{display:none}
 .cd:hover{transform:translateY(-2px)}.cd:active{transform:scale(.97)}
 .cd:has(.tlg[data-team]:active),.cd:has(.tb[data-team]:active){transform:none!important}
 .cd .c [data-team]{transition:transform .15s,filter .15s}
@@ -199,7 +199,7 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stro
 .line{display:flex;justify-content:center;gap:8px;margin:8px 0}
 
 /* ---------- pitch ---------- */
-.pitch{position:relative;border-radius:var(--r3);padding:14px 0;margin-bottom:12px;background:repeating-linear-gradient(0deg,#0f2c1f 0 46px,#0c2519 46px 92px);border:1px solid var(--ln2);box-shadow:inset 0 1px 0 var(--hi),var(--sh)}
+.pitch{position:relative;border-radius:var(--r3);padding:14px 0;margin-bottom:12px;background:repeating-linear-gradient(0deg,#0f2c1f 0 46px,#0c2519 46px 92px);border:1px solid var(--ln2);box-shadow:var(--sh)}
 .pitch::before{content:"";position:absolute;left:50%;top:50%;width:84px;height:84px;border:1.5px solid rgba(255,255,255,.14);border-radius:50%;transform:translate(-50%,-50%);pointer-events:none}
 .pitch::after{content:"";position:absolute;inset:8px;border:1.5px solid rgba(255,255,255,.1);border-radius:var(--r2);pointer-events:none}
 .pitch>*{position:relative;z-index:1}
@@ -221,7 +221,7 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stro
 .modal{position:fixed;inset:0;z-index:25;display:none;flex-direction:column;align-items:center;justify-content:flex-start;gap:14px;padding:64px 16px 24px;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;color:var(--tx);background:rgba(var(--bk),.62);-webkit-backdrop-filter:blur(30px) saturate(150%);backdrop-filter:blur(30px) saturate(150%);animation:fi .2s}
 .modal::before,.modal::after{content:"";margin:auto}
 .modal h3{font-size:18px;margin:0;text-align:center}.modal .cards{justify-content:center;max-width:420px}
-.modal .x{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));right:14px;width:44px;height:44px;border-radius:var(--r2);background:linear-gradient(180deg,rgba(var(--wh),.14),rgba(var(--wh),.05));border:1px solid var(--ln2);box-shadow:inset 0 1px 0 var(--hi);color:var(--tx);font-size:14px;z-index:6;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.modal .x{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));right:14px;width:44px;height:44px;border-radius:var(--r2);background:linear-gradient(180deg,rgba(var(--wh),.14),rgba(var(--wh),.05));border:1px solid var(--ln2);box-shadow:none;color:var(--tx);font-size:14px;z-index:6;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
 .modal .x:hover{background:rgba(var(--wh),.2)}
 .mw{width:100%;max-width:460px;margin:auto 0;padding-top:24px}
 .g0{--g:#ffffff}.g1{--g:#a9bddb}.g2{--g:#e0b95a}.g3{--g:#f6e7b0}.rv{overflow:hidden}
@@ -296,14 +296,14 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stro
 .cres .cd .o{font-size:38px}.cres .cd .n{font-size:13px}.cres .cd .c{font-size:11px}
 
 /* ---------- stadium ---------- */
-.stg{position:relative;height:clamp(300px,52vh,540px);border-radius:var(--r4);margin-bottom:12px;overflow:hidden;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none;background:radial-gradient(70% 60% at 50% 45%,rgba(255,255,255,.08),transparent 72%),rgba(255,255,255,.025);border:1px solid var(--ln);box-shadow:inset 0 1px 0 var(--hi),var(--sh)}
+.stg{position:relative;height:clamp(300px,52vh,540px);border-radius:var(--r4);margin-bottom:12px;overflow:hidden;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none;background:radial-gradient(70% 60% at 50% 45%,rgba(255,255,255,.08),transparent 72%),rgba(255,255,255,.025);border:1px solid var(--ln);box-shadow:var(--sh)}
 .stg:active{cursor:grabbing}
 .sv{display:block;width:100%;height:100%}#cam{animation:fi .5s}
 .hs{cursor:pointer;transition:filter .2s}.hs:hover{filter:brightness(1.18)}
 .pn{transform-box:fill-box;transform-origin:center}.can .pn{animation:pnp 1.6s ease-in-out infinite}
 @keyframes pnp{50%{transform:scale(1.07)}}
 .zc{position:absolute;right:12px;bottom:12px;display:flex;flex-direction:column;gap:6px}
-.zc button{width:44px;height:44px;border-radius:10px;border:1px solid var(--ln2);background:rgba(10,11,14,.6);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:inset 0 1px 0 var(--hi);color:var(--tx);font:600 18px var(--f)}
+.zc button{width:44px;height:44px;border-radius:10px;border:1px solid var(--ln2);background:rgba(10,11,14,.6);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:none;color:var(--tx);font:600 18px var(--f)}
 .zc button:hover{background:rgba(255,255,255,.14)}
 .zh{position:absolute;left:14px;bottom:12px;max-width:60%;color:rgba(255,255,255,.55);font-size:11.5px;pointer-events:none}
 .led{animation:ledp 2s ease-in-out infinite alternate}svg .sp{animation:ledp 1.2s ease-in-out infinite alternate}@keyframes top1g{0%,100%{box-shadow:0 0 6px 0 rgba(240,190,60,.18)}50%{box-shadow:0 0 14px 1px rgba(240,190,60,.32)}}.st.sp:not(.sp+.sp),.pl.sp:not(.sp+.sp){animation:top1g 3.5s ease-in-out infinite}
@@ -339,13 +339,13 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stro
 
 /* ---------- toasts ---------- */
 #toasts{position:fixed;top:calc(10px + env(safe-area-inset-top,0px));left:0;right:0;z-index:40;display:flex;flex-direction:column;align-items:center;gap:8px;padding:0 12px;pointer-events:none}
-.tst{pointer-events:auto;width:100%;max-width:420px;padding:14px 16px;border-radius:var(--r3);background:linear-gradient(160deg,rgba(var(--wh),.16),rgba(var(--wh),.06)),rgba(var(--bk),.72);border-color:var(--ln2);box-shadow:inset 0 1px 0 var(--hi),0 18px 40px -10px rgba(0,0,0,.8);-webkit-backdrop-filter:blur(26px) saturate(180%);backdrop-filter:blur(26px) saturate(180%);font-size:13.5px;cursor:pointer;animation:up .35s var(--ease)}
+.tst{pointer-events:auto;width:100%;max-width:420px;padding:14px 16px;border-radius:var(--r3);background:linear-gradient(160deg,rgba(var(--wh),.16),rgba(var(--wh),.06)),rgba(var(--bk),.72);border-color:var(--ln2);box-shadow:0 18px 40px -10px rgba(0,0,0,.8);-webkit-backdrop-filter:blur(26px) saturate(180%);backdrop-filter:blur(26px) saturate(180%);font-size:13.5px;cursor:pointer;animation:up .35s var(--ease)}
 .tst small{display:block;margin-top:3px}
 
 /* ---------- onboarding tour ---------- */
 #tov{position:fixed;inset:0;z-index:30}
 #tsp{position:fixed;border-radius:14px;box-shadow:0 0 0 9999px rgba(4,5,7,.74),0 0 0 1.5px rgba(var(--wh),.9);transition:all .35s var(--ease);pointer-events:none}
-#ttp{position:fixed;padding:18px;background:linear-gradient(160deg,rgba(var(--wh),.14),rgba(var(--wh),.05)),rgba(var(--bk),.82);border-color:var(--ln2);box-shadow:inset 0 1px 0 var(--hi),0 24px 60px -10px rgba(0,0,0,.85);-webkit-backdrop-filter:blur(26px) saturate(180%);backdrop-filter:blur(26px) saturate(180%);transition:left .35s var(--ease),top .35s var(--ease)}
+#ttp{position:fixed;padding:18px;background:linear-gradient(160deg,rgba(var(--wh),.14),rgba(var(--wh),.05)),rgba(var(--bk),.82);border-color:var(--ln2);box-shadow:0 24px 60px -10px rgba(0,0,0,.85);-webkit-backdrop-filter:blur(26px) saturate(180%);backdrop-filter:blur(26px) saturate(180%);transition:left .35s var(--ease),top .35s var(--ease)}
 #ttp h3{font-size:17px;margin:4px 0 6px}#ttp p{margin:0 0 16px;color:var(--tx2);font-size:14px}#ttp .row{margin:0}#ttp button{flex:1}
 
 /* ---------- loading ---------- */
@@ -355,19 +355,19 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stro
 
 /* ---------- auth ---------- */
 #au{position:fixed;inset:0;z-index:28;display:none;overflow:hidden;align-items:center;justify-content:center;padding:16px;background:rgba(var(--bk),.62);-webkit-backdrop-filter:blur(22px) saturate(140%);backdrop-filter:blur(22px) saturate(140%);animation:fi .2s}
-.ac{position:relative;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);width:min(940px,100%);max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);grid-template-rows:minmax(0,1fr);overflow:hidden;border-radius:var(--r4);border:1px solid var(--ln2);background:rgb(var(--ab));box-shadow:inset 0 1px 0 var(--hi),0 44px 100px -20px rgba(0,0,0,.85);animation:up .35s var(--ease)}
+.ac{position:relative;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);width:min(940px,100%);max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);grid-template-rows:minmax(0,1fr);overflow:hidden;border-radius:var(--r4);border:1px solid var(--ln2);background:rgb(var(--ab));box-shadow:0 44px 100px -20px rgba(0,0,0,.85);animation:up .35s var(--ease)}
 .al{--px:40px;--py:44px;padding:var(--py) var(--px);display:flex;flex-direction:column;justify-content:flex-start;min-width:0;min-height:0;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y}
 .al::before,.al::after{content:"";margin:auto}
 .sf{position:sticky;bottom:0;z-index:2;margin:10px calc(var(--px)*-1) calc(var(--py)*-1);padding:10px var(--px) var(--py);background:linear-gradient(180deg,rgba(var(--ab),0),rgb(var(--ab)) 14px)}
 .sf .err{margin:0 0 2px}.sf button{margin-top:6px}
-.sf button.b{box-shadow:inset 0 1px 0 rgba(255,255,255,.6)!important}
+.sf button.b{box-shadow:none}
 .al .lgo{margin-bottom:28px}
 .al h2{font-size:30px;line-height:1.08;letter-spacing:-.035em;font-weight:700;margin:0 0 10px}
 .al p{margin:0 0 22px;color:var(--tx2);font-size:15px}
 .al button{width:100%;margin-top:10px}
 .sw{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;margin:0 0 22px;border-radius:var(--r2);background:rgba(var(--wh),.05);border:1px solid var(--ln);box-shadow:inset 0 1px 2px rgba(0,0,0,.35)}
 .al .sw button{margin:0;min-height:44px;border:0;border-radius:var(--r1);background:none;box-shadow:none;color:var(--tx2);font:600 14px var(--f);-webkit-backdrop-filter:none;backdrop-filter:none}
-.al .sw button.on{background:var(--ac);color:var(--ink);box-shadow:inset 0 1px 0 rgba(255,255,255,.6)}.al small{display:block;margin-top:18px}
+.al .sw button.on{background:var(--ac);color:var(--ink);box-shadow:none}.al small{display:block;margin-top:18px}
 .al .oa{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.al .oa button{margin:0;padding:0 4px;font-size:13px;min-width:0;overflow:hidden}.al .oa svg{flex:none;fill:currentColor}
 .or{display:flex;align-items:center;gap:12px;margin:18px 0 4px;color:var(--mu);font-size:12.5px}.or::before,.or::after{content:"";flex:1;height:1px;background:var(--ln)}
 .av{position:relative;display:flex;align-items:center;padding:40px;border-left:1px solid var(--ln);background:linear-gradient(180deg,rgba(var(--wh),.04),rgba(var(--wh),.01)),var(--pitchbg) center/cover no-repeat}
@@ -415,7 +415,7 @@ button.cpm.cpl{position:static;transform:none;display:block;margin:12px auto 0}
 .lead{max-width:30em;margin-bottom:32px;color:var(--tx2);font-size:clamp(16px,1.5vw,19px);line-height:1.55}
 .ctas{display:flex;flex-wrap:wrap;gap:12px}.ctas button{min-height:50px;padding:0 24px;font-size:15px}
 .cap{margin-top:16px;font-size:13px;color:var(--mu)}
-.stage{display:flex;flex-direction:column;min-height:400px;border-radius:var(--r4);overflow:hidden;border-color:var(--ln2);background:radial-gradient(80% 70% at 50% 25%,rgba(var(--wh),.11),transparent 70%),linear-gradient(160deg,rgba(var(--wh),.07),rgba(var(--wh),.02));box-shadow:inset 0 1px 0 var(--hi),0 44px 90px -34px rgba(0,0,0,.9)}
+.stage{display:flex;flex-direction:column;min-height:400px;border-radius:var(--r4);overflow:hidden;border-color:var(--ln2);background:radial-gradient(80% 70% at 50% 25%,rgba(var(--wh),.11),transparent 70%),linear-gradient(160deg,rgba(var(--wh),.07),rgba(var(--wh),.02));box-shadow:0 44px 90px -34px rgba(0,0,0,.9)}
 .stage::before{content:"";position:absolute;inset:0;background:var(--pitch) center/cover no-repeat;opacity:.12;pointer-events:none}
 .fan{position:relative;flex:1;display:flex;justify-content:center;align-items:center;padding:36px 16px 28px;pointer-events:none}
 .fan .cd{width:104px;height:148px;margin:0 -12px;padding:10px 10px 9px;border-radius:14px}
@@ -519,11 +519,11 @@ html[data-theme=light] .bar i,html[data-theme=light] .sbar i.w{background:var(--
 html[data-theme=light] select option{background:#fff;color:var(--tx)}
 html[data-theme=light] .lh h1 .dm{color:rgba(20,22,27,.6)}
 html[data-theme=light] tr.me td{background:rgba(160,220,40,.32)}
-html[data-theme=light] .cd{border-color:rgba(16,22,36,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 8px 18px -10px rgba(16,22,36,.35)}
+html[data-theme=light] .cd{border-color:rgba(16,22,36,.14);box-shadow:0 8px 18px -10px rgba(16,22,36,.35)}
 html[data-theme=light] .cd.r0{background:linear-gradient(165deg,#fff,#e8eaf0)}
 html[data-theme=light] .cd>.n,html[data-theme=light] .cd>.c{text-shadow:none}
 html[data-theme=light] .stg{background:radial-gradient(70% 60% at 50% 45%,rgba(255,255,255,.95),transparent 72%),linear-gradient(160deg,rgba(255,255,255,.92),rgba(255,255,255,.62));border-color:var(--ln)}
-html[data-theme=light] .zc button{background:rgba(255,255,255,.85);border-color:var(--ln2);color:var(--tx);box-shadow:inset 0 1px 0 #fff,0 4px 10px -6px rgba(16,22,36,.4)}
+html[data-theme=light] .zc button{background:rgba(255,255,255,.85);border-color:var(--ln2);color:var(--tx);box-shadow:0 4px 10px -6px rgba(16,22,36,.4)}
 html[data-theme=light] .zc button:hover{background:#fff}
 html[data-theme=light] .zh{color:rgba(20,22,27,.55)}
 html[data-theme=light] .sv polygon[fill="#ffffff10"],html[data-theme=light] .sv polygon[fill="#ffffff14"]{fill:rgba(16,22,36,.07)}
@@ -537,8 +537,8 @@ html[data-theme=light] .pitch .slot{border-color:rgba(255,255,255,.75);backgroun
 html[data-theme=light] .pitch .slot:hover{background:rgba(255,255,255,.5);color:#14212a}
 html[data-theme=light] .modal button.g{color:var(--tx)!important;border-color:var(--ln2)!important}
 html[data-theme=light] .sb .rt.h{color:#3d6200}html[data-theme=light] .sb .rt.g{color:#0d6b46}html[data-theme=light] .sb .rt.m{color:#7a5200}html[data-theme=light] .sb .rt.l{color:#a3231d}
-html[data-theme=light] button.b{box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 1px 2px rgba(16,22,36,.25),0 10px 20px -12px rgba(16,22,36,.45)}
-html[data-theme=light] .tst,html[data-theme=light] #ttp{box-shadow:inset 0 1px 0 var(--hi),0 18px 40px -10px rgba(16,22,36,.35)}
+html[data-theme=light] button.b{box-shadow:0 1px 2px rgba(16,22,36,.25),0 10px 20px -12px rgba(16,22,36,.45)}
+html[data-theme=light] .tst,html[data-theme=light] #ttp{box-shadow:0 18px 40px -10px rgba(16,22,36,.35)}
 
 /* ---------- accessibility additions ---------- */
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
@@ -843,7 +843,7 @@ const phImg=p=>p.photo?`<img class="ph" referrerpolicy="no-referrer" ${lz(phUrl(
 addEventListener("error",e=>{const t=e.target;if(!t.classList||!t.classList.contains("ph"))return;const i=+t.dataset.i+1;if(i<PH.length&&!/^http/.test(t.dataset.c)){t.dataset.i=i;t.src=phUrl(t.dataset.c,i)}else t.remove()},true);
 addEventListener("load",e=>{const t=e.target;if(t.classList&&t.classList.contains("ph"))PHI=+t.dataset.i},true);
 const card=(id,ex="")=>{const p=PL[id];return `<div class="cd r${rar(p.rating)} ${ex}" data-id="${id}">${phImg(p)}${QTY[id]>1?`<i class="qt">×${QTY[id]}</i>`:""}<div class="o">${p.rating}${tr(p)}</div><div class="n">${esc(p.name)}</div><div class="c"><b>${p.position}</b>${bdg(p.team,1)||tchip(p.team)}</div></div>`};
-const msg=e=>({"not enough coins":"Не хватает монет","need 6 cards":"Нужно выбрать ровно 6 карточек","need 2-2-2":"Нужно 2 нападающих, 2 полузащитника и 2 защитника","must counter":"Против нападающего нужно ставить защитника, против защитника — нападающего","bad stake":"Выбери ставку из списка","nickname must be 2-20 chars":"Ник: от 2 до 20 символов","duplicate players":"Игрок указан дважды","no open round":"Нет открытого тура","league not found":"Лига с таким кодом не найдена","max level":"Максимальный уровень","daily pack limit":"Лимит этого пака на сегодня исчерпан","contract needs 5 cards":"Для контракта нужно ровно 5 карточек","cards not owned":"Этих карточек у тебя нет","only starters":"Тренироваться могут только игроки стартового состава","training full":"Все 3 слота тренировки заняты","too tired":"Игрок слишком устал: нужно минимум 5% выносливости","not logged in":"Нужно войти в аккаунт","need 5 cards":"Нужно выбрать ровно 5 карточек","max 1 goalkeeper":"Не больше 1 вратаря","already in duel":"Ты уже в дуэли","duel not found":"Дуэль не найдена. Проверь код и убедись, что у вас выбрана одна и та же лига (кнопка лиги вверху). Нельзя войти и в собственную дуэль.","not your turn":"Сейчас не твой ход","bad card":"Эта карточка недоступна","bad stats":"Выбери ровно 2 разных стата","stat limit":"Этот стат уже использован 2 раза в этой дуэли","pair used":"Такую пару статов ты уже использовал(а) в этой дуэли","max 2 forwards":"В составе не больше 2 нападающих","need defender and midfielder":"Нужен минимум 1 защитник и 1 полузащитник"}[e.message]||(/profiles_nick_uq/.test(e.message)?"Этот ник уже занят":/failed to fetch|network|load failed/i.test(e.message)?"Нет соединения. Проверь интернет и попробуй ещё раз.":/[А-Яа-яЁё]/.test(e.message)?e.message:(console.warn(e.message),"Что-то пошло не так. Попробуй ещё раз.")));
+const msg=e=>({"not enough coins":"Не хватает монет","need 6 cards":"Нужно выбрать ровно 6 карточек","need 2-2-2":"Нужно 2 нападающих, 2 полузащитника и 2 защитника","must counter":"Против нападающего нужно ставить защитника, против защитника, нападающего","bad stake":"Выбери ставку из списка","nickname must be 2-20 chars":"Ник: от 2 до 20 символов","duplicate players":"Игрок указан дважды","no open round":"Нет открытого тура","league not found":"Лига с таким кодом не найдена","max level":"Максимальный уровень","daily pack limit":"Лимит этого пака на сегодня исчерпан","contract needs 5 cards":"Для контракта нужно ровно 5 карточек","cards not owned":"Этих карточек у тебя нет","only starters":"Тренироваться могут только игроки стартового состава","training full":"Все 3 слота тренировки заняты","too tired":"Игрок слишком устал: нужно минимум 5% выносливости","not logged in":"Нужно войти в аккаунт","need 5 cards":"Нужно выбрать ровно 5 карточек","max 1 goalkeeper":"Не больше 1 вратаря","already in duel":"Ты уже в дуэли","duel not found":"Дуэль не найдена. Проверь код и убедись, что у вас выбрана одна и та же лига (кнопка лиги вверху). Нельзя войти и в собственную дуэль.","not your turn":"Сейчас не твой ход","bad card":"Эта карточка недоступна","bad stats":"Выбери ровно 2 разных стата","stat limit":"Этот стат уже использован 2 раза в этой дуэли","pair used":"Такую пару статов ты уже использовал(а) в этой дуэли","max 2 forwards":"В составе не больше 2 нападающих","need defender and midfielder":"Нужен минимум 1 защитник и 1 полузащитник"}[e.message]||(/profiles_nick_uq/.test(e.message)?"Этот ник уже занят":/failed to fetch|network|load failed/i.test(e.message)?"Нет соединения. Проверь интернет и попробуй ещё раз.":/[А-Яа-яЁё]/.test(e.message)?e.message:(console.warn(e.message),"Что-то пошло не так. Попробуй ещё раз.")));
 async function rpc(fn,args){const {data,error}=await sb.rpc(fn,args);if(error)throw new Error(error.message);return data}
 let NAVB=null,TMN=null,MFOC=null;
 let SCRS=[],RST=null,TOPF=0;function modal(html){const m=$("#md"),op=m.style.display==="flex";m.onclick=null;if(m.style.display!=="flex")MFOC=document.activeElement;m.className="modal";m.style.display="flex";m.innerHTML=html+'<button class="x" aria-label="Закрыть">✕</button>';m.querySelector(".x").onclick=closeM;m.setAttribute("aria-label",((m.querySelector("h1,h2,h3")||{}).textContent||"Окно").trim());m.tabIndex=-1;m.focus({preventScroll:true});
@@ -858,7 +858,7 @@ function authView(up){if($("#lp").style.display!=="block")landing();const A=$("#
  IF='<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.8-4.7 4.54-4.7 1.31 0 2.68.24 2.68.24v2.97h-1.5c-1.5 0-1.96.93-1.96 1.89v2.26h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z"/></svg>',
  IA='<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12.15 6.9c-.95 0-2.42-1.08-3.96-1.04-2.04.03-3.91 1.18-4.96 3.01-2.12 3.68-.55 9.1 1.52 12.09 1.01 1.45 2.21 3.09 3.79 3.04 1.52-.07 2.09-.99 3.94-.99 1.83 0 2.35.99 3.96.95 1.64-.03 2.68-1.48 3.68-2.95 1.16-1.69 1.64-3.33 1.66-3.42-.04-.01-3.18-1.22-3.22-4.86-.03-3.04 2.48-4.49 2.6-4.56-1.43-2.09-3.62-2.32-4.39-2.38-2-.16-3.68 1.09-4.61 1.09zM15.53 3.83c.84-1.01 1.4-2.43 1.25-3.83-1.21.05-2.66.8-3.53 1.82-.78.9-1.45 2.34-1.27 3.71 1.34.1 2.72-.69 3.55-1.7z"/></svg>',
  perks=[["cal","Реальные матчи","Оценки считаются по итогам настоящих игр"],["sh","Честная игра","Очки и награды начисляет сервер"],["us","Играй с друзьями","Лиги по коду и общий рейтинг"]];
- A.innerHTML=`<div class="ac" role="dialog" aria-modal="true" aria-labelledby="at"><button class="g ax" aria-label="Закрыть">✕</button><div class="al"><div class="lgo"><i class="mk"></i>Club</div><h2 id="at"></h2><p id="ap"></p><div class="pk3">${[["cal","Реальные матчи"],["sh","Честный счёт"],["us","Лиги с друзьями"]].map(a=>`<div><span class="ic">${ico(a[0])}</span>${a[1]}</div>`).join("")}</div><div class="oa"><button class="b" data-p="google">${IG}Продолжить через Google</button><button class="g" data-p="apple">${IA}Продолжить через Apple</button><button class="g" data-p="facebook">${IF}Продолжить через Facebook</button></div><div class="or">или почтой</div><div id="nmw"><label class="fl"><span>Имя</span><input id="fnm" maxlength="30" autocomplete="given-name" placeholder="Магжан"></label><label class="fl"><span>Фамилия</span><input id="lnm" maxlength="30" autocomplete="family-name" placeholder="Татаев"></label></div><label class="fl"><span>Почта</span><input id="em" type="email" placeholder="name@example.com" autocomplete="email"></label><label class="fl"><span>Пароль</span><input id="pw" type="password" placeholder="От 6 символов" autocomplete="${up?"new-password":"current-password"}"></label><div class="sf"><div class="err" id="er" role="alert"></div><button class="b" id="sbm"></button></div><button type="button" class="sl" id="sw"></button><small>Продолжая, ты соглашаешься с правилами игры. Проект независимый.</small></div></div>`;
+ A.innerHTML=`<div class="ac" role="dialog" aria-modal="true" aria-labelledby="at"><button class="g ax" aria-label="Закрыть">✕</button><div class="al"><div class="lgo"><i class="mk"></i>Club</div><h2 id="at"></h2><p id="ap"></p><div class="pk3">${[["cal","Реальные матчи"],["sh","Честный счёт"],["us","Лиги с друзьями"]].map(a=>`<div><span class="ic">${ico(a[0])}</span>${a[1]}</div>`).join("")}</div><div class="oa"><button class="b" data-p="google">${IG}Продолжить через Google</button><button class="g" data-p="apple">${IA}Продолжить через Apple</button><button class="g" data-p="facebook">${IF}Продолжить через Facebook</button></div><div class="or">или почтой</div><div id="nmw"><label class="fl"><span>Имя</span><input id="fnm" maxlength="30" autocomplete="given-name" placeholder="Магжан"></label><label class="fl"><span>Фамилия</span><input id="lnm" maxlength="30" autocomplete="family-name" placeholder="Татаев"></label></div><label class="fl"><span>Почта</span><input id="em" type="email" placeholder="name@example.com" autocomplete="email"></label><label class="fl"><span>Пароль</span><input id="pw" type="password" placeholder="От 6 символов" autocomplete="${up?"new-password":"current-password"}"></label><div class="sf"><div class="err" id="er" role="alert"></div><button class="b" id="sbm"></button></div><button type="button" class="sl" id="sw"></button><small>Продолжая, ты соглашаешься с <a href=\"terms.html\" target=\"_blank\" rel=\"noopener\" style=\"color:var(--act)\">Условиями</a> и <a href=\"privacy.html\" target=\"_blank\" rel=\"noopener\" style=\"color:var(--act)\">Политикой конфиденциальности</a>. Проект независимый.</small></div></div>`;
  A.onclick=x=>{if(x.target===A)closeAuth()};A.querySelector(".ax").onclick=closeAuth;
  const go=async(up)=>{const email=$("#em").value.trim(),password=$("#pw").value;$("#er").style.color="";$("#er").textContent="";if(!email||password.length<6){$("#er").textContent="Введи почту и пароль от 6 символов";return}const fnm=($("#fnm").value||"").trim(),lnm=($("#lnm").value||"").trim();if(up&&(!fnm||!lnm)){$("#er").textContent="Введи имя и фамилию";return}
   const ov=document.createElement("div");ov.className="aov";ov.innerHTML=LOAD;A.querySelector(".ac").appendChild(ov);let r;try{r=up?await sb.auth.signUp({email,password,options:{data:{first_name:fnm,last_name:lnm}}}):await sb.auth.signInWithPassword({email,password})}finally{ov.remove()}
@@ -914,7 +914,7 @@ function duStop(){if(DUCH){try{sb0.removeChannel(DUCH)}catch(e){}DUCH=null}clear
 (()=>{const s=document.createElement("style");s.textContent=`.dsc{display:flex;justify-content:space-between;align-items:center;gap:10px;text-align:center}.dsc b{font-size:32px;letter-spacing:-1px}.dsc div{flex:1;min-width:0}.dsc small{display:block;overflow:hidden;text-overflow:ellipsis}.dtm{font-variant-numeric:tabular-nums;font-weight:700}.dtm.lo{color:#ff6b6b}.dch{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.dch button{flex:1;min-width:70px;padding:10px 6px;border-radius:10px;border:1px solid var(--ln);background:none;color:var(--tx);font:inherit;font-size:13px}.dch button.on{background:var(--ac);color:var(--bg);font-weight:700}.dlg{font-size:13px;padding:8px 0;border-top:1px solid var(--ln)}.dcs{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:10px}.dcs .cd.dis{opacity:.35;pointer-events:none}.dcs .cd small{position:absolute;left:0;right:0;bottom:-16px;text-align:center;font-size:10px;z-index:3}.dcs .cd{margin-bottom:18px}.dbn{display:inline-block;padding:2px 8px;border-radius:8px;background:rgba(255,107,107,.18);color:#ff8a8a;font-size:11px}`;document.head.appendChild(s)})();
 async function duels(){const m=$("#m");m.innerHTML=LOAD;duStop();try{const d=await rpc("duel_active");if(d){DU=d;duSub();duRender();return}DU=null;duHome()}catch(e){m.innerHTML=ERRV(e)}}
 async function duHome(){const m=$("#m");let top=[],inv=duInv();try{top=await rpc("duel_top")}catch(e){}
- m.innerHTML=`<div class="box"><h3>Дуэли 1 на 1</h3><small>Выстави 6 карточек: 2 нападающих, 2 полузащитника и 2 защитника. 6 раундов, атакуют по очереди. Атакующий выбирает карточку и стат, защитник отвечает своей карточкой и тоже выбирает любой стат: у кого цифра выше, тот берёт очко. Против нападающего ставят защитника, против защитника — нападающего, против полузащитника — любого. Победитель забирает 1.8× ставки, при ничьей ставки возвращаются.</small>
+ m.innerHTML=`<div class="box"><h3>Дуэли 1 на 1</h3><small>Выстави 6 карточек: 2 нападающих, 2 полузащитника и 2 защитника. 6 раундов, атакуют по очереди. Атакующий выбирает карточку и стат, защитник отвечает своей карточкой и тоже выбирает любой стат: у кого цифра выше, тот берёт очко. Против нападающего ставят защитника, против защитника, нападающего, против полузащитника, любого. Победитель забирает 1.8× ставки, при ничьей ставки возвращаются.</small>
  <div class="dch" id="dst">${[100,200,500,1000].map(v=>`<button data-v="${v}" class="${DST===v?"on":""}">${v}</button>`).join("")}</div>
  <div style="display:grid;gap:8px;margin-top:12px"><button class="b" id="dq">Найти соперника</button><button class="b g" id="dc">Вызвать друга (код)</button>
  <div class="row"><input id="dcode" placeholder="Код дуэли" maxlength="6" value="${esc(inv||"")}" style="text-transform:uppercase"><button class="b g" id="dj">Войти</button></div></div></div>
@@ -926,7 +926,7 @@ function duPick(mode,code){const m=$("#m");DPK=[];const ids=[...OWN].filter(id=>
  const cnt=p=>DPK.filter(i=>PL[i].position===p).length,LIM={FWD:2,MID:2,DEF:2},can=id=>{if(DPK.includes(id))return true;const p=PL[id].position;return DPK.length<6&&p!=="GK"&&cnt(p)<2};
  const draw=()=>{m.innerHTML=`<div class="box"><h3>Выбери 6 карточек (${DPK.length}/6)</h3><small>Нужно ровно 2 нападающих, 2 полузащитника и 2 защитника.</small><div class="dtb">${["ALL","FWD","MID","DEF"].map(f=>`<button data-f="${f}" class="${F===f?"on":""}">${f==="ALL"?"Все":f}<small>${f==="ALL"?DPK.length+"/6":cnt(f)+(LIM[f]?"/"+LIM[f]:"")}</small></button>`).join("")}</div><div class="dcs">${ids.filter(id=>F==="ALL"||PL[id].position===F).map(id=>card(id,DPK.includes(id)?"sel":can(id)?"":"dis")).join("")}</div></div><div style="display:grid;gap:8px"><button class="b" id="dgo" ${duOk(DPK)?"":"disabled"}>${mode==="j"?"Принять вызов":"Начать · ставка "+DST}</button><button class="g" id="dbk">Назад</button></div>`;
   m.querySelectorAll(".cd").forEach(e=>e.onclick=()=>{const id=+e.dataset.id,i=DPK.indexOf(id);if(i>=0)DPK.splice(i,1);else if(can(id))DPK.push(id);draw()});m.querySelectorAll(".dtb button").forEach(b=>b.onclick=()=>{F=b.dataset.f;draw()});
-  $("#dbk").onclick=duHome;$("#dgo").onclick=async()=>{$("#dgo").disabled=true;try{DU=mode==="j"?await rpc("duel_join",{p_code:code,p_cards:DPK}):await rpc("duel_open",{p_cards:DPK,p_private:mode==="c",p_stake:DST});await duCoins();duSub();duRender()}catch(e){let t=msg(e);if(mode==="j"&&e.message==="duel not found"){for(const c of COMPS){if(c.slug===CLG)continue;try{const{data}=await sb0.schema(c.schema_name).rpc("duel_peek",{p_code:code});if(data){t="Эта дуэль создана в лиге «"+c.name+"». Сейчас у тебя выбрана другая лига — переключи её кнопкой вверху и войди снова.";break}}catch(x){}}}alert(t);$("#dgo").disabled=false}}};draw()}
+  $("#dbk").onclick=duHome;$("#dgo").onclick=async()=>{$("#dgo").disabled=true;try{DU=mode==="j"?await rpc("duel_join",{p_code:code,p_cards:DPK}):await rpc("duel_open",{p_cards:DPK,p_private:mode==="c",p_stake:DST});await duCoins();duSub();duRender()}catch(e){let t=msg(e);if(mode==="j"&&e.message==="duel not found"){for(const c of COMPS){if(c.slug===CLG)continue;try{const{data}=await sb0.schema(c.schema_name).rpc("duel_peek",{p_code:code});if(data){t="Эта дуэль создана в лиге «"+c.name+"». Сейчас у тебя выбрана другая лига, переключи её кнопкой вверху и войди снова.";break}}catch(x){}}}alert(t);$("#dgo").disabled=false}}};draw()}
 async function duHand(){const id=DU&&DU.id;try{const{data}=await sb.from("duel_hands").select("*").eq("duel_id",id).maybeSingle();DH=data||{duel_id:id,cards:[],stats:{}}}catch(e){DH={duel_id:id,cards:[],stats:{}}}duRender()}
 async function duCoins(){try{const{data}=await sb.from("profiles").select("coins").single();if(data){PF.coins=data.coins;coins(PF.coins)}}catch(e){}}
 function duSub(){duStop();const id=DU.id;DUCH=sb0.channel("duel:"+id).on("postgres_changes",{event:"*",schema:SCH_OF(CLG),table:"duels",filter:"id=eq."+id},p=>{if(p.new&&p.new.id===id){DU=p.new;duRender()}}).subscribe();
@@ -942,11 +942,11 @@ function duRender(){if(tab!=="du"||!DU)return;const m=$("#m"),me=PF.id,d=DU;if(d
  const head=`<div class="box"><div class="dsc"><div><small>${esc(me===d.player_1?d.nick_1:d.nick_2)} (ты)</small><b>${my}</b></div><div><small>${fin?"Итог":"Раунд "+d.round+"/6"}</small>${fin?"":`<span class="dtm" id="dt">45 с</span>`}</div><div><small>${esc(me===d.player_1?d.nick_2:d.nick_1)}</small><b>${th}</b></div></div></div>`;
  const lg=(d.log||[]).length?`<div class="box"><h3>Раунды</h3>${d.log.map(r=>{const a=PL[r.ac],b=PL[r.dc],ia=r.a===me,pm=ia?r.pa:r.pd,po=ia?r.pd:r.pa;return`<div class="dlg"><b>${r.r}.</b> ${esc(duNm(r.a))}: ${esc(a.name)} → ${esc(b.name)} <br><small>${DUS[r.st[0]]} ${r.av[0]} : ${DUS[r.ds||r.st[0]]} ${r.dv[0]}</small> <b style="float:right">${pm}:${po}</b></div>`}).join("")}</div>`:"";
  let body="";
- if(fin){const w=d.winner,res=w===me?"Победа! +"+Math.round(d.stake*1.8)+" монет":w?"Поражение":"Ничья — ставка возвращена";body=`<div class="box" style="text-align:center"><h3>${res}</h3><button class="b" id="dnw" style="margin-top:10px">Играть ещё</button></div>`}
+ if(fin){const w=d.winner,res=w===me?"Победа! +"+Math.round(d.stake*1.8)+" монет":w?"Поражение":"Ничья, ставка возвращена";body=`<div class="box" style="text-align:center"><h3>${res}</h3><button class="b" id="dnw" style="margin-top:10px">Играть ещё</button></div>`}
  else{const picking=myTurn&&((atk&&!d.atk_card)||(!atk&&d.atk_card)),ac=d.atk_card?PL[d.atk_card]:null;const rem0=mine.filter(i=>!used.includes(i)),needP=!atk&&ac?(ac.position==="FWD"?"DEF":ac.position==="DEF"?"FWD":null):null,okc=id=>!needP||PL[id].position===needP||!rem0.some(i=>PL[i].position===needP);
   const oc=ac?`<div class="box" style="text-align:center"><h3>${atk?"Твоя атака":esc(duNm(d.attacker))+" атакует"}</h3><div class="dcs" style="margin-bottom:0">${card(d.atk_card)}</div><small>Стат: <b>${DUS[d.atk_stats[0]]} ${d.atk_vals?d.atk_vals[0]:""}</b></small></div>`:"";
   const rem=mine.filter(i=>!used.includes(i)),hint=id=>{if(!picking)return"";const p=PL[id];if(atk){return DSS.length?`<small>${DSS.map(s=>(+DH.stats[id][s])).join(" / ")}</small>`:""}const f=duFit(ac,p);return`<small>${d.atk_stats.map(s=>Math.round((+DH.stats[id][s])*(f?1:.8))).join(" / ")}${f?"":" −20%"}</small>`};
-  let ctl="";if(picking){ctl=(atk?`<div class="dch">${Object.keys(DUS).map(s=>`<button data-s="${s}" class="${DSS.includes(s)?"on":""}" ${su(s)>=2?"disabled style=\"opacity:.35\"":""}>${DUS[s]} ${su(s)}/2</button>`).join("")}</div><small>${pu?"Эту пару статов ты уже использовал(а) — выбери другую":"Выбери карточку и ровно 2 стата (каждый стат — максимум 2 раза за дуэль)"}</small>`:`<small>${ac.position==="FWD"?"Лучший ответ — защитник (DEF)":ac.position==="MID"?"Лучший ответ — полузащитник (MID)":ac.position==="DEF"?"Лучший ответ — нападающий (FWD)":"Любая карточка"}. Вратарь отвечает без штрафа.</small>`);}
+  let ctl="";if(picking){ctl=(atk?`<div class="dch">${Object.keys(DUS).map(s=>`<button data-s="${s}" class="${DSS.includes(s)?"on":""}" ${su(s)>=2?"disabled style=\"opacity:.35\"":""}>${DUS[s]} ${su(s)}/2</button>`).join("")}</div><small>${pu?"Эту пару статов ты уже использовал(а), выбери другую":"Выбери карточку и ровно 2 стата (каждый стат, максимум 2 раза за дуэль)"}</small>`:`<small>${ac.position==="FWD"?"Лучший ответ, защитник (DEF)":ac.position==="MID"?"Лучший ответ, полузащитник (MID)":ac.position==="DEF"?"Лучший ответ, нападающий (FWD)":"Любая карточка"}. Вратарь отвечает без штрафа.</small>`);}
   body=oc+`<div class="box"><h3>${picking?(atk?"Твоя атака":"Твой ответ"):"Ход соперника…"}</h3>${ctl}<div class="dcs">${rem.map(id=>card(id,(DSC===id?"sel ":"")+(picking?"":"dis")+(picking&&!okc(id)?" dis":""))+"").map((h,i)=>h.replace(/<\/div>$/,hint(rem[i])+"</div>")).join("")}</div>${picking?`<button class="b" id="dok" style="margin-top:10px" ${DSC&&DSS.length===1?"":"disabled"}>${atk?"Атаковать":"Ответить"}</button>`:""}</div><div class="box"><small>У соперника осталось (позиции): ${orem.join(", ")||"—"}</small></div>`}
  m.innerHTML=head+body+lg;duTick();
  if(fin){duCoins();duStop();$("#dnw").onclick=()=>{DU=null;DSC=null;DSS=[];duels()};return}
@@ -1040,7 +1040,7 @@ function choose(pid,offer,fx){const sel=new Set();
  const draw=f=>{const m=modal(`<h3>Выбери 3 из ${offer.length}</h3><div class="cards">${offer.map((id,n)=>(id<0?bcard(id,(sel.has(id)?"sel":sel.size>=3?"dim":"")+(f?" deal":"")):card(id,(sel.has(id)?"sel":sel.size>=3?"dim":"")+(f?" deal":""))).replace('class="cd','style="--i:'+n+'" class="cd')).join("")}</div><button class="b" id="x" ${sel.size<3?"disabled":""}>Забрать (${sel.size}/3)</button><button class="g" id="lt" style="color:#fff;border-color:#ffffff40">Выбрать позже</button>`);
   m.querySelectorAll(".cd").forEach(e=>e.onclick=()=>{const id=+e.dataset.id;sel.has(id)?sel.delete(id):sel.size<3&&sel.add(id);draw()});
   $("#lt").onclick=closeM;
-  $("#x").onclick=async()=>{try{const r=await rpc("claim_pack",{p_pack:pid,p_picks:[...sel]});await refresh();closeM();view();if(r.boost)toast(`<b>Буст получен!</b><small>${BST[r.boost][0]} — применяй во вкладке «Состав»</small>`);if(r.dups)toast(`<b>Копии: +${r.dups}</b><small>Повторы сохранены. Из них можно собрать контракт во вкладке «Паки»</small>`)}catch(e){alert(msg(e))}}};draw(fx)}
+  $("#x").onclick=async()=>{try{const r=await rpc("claim_pack",{p_pack:pid,p_picks:[...sel]});await refresh();closeM();view();if(r.boost)toast(`<b>Буст получен!</b><small>${BST[r.boost][0]}, применяй во вкладке «Состав»</small>`);if(r.dups)toast(`<b>Копии: +${r.dups}</b><small>Повторы сохранены. Из них можно собрать контракт во вкладке «Паки»</small>`)}catch(e){alert(msg(e))}}};draw(fx)}
 
 // ---------- задания, ачивки, бусты, скаут ----------
 
@@ -1080,7 +1080,7 @@ async function scout(){const m=$("#m");m.innerHTML=LOAD;
   
   const ez=e=>e>=.62?3:e>=.38?2:1,ezt=["","Сложный","Средний","Лёгкий"];
   const L=[...OWN].map(id=>PL[id]).filter(p=>p&&fx[p.team]).map(p=>{const f=fx[p.team],e=f.reduce((a,x)=>a+x.e,0)/f.length;return{p,f,e}}).filter(x=>SCP==="ALL"||x.p.position===SCP).sort((a,b)=>b.e-a.e||b.p.rating-a.p.rating).slice(0,25);
-  m.innerHTML=`<div class="box"><h3>Скаут: лёгкие соперники</h3><small>Оценка по очкам и разнице мячей в лиге, дома — плюс. Показаны твои игроки.</small><div class="tabs" style="margin:10px 0">${["ALL","GK","DEF","MID","FWD"].map(q=>`<button class="rc${q===SCP?" on":""}" data-sp="${q}">${q==="ALL"?"Все":q}</button>`).join("")}</div>${L.map(({p,f,e})=>{const z=ez(e);return`<div class="sco"><b class="rb r${rar(p.rating)}">${p.rating}</b><div class="pi"><div>${esc(p.name)}${LU.xi.includes(p.id)?' <small>· в составе</small>':""}</div><small>${p.position} · ${f.map(x=>(x.h?"дома":"в гостях")+" vs "+esc(x.o)).join(", ")}</small></div><span class="bst ez${z}">${ezt[z]}</span></div>`}).join("")||"<small>Нет данных на ближайший тур</small>"}</div>`;
+  m.innerHTML=`<div class="box"><h3>Скаут: лёгкие соперники</h3><small>Оценка по очкам и разнице мячей в лиге, дома, плюс. Показаны твои игроки.</small><div class="tabs" style="margin:10px 0">${["ALL","GK","DEF","MID","FWD"].map(q=>`<button class="rc${q===SCP?" on":""}" data-sp="${q}">${q==="ALL"?"Все":q}</button>`).join("")}</div>${L.map(({p,f,e})=>{const z=ez(e);return`<div class="sco"><b class="rb r${rar(p.rating)}">${p.rating}</b><div class="pi"><div>${esc(p.name)}${LU.xi.includes(p.id)?' <small>· в составе</small>':""}</div><small>${p.position} · ${f.map(x=>(x.h?"дома":"в гостях")+" vs "+esc(x.o)).join(", ")}</small></div><span class="bst ez${z}">${ezt[z]}</span></div>`}).join("")||"<small>Нет данных на ближайший тур</small>"}</div>`;
   m.querySelectorAll("[data-sp]").forEach(b=>b.onclick=()=>{SCP=b.dataset.sp;scout()});
  }catch(e){m.innerHTML=ERRV(e)}}
 async function boostLoad(){const el=$("#bxs");if(!el)return;
@@ -1247,7 +1247,7 @@ let TTAB="o";
 async function teamStats(n){let pls=[];try{const{data}=await sb.from("players").select("*").eq("team",n).limit(60);pls=data||[]}catch(e){}
  if(!pls.length)pls=Object.values(PL).filter(p=>p.team===n);
  if(!pls.length)return'<div class="box"><small>Статистики пока нет</small></div>';
- const v=(p,k)=>p[k]==null?0:+p[k]||0,c=(p,k)=>p[k]==null?"–":p[k];
+ const v=(p,k)=>p[k]==null?0:+p[k]||0,c=(p,k)=>p[k]==null?"-":p[k];
  const top=(k,l)=>{const a=[...pls].sort((a,b)=>v(b,k)-v(a,k))[0];return a&&v(a,k)>0?`<div class="sld" data-pid="${a.id}"><div class="sla">${phImg(a)}</div><small>${l}</small><b>${k==="rating"?rf(a[k]):v(a,k)}</b><span>${esc(a.name)}</span></div>`:""};
  const rows=[...pls].sort((a,b)=>v(b,"goals")-v(a,"goals")||v(b,"assists")-v(a,"assists")||v(b,"rating")-v(a,"rating"));
  return`<div class="sldr">${top("goals","Голы")}${top("assists","Ассисты")}${top("rating","Рейтинг")}</div><div class="box tcard"><h3>Игроки</h3><div class="sth"><span>Игрок</span><span>И</span><span>Г</span><span>А</span><span>ЖК</span><span>КК</span></div>${rows.map(p=>`<div class="str" data-pid="${p.id}"><span class="stn"><b class="rb r${rar(p.rating)}">${p.rating}</b><i>${esc(p.name)}<small>${p.position||""}</small></i></span><span>${c(p,"appearances")}</span><span>${c(p,"goals")}</span><span>${c(p,"assists")}</span><span>${c(p,"yellow_cards")}</span><span>${c(p,"red_cards")}</span></div>`).join("")}</div>`}
@@ -1868,7 +1868,7 @@ if(L&&L.style.display==="block"){LTOP=null;ltop().then(()=>{scatter(L)})}
 </script>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400..800&display=swap" rel="stylesheet">
 <style id="redesign">
-/* ===== Club — professional redesign: editorial serif + emerald on ink/paper ===== */
+/* ===== Club, professional redesign: editorial serif + emerald on ink/paper ===== */
 :root{--fs:Manrope,system-ui,sans-serif;--f:Manrope,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--r1:8px;--r2:10px;--r3:14px;--r4:20px;
  --bg:#0a1017;--tx:#eef2f6;--tx2:#b4bfcc;--mu:#8593a3;--ac:#4fd1a1;--ac2:#78e0ba;--act:#4fd1a1;--ink:#04140d;
  --wh:255,255,255;--bk:10,16,23;--ab:17,26,36;--sf:#111a24;--sf2:#16212d;

@@ -783,6 +783,10 @@ header .hr>button svg,header .hr>a svg{width:17px!important;height:17px!importan
 header .lgsel{height:36px!important;font-size:12px!important;padding:0 28px 0 11px!important;background-position:right 9px center!important;max-width:120px!important;flex:none!important;overflow:hidden;text-overflow:clip}
 header #co{padding:0 8px!important;font-size:12.5px!important;display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
 @media(max-width:360px){header .lgo{display:none!important}header .hr{margin-left:auto}}
+
+/* landing: page scroll */
+body:has(#lp[style*="block"]) main{display:none!important}
+html body #lp{position:relative;inset:auto;overflow:visible;overscroll-behavior:auto;min-height:100dvh}
 </style><script>["gesturestart","gesturechange","gestureend"].forEach(function(t){document.addEventListener(t,function(e){e.preventDefault()},{passive:false})});document.addEventListener("touchmove",function(e){if(e.touches&&e.touches.length>1)e.preventDefault()},{passive:false});</script></head><body><noscript><style>#bs{display:none}</style><main style="position:static;padding:32px 20px;max-width:560px;margin:0 auto"><h1>Club</h1><p>Fantasy-футбол по топ-5 лигам и Лиге чемпионов: собери клуб из реальных игроков, открывай паки и соревнуйся с друзьями в лигах.</p><p>Для игры нужен включённый JavaScript.</p></main></noscript><div id="bs"><div class="bl" role="status" aria-label="Загрузка"><i class="mk"></i></div></div><script>setTimeout(function(){var e=document.getElementById("bs");e&&e.remove()},12000)</script>
 <header style="display:none"><div class="lgo"><i class="mk"></i><span id="pt"></span></div><div class="hr"><button id="hp" hidden style="display:none!important" aria-hidden="true"></button><button id="hl" title="Профиль" aria-haspopup="menu"></button><span id="co" title="Монеты"></span></div></header>
 <main id="m"></main><button id="mx" class="g" aria-label="Закрыть матч">✕</button>

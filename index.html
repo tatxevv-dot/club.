@@ -1317,8 +1317,8 @@ const tru=k=>TRU[k]||k;
 function tmVal(v){return v==null?"-":(typeof v==="number"&&!Number.isInteger(v)?v.toFixed(2):esc(String(v).replace(/ km$/," км")))}
 function tmNum(v){const n=parseFloat(String(v));return isNaN(n)?0:n}
 function tmGrp(P,CL){return((P&&P.stats)||[]).map(g=>{const rows=(g.stats||[]).filter(x=>x&&x.stats&&x.stats.length>1&&x.type!=="title").map(x=>{const a=x.stats[0],b=x.stats[1],A=tmNum(a),B=tmNum(b),pc=x.key==="BallPossesion"||/Ball possession/i.test(x.title||"");
- const pill=(v,w,c)=>`<b style="min-width:54px;text-align:center;padding:4px 10px;border-radius:14px;${w?"background:"+c+";color:"+tct(c):""}">${tmVal(v)}${pc?"%":""}</b>`;
- return`<div style="display:grid;grid-template-columns:1fr 1.6fr 1fr;align-items:center;gap:6px;padding:6px 0;text-align:center"><span style="text-align:left">${pill(a,A>B,CL[0])}</span><span>${esc(tru(x.title||x.key))}</span><span style="text-align:right">${pill(b,B>A,CL[1])}</span></div>`});
+ const pill=(v,w,c)=>{const t=String(tmVal(v))+(pc?"%":""),lg=t.replace(/<[^>]*>/g,"").length>6;return`<b style="display:inline-block;white-space:nowrap;min-width:54px;text-align:center;padding:4px ${lg?7:10}px;border-radius:14px;font-size:${lg?".8em":"1em"};${w?"background:"+c+";color:"+tct(c):""}">${t}</b>`};
+ return`<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr) minmax(0,1fr);align-items:center;gap:4px;padding:6px 0;text-align:center"><span style="text-align:left">${pill(a,A>B,CL[0])}</span><span>${esc(tru(x.title||x.key))}</span><span style="text-align:right">${pill(b,B>A,CL[1])}</span></div>`});
  return rows.length?[g.title,rows]:null}).filter(Boolean)}
 function tmSw(b,k){const w=b.closest(".tmw");w.querySelectorAll("[data-pp]").forEach(e=>e.style.display=e.dataset.pp===k?"":"none");w.querySelectorAll(".tpb").forEach(e=>{const on=e.dataset.k===k;e.style.fontWeight=on?"700":"400";e.style.background=on?"rgba(128,128,128,.28)":"none"})}
 function tmFull(T,x){const CL=tmCol(x),P=T&&T.stats;if(!P)return"";const K=[["All","Все"],["FirstHalf","1-й тайм"],["SecondHalf","2-й тайм"]].filter(([k])=>P[k]&&P[k].stats);if(!K.length)return"";

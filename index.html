@@ -787,6 +787,14 @@ header #co{padding:0 8px!important;font-size:12.5px!important;display:inline-fle
 /* landing: page scroll */
 body:has(#lp[style*="block"]) main{display:none!important}
 html body #lp{position:relative;inset:auto;overflow:visible;overscroll-behavior:auto;min-height:100dvh}
+
+/* nav on top (mobile) */
+@media(max-width:899px){
+html body #nv{top:var(--top);bottom:auto!important;height:auto!important;max-height:none;left:0;right:0;transform:none;width:100%;flex-direction:row;gap:0;padding:2px 6px;border:0;border-bottom:1px solid var(--ln);border-radius:0;z-index:14;background:var(--bg)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;box-shadow:none}
+html body #nv button{min-height:46px;padding:7px 0 5px;gap:3px}
+html body #nv button.on{background:rgba(var(--wh),.1)}
+html body.app main{padding-top:calc(var(--top) + 62px + 14px);padding-bottom:calc(32px + env(safe-area-inset-bottom,0px))}
+}
 </style><script>["gesturestart","gesturechange","gestureend"].forEach(function(t){document.addEventListener(t,function(e){e.preventDefault()},{passive:false})});document.addEventListener("touchmove",function(e){if(e.touches&&e.touches.length>1)e.preventDefault()},{passive:false});</script></head><body><noscript><style>#bs{display:none}</style><main style="position:static;padding:32px 20px;max-width:560px;margin:0 auto"><h1>Club</h1><p>Fantasy-футбол по топ-5 лигам и Лиге чемпионов: собери клуб из реальных игроков, открывай паки и соревнуйся с друзьями в лигах.</p><p>Для игры нужен включённый JavaScript.</p></main></noscript><div id="bs"><div class="bl" role="status" aria-label="Загрузка"><i class="mk"></i></div></div><script>setTimeout(function(){var e=document.getElementById("bs");e&&e.remove()},12000)</script>
 <header style="display:none"><div class="lgo"><i class="mk"></i><span id="pt"></span></div><div class="hr"><button id="hp" hidden style="display:none!important" aria-hidden="true"></button><button id="hl" title="Профиль" aria-haspopup="menu"></button><span id="co" title="Монеты"></span></div></header>
 <main id="m"></main><button id="mx" class="g" aria-label="Закрыть матч">✕</button>

@@ -2418,12 +2418,12 @@ if(on&&!has){y0=window.scrollY||0;document.body.classList.add("mo");scrollTo(0,0
 (()=>{if(!("IntersectionObserver"in window))return;
 const SEL='.box,.st,.pl,.fr,.fms,.stat,.tsl,.sb,.rr,.mrow,tbody tr,[style*="64px 38%"]';
 const seen=new WeakSet();let batch=0,bt=0;
-const io=new IntersectionObserver(es=>{let k=0;es.filter(e=>e.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top).forEach(e=>{e.target.style.setProperty("--d",Math.min(k++,6)*55+"ms");e.target.classList.add("in");io.unobserve(e.target)})},{threshold:.06,rootMargin:"0px 0px -5% 0px"});
+const io=new IntersectionObserver(es=>{let k=0;es.filter(e=>e.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top).forEach(e=>{e.target.style.setProperty("--d",Math.min(k++,6)*55+"ms");e.target.classList.add("in");io.unobserve(e.target)})},{threshold:.04,rootMargin:"0px 0px 0px 0px"});
 let ink=0,it=0;
 function tag(n){if(!(n instanceof Element))return;const l=(n.matches(SEL)?[n]:[]).concat([...n.querySelectorAll(SEL)]);
 for(const el of l){if(seen.has(el)||el.closest(".cd,#bs,.bl"))continue;seen.add(el);if(el.classList.contains("rv")||el.classList.contains("rvl"))continue;
 const r=el.getBoundingClientRect();el.classList.add("rx");
-if(r.top<innerHeight*.95&&r.bottom>0){el.style.setProperty("--d",Math.min(ink++,8)*45+"ms");el.classList.add("ra");clearTimeout(it);it=setTimeout(()=>ink=0,120)}
+if(r.top<innerHeight*1.6&&r.bottom>0){el.style.setProperty("--d",Math.min(ink++,7)*40+"ms");el.classList.add("ra");clearTimeout(it);it=setTimeout(()=>ink=0,120)}
 else io.observe(el)}}
 new MutationObserver(ms=>ms.forEach(m=>m.addedNodes.forEach(tag))).observe(document.body,{childList:true,subtree:true});
 tag(document.body)})();

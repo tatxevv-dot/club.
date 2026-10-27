@@ -250,7 +250,7 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stro
 .nw{display:block;padding:10px 12px;border-radius:10px;color:inherit;text-decoration:none;transition:background .2s}
 .nw b{display:block;font-size:13.5px;font-weight:500;line-height:1.35;margin-bottom:2px}a.nw:hover{background:rgba(var(--wh),.06)}a.nw:hover b{color:var(--act)}
 .pc{position:relative;width:62px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;font-weight:500;color:#fff;cursor:pointer}.pc span{max-width:62px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.rt{display:grid;place-items:center;min-width:34px;height:34px;padding:0 4px;border-radius:9px;font-size:12.5px;font-weight:700;font-variant-numeric:tabular-nums;border:1px solid transparent}
+.rt{display:grid;place-items:center;min-width:34px;height:34px;padding:0 4px;border-radius:5px;font-size:12.5px;font-weight:700;font-variant-numeric:tabular-nums;border:1px solid transparent}
 .rt.h{background:rgba(255,255,255,.22);border-color:rgba(255,255,255,.6);color:#eceef2}
 .rt.g{background:rgba(90,214,160,.2);border-color:rgba(90,214,160,.5);color:#a8f0cf}
 .rt.m{background:rgba(240,182,74,.2);border-color:rgba(240,182,74,.5);color:#f8d68c}
@@ -731,7 +731,7 @@ main.in>*,.mw:not(.na)>*{animation:none}
 .qr{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--ln)}.qr:first-of-type{border-top:0}
 .qr>div:first-child{flex:1;min-width:0}.qr .bar{margin-top:8px}.qr b{display:block}.qr .rw{white-space:nowrap}
 .qr.dn{opacity:.55}.qh{display:flex;justify-content:space-between;align-items:center;gap:8px}
-.bst{display:inline-block;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:600;border:1px solid var(--ln2)}
+.bst{display:inline-block;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:600;border:1px solid var(--ln2)}
 .bc{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:linear-gradient(160deg,#3a2a00,#a06a00 45%,#ffd45a)!important;color:#fff;box-shadow:0 0 22px rgba(255,200,60,.55)}
 .bc-all{background:linear-gradient(160deg,#07243a,#0a5c8c 45%,#5fd0ff)!important;box-shadow:0 0 22px rgba(80,200,255,.55)}
 .bc .bi{width:44px;height:44px;margin-bottom:6px}.bc .bi svg{width:100%;height:100%}.bc .o{position:static!important;font-size:30px!important}
@@ -817,7 +817,7 @@ html body.app main{padding-top:calc(var(--top) + 62px + 14px);padding-bottom:cal
 .pomp{position:relative;flex:none;width:76px;height:76px}
 .pomp .ph{position:static;display:block;width:76px;height:76px;max-width:none;border-radius:50%;object-fit:cover;object-position:50% 14%;background:var(--sf2);border:1px solid var(--ln)}
 .pomn{display:grid;place-items:center;width:76px;height:76px;border-radius:50%;font:700 28px var(--f);font-style:normal;color:var(--tx2);background:var(--sf2);border:1px solid var(--ln)}
-.pomv{position:absolute;left:-4px;top:-6px;min-width:34px;padding:3px 7px;border-radius:999px;font:700 13px/1.2 var(--f);text-align:center;color:#fff;background:#3b3e46;border:2px solid var(--bg)}
+.pomv{position:absolute;left:-4px;top:-6px;min-width:34px;padding:3px 7px;border-radius:6px;font:700 13px/1.2 var(--f);text-align:center;color:#fff;background:#3b3e46;border:2px solid var(--bg)}
 .pomv.h{background:#2e9a62}.pomv.g{background:#4a4e57}
 .pomi{min-width:0;display:grid;gap:6px}
 .pomi>b{font-size:19px;font-weight:700;line-height:1.15;letter-spacing:-.01em}
@@ -1318,12 +1318,12 @@ const tru=k=>TRU[k]||k;
 function tmVal(v){return v==null?"-":(typeof v==="number"&&!Number.isInteger(v)?v.toFixed(2):esc(String(v).replace(/ km$/," км")))}
 function tmNum(v){const n=parseFloat(String(v));return isNaN(n)?0:n}
 function tmGrp(P,CL){return((P&&P.stats)||[]).map(g=>{const rows=(g.stats||[]).filter(x=>x&&x.stats&&x.stats.length>1&&x.type!=="title").map(x=>{const a=x.stats[0],b=x.stats[1],A=tmNum(a),B=tmNum(b),pc=x.key==="BallPossesion"||/Ball possession/i.test(x.title||"");
- const pill=(v,w,c)=>{const t=String(tmVal(v))+(pc?"%":""),lg=t.replace(/<[^>]*>/g,"").length>6;return`<b style="display:inline-block;white-space:nowrap;min-width:54px;text-align:center;padding:4px ${lg?7:10}px;border-radius:9px;font-size:${lg?".8em":"1em"};${w?"background:"+c+";color:"+tct(c):""}">${t}</b>`};
+ const pill=(v,w,c)=>{const t=String(tmVal(v))+(pc?"%":""),lg=t.replace(/<[^>]*>/g,"").length>6;return`<b style="display:inline-block;white-space:nowrap;min-width:54px;text-align:center;padding:4px ${lg?7:10}px;border-radius:4px;font-size:${lg?".8em":"1em"};${w?"background:"+c+";color:"+tct(c):""}">${t}</b>`};
  return`<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr) minmax(0,1fr);align-items:center;gap:4px;padding:6px 0;text-align:center"><span style="text-align:left">${pill(a,A>B,CL[0])}</span><span>${esc(tru(x.title||x.key))}</span><span style="text-align:right">${pill(b,B>A,CL[1])}</span></div>`});
  return rows.length?[g.title,rows]:null}).filter(Boolean)}
 function tmSw(b,k){const w=b.closest(".tmw");w.querySelectorAll("[data-pp]").forEach(e=>e.style.display=e.dataset.pp===k?"":"none");w.querySelectorAll(".tpb").forEach(e=>{const on=e.dataset.k===k;e.style.fontWeight=on?"700":"400";e.style.background=on?"rgba(128,128,128,.28)":"none"})}
 function tmFull(T,x){const CL=tmCol(x),P=T&&T.stats;if(!P)return"";const K=[["All","Все"],["FirstHalf","1-й тайм"],["SecondHalf","2-й тайм"]].filter(([k])=>P[k]&&P[k].stats);if(!K.length)return"";
- const btn="padding:6px 14px;border-radius:9px;border:1px solid var(--ln2);color:inherit;white-space:nowrap;flex:none";
+ const btn="padding:6px 14px;border-radius:4px;border:1px solid var(--ln2);color:inherit;white-space:nowrap;flex:none";
  const body=K.map(([k],i)=>`<div data-pp="${k}"${i?' style="display:none"':""}>${tmGrp(P[k],CL).map(g=>`<div style="margin:14px 0 4px"><h4 style="text-align:center;margin:0 0 4px">${esc(tru(g[0]))}</h4>${g[1].join("")}</div>`).join("")}</div>`).join("");
  return`<div class="box fmb tmw"><h3 style="text-align:center">Статистика матча</h3><div style="display:flex;gap:6px;justify-content:center;margin:8px 0">${K.map(([k,n],i)=>`<button class="tpb" data-k="${k}" onclick="tmSw(this,'${k}')" style="${btn};font-weight:${i?400:700};background:${i?"none":"rgba(128,128,128,.28)"}">${n}</button>`).join("")}</div>${body}</div>`}
 function tmTop(T,x){const CL=tmCol(x),P=T&&T.stats&&T.stats.All,g=tmGrp(P,CL).find(q=>q[0]==="Top stats");return g?`<div class="box"><h3 style="text-align:center">Главное</h3>${g[1].join("")}</div>`:""}
@@ -1333,7 +1333,7 @@ function mtHead(){return`<div style="${MTG}opacity:.6;font-size:.8em"><span>#</s
 function mtRows(mode,h,a,only){return mtStand(mode).map((t,i)=>{const hl=t.n===h||t.n===a;if(only&&!hl)return"";return`<div style="${MTG}${hl?"background:rgba(128,128,128,.18);border-radius:8px;font-weight:700":""}"><span>${i+1}</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(t.n)}</span><span>${t.p}</span><span>${t.w}</span><span>${t.d}</span><span>${t.l}</span><span>${t.gf-t.ga}</span><b>${t.pts}</b></div>`}).join("")}
 function mtMini(x){const r=mtRows("all",x.home,x.away,true);return r?`<div class="box"><h3>Таблица</h3>${mtHead()}${r}</div>`:""}
 function mtTb(b,mode){const w=b.closest(".mtt");w.querySelector(".mtr0").innerHTML=mtRows(mode,w.dataset.h,w.dataset.a,false);w.querySelectorAll("button").forEach(e=>{const on=e===b;e.style.fontWeight=on?"700":"400";e.style.background=on?"rgba(128,128,128,.28)":"none"})}
-function mtTableTab(x){const btn="padding:6px 14px;border-radius:9px;border:1px solid var(--ln2);color:inherit;white-space:nowrap";return`<div class="box mtt" data-h="${esc(x.home)}" data-a="${esc(x.away)}"><div style="display:flex;gap:6px;margin-bottom:8px">${[["all","Все"],["home","Дома"],["away","В гостях"]].map(([k,n],i)=>`<button onclick="mtTb(this,'${k}')" style="${btn};font-weight:${i?400:700};background:${i?"none":"rgba(128,128,128,.28)"}">${n}</button>`).join("")}</div>${mtHead()}<div class="mtr0">${mtRows("all",x.home,x.away,false)||"<small>Нет сыгранных матчей</small>"}</div></div>`}
+function mtTableTab(x){const btn="padding:6px 14px;border-radius:4px;border:1px solid var(--ln2);color:inherit;white-space:nowrap";return`<div class="box mtt" data-h="${esc(x.home)}" data-a="${esc(x.away)}"><div style="display:flex;gap:6px;margin-bottom:8px">${[["all","Все"],["home","Дома"],["away","В гостях"]].map(([k,n],i)=>`<button onclick="mtTb(this,'${k}')" style="${btn};font-weight:${i?400:700};background:${i?"none":"rgba(128,128,128,.28)"}">${n}</button>`).join("")}</div>${mtHead()}<div class="mtr0">${mtRows("all",x.home,x.away,false)||"<small>Нет сыгранных матчей</small>"}</div></div>`}
 function mtTab(b){const w=b.closest(".mtw"),k=b.dataset.k;w.querySelectorAll(".mtp").forEach(e=>e.style.display=e.dataset.k===k?"":"none");w.querySelectorAll(".mtb").forEach(e=>{const on=e.dataset.k===k;e.style.fontWeight=on?"700":"500";e.style.borderBottomColor=on?"currentColor":"transparent";e.style.opacity=on?"1":".6"})}
 function mtTop3(R,x){const t=n=>R.filter(p=>p.pl_team===n&&p.rate!=null).sort((a,b)=>b.rate-a.rate).slice(0,3),h=t(x.home),a=t(x.away);if(!h.length&&!a.length)return"";const c=L=>L.map(p=>`<div class="sb" data-mp="${p.pl_id}" data-mm="${x.id}"><span>${esc(p.pl_name)} <small>${p.pl_pos||""}</small></span><span class="rr"><b class="rt ${rg(p.rate)}">${rf(p.rate)}</b></span></div>`).join("");return`<div class="box"><h3>Лучшие игроки</h3><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div><small>${esc(x.home)}</small>${c(h)}</div><div><small>${esc(x.away)}</small>${c(a)}</div></div></div>`}
 function mtForm(x){const t0=new Date(x.kickoff),dn=m=>(m.finished||m.ft)&&m.home_goals!=null,
@@ -2043,7 +2043,7 @@ input:focus,select:focus,html[data-theme=light] input:focus,html[data-theme=ligh
 .lstp{gap:20px;border:0}
 @media(min-width:760px){.lstp{grid-template-columns:repeat(4,1fr)}.lstc+.lstc{border-left:1px solid var(--ln)}.lstc,.lstc:first-child{padding:28px}}
 .lstc,.lstc:first-child{background:var(--sf);border:1px solid var(--ln)!important;border-radius:var(--r3);padding:28px;box-shadow:var(--sh);position:relative}
-.lstc b{font:500 15px/1 var(--f);letter-spacing:.08em;color:var(--ac);display:inline-flex;padding:7px 11px;border:1px solid var(--ln2);border-radius:999px}
+.lstc b{font:500 15px/1 var(--f);letter-spacing:.08em;color:var(--ac);display:inline-flex;padding:7px 11px;border:1px solid var(--ln2);border-radius:6px}
 .lstc h3{font-family:var(--fs);font-size:19px;font-weight:700;margin:22px 0 10px;letter-spacing:-.015em}
 /* features */
 .fgr{gap:20px;border:0}
@@ -2328,7 +2328,7 @@ html body .row>small{flex:none}
 .modal:has(.thero) .x{background:rgba(255,255,255,.2)!important;border-color:rgba(255,255,255,.35)!important;color:#fff!important}
 .tts[hidden]{display:none}.tts{padding-top:2px}
 .tcard{margin-top:14px}.tcard h3{margin:0 0 12px;font-size:18px;font-weight:700}
-.tcard .chp{padding:4px 10px;border-radius:999px;background:rgba(0,0,0,.06);font-weight:600}
+.tcard .chp{padding:4px 10px;border-radius:6px;background:rgba(0,0,0,.06);font-weight:600}
 .fcs{display:flex;justify-content:space-between;gap:6px}
 .fcol{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:10px;position:relative;padding-bottom:6px}
 .fch{display:block;width:100%;max-width:60px;padding:5px 0;text-align:center;border-radius:6px;font:700 13px/1.2 var(--f);color:#fff;cursor:pointer;font-variant-numeric:tabular-nums}
@@ -2353,10 +2353,10 @@ html body .row>small{flex:none}
 .lpp{flex:1 1 0;min-width:0;max-width:92px;display:flex;flex-direction:column;align-items:center;cursor:pointer}
 .lav{position:relative;width:52px;height:52px;border-radius:50%;background:#e8ecef}
 .lav .ph{position:static!important;display:block;width:100%;height:100%;object-fit:cover;object-position:50% 12%;border-radius:50%}
-.lrt{position:absolute;top:-6px;right:-14px;min-width:30px;padding:3px 6px;border-radius:999px;text-align:center;font:700 13px/1.1 var(--f);color:#fff;background:#8a9097}
+.lrt{position:absolute;top:-6px;right:-14px;min-width:30px;padding:3px 6px;border-radius:6px;text-align:center;font:700 13px/1.1 var(--f);color:#fff;background:#8a9097}
 .lrt.h,.lrt.g{background:#3fae6a}.lrt.m{background:#e8832f}.lrt.l{background:#d4443b}
 .lev{display:flex;gap:4px;margin-top:-8px;min-height:20px;position:relative;z-index:1}
-.lev i{display:flex;align-items:center;gap:3px;padding:2px 7px 2px 3px;border-radius:999px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.18);font:700 12px/1 var(--f);font-style:normal;color:#14161b}
+.lev i{display:flex;align-items:center;gap:3px;padding:2px 7px 2px 3px;border-radius:6px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.18);font:700 12px/1 var(--f);font-style:normal;color:#14161b}
 .lev i svg{width:15px;height:15px}
 .lpp>span{margin-top:3px;font-size:13px;font-weight:500;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center}
 /* ---- no zoom ---- */

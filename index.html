@@ -879,6 +879,7 @@ const sb=new Proxy(sb0,{get(o,k){if(k==="from")return t=>o.schema(SCH_OF(CLG)).f
 const lgSel=()=>`<button type="button" class="lgsel" aria-label="Сменить лигу">${(COMPS.find(c=>c.slug===CLG)||COMPS[0]).short}</button>`;
 document.addEventListener("click",e=>{const s=e.target.closest&&e.target.closest(".lgsel");if(!s)return;modal(`<div class="box"><h3>Выбери лигу</h3><div style="display:grid;gap:8px;margin-top:12px">${COMPS.map(c=>`<button class="b${c.slug===CLG?"":" g"}" data-lg="${c.slug}">${c.name}</button>`).join("")}</div></div>`);document.querySelectorAll("#md [data-lg]").forEach(x=>x.onclick=()=>{if(x.dataset.lg===CLG){closeM();return}try{localStorage.setItem("club_lg",x.dataset.lg)}catch(z){}location.reload()})});
 async function loadComps(){try{const {data}=await sb0.from("competitions").select("*").eq("active",true).order("sort");if(data&&data.length)COMPS=data;if(!COMPS.find(c=>c.slug===CLG))CLG=COMPS[0].slug;const c=COMPS.find(c=>c.slug===CLG);document.title="Club | "+c.name;document.querySelectorAll("header .lgsel").forEach(e=>e.remove());const h=document.querySelector("header .hr");if(h)h.insertAdjacentHTML("afterbegin",lgSel());const {data:ti}=await sb.from("team_info").select("team,logo");LOGO={};(ti||[]).forEach(r=>{if(r.logo)LOGO[r.team]=r.logo})}catch(e){}}
+const MINL=t=>new Promise(r=>setTimeout(r,Math.max(0,550-(performance.now()-t))));
 const LOAD='<div class="bl" role="status" aria-label="Загрузка"><i class="mk"></i></div>';
 let FRESH=0,HT=0;
 async function hold(m,pr,ms=12000){const t=++HT;m.querySelectorAll(".ldo").forEach(e=>e.remove());m.classList.add("ldg");m.insertAdjacentHTML("afterbegin",LOAD.replace('class="bl"','class="bl ldo"'));
@@ -984,7 +985,7 @@ const duNm=u=>u===DU.player_1?DU.nick_1:DU.nick_2;
 function duStop(){if(DUCH){try{sb0.removeChannel(DUCH)}catch(e){}DUCH=null}clearInterval(DUT);clearInterval(DUP);DUT=DUP=null}
 (()=>{const s=document.createElement("style");s.textContent=`.dsc{display:flex;justify-content:space-between;align-items:center;gap:10px;text-align:center}.dsc b{font-size:32px;letter-spacing:-1px}.dsc div{flex:1;min-width:0}.dsc small{display:block;overflow:hidden;text-overflow:ellipsis}.dtm{font-variant-numeric:tabular-nums;font-weight:700}.dtm.lo{color:#ff6b6b}.dch{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.dch button{flex:1;min-width:70px;padding:10px 6px;border-radius:10px;border:1px solid var(--ln);background:none;color:var(--tx);font:inherit;font-size:13px}.dch button.on{background:var(--ac);color:var(--bg);font-weight:700}.dlg{font-size:13px;padding:8px 0;border-top:1px solid var(--ln)}.dcs{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:10px}.dcs .cd.dis{opacity:.35;pointer-events:none}.dcs .cd small{position:absolute;left:0;right:0;bottom:-16px;text-align:center;font-size:10px;z-index:3}.dcs .cd{margin-bottom:18px}.dbn{display:inline-block;padding:2px 8px;border-radius:8px;background:rgba(255,107,107,.18);color:#ff8a8a;font-size:11px}`;document.head.appendChild(s)})();
 async function duels(){const m=$("#m");m.innerHTML=LOAD;duStop();try{const d=await rpc("duel_active");if(d){DU=d;duSub();duRender();return}DU=null;duHome()}catch(e){m.innerHTML=ERRV(e)}}
-async function duHome(){const m=$("#m");let top=[],inv=duInv();try{top=await rpc("duel_top")}catch(e){}
+async function duHome(){const m=$("#m");const t0=performance.now();m.innerHTML=LOAD;let top=[],inv=duInv();try{top=await rpc("duel_top")}catch(e){}await MINL(t0);
  m.innerHTML=`<div class="box"><h3>Дуэли 1 на 1</h3><small>Выстави 6 карточек: 2 нападающих, 2 полузащитника и 2 защитника. 6 раундов, атакуют по очереди. Атакующий выбирает карточку и стат, защитник отвечает своей карточкой и тоже выбирает любой стат: у кого цифра выше, тот берёт очко. Против нападающего ставят защитника, против защитника, нападающего, против полузащитника, любого. Победитель забирает 1.8× ставки, при ничьей ставки возвращаются.</small>
  <div class="dch" id="dst">${[100,200,500,1000].map(v=>`<button data-v="${v}" class="${DST===v?"on":""}">${v}</button>`).join("")}</div>
  <div style="display:grid;gap:8px;margin-top:12px"><button class="b" id="dq">Найти соперника</button><button class="b g" id="dc">Вызвать друга (код)</button>
@@ -1154,7 +1155,7 @@ async function scout(){const m=$("#m");m.innerHTML=LOAD;
   m.innerHTML=`<div class="box"><h3>Скаут: лёгкие соперники</h3><small>Оценка по очкам и разнице мячей в лиге, дома, плюс. Показаны твои игроки.</small><div class="tabs" style="margin:10px 0">${["ALL","GK","DEF","MID","FWD"].map(q=>`<button class="rc${q===SCP?" on":""}" data-sp="${q}">${q==="ALL"?"Все":q}</button>`).join("")}</div>${L.map(({p,f,e})=>{const z=ez(e);return`<div class="sco"><b class="rb r${rar(p.rating)}">${p.rating}</b><div class="pi"><div>${esc(p.name)}${LU.xi.includes(p.id)?' <small>· в составе</small>':""}</div><small>${p.position} · ${f.map(x=>(x.h?"дома":"в гостях")+" vs "+esc(x.o)).join(", ")}</small></div><span class="bst ez${z}">${ezt[z]}</span></div>`}).join("")||"<small>Нет данных на ближайший тур</small>"}</div>`;
   m.querySelectorAll("[data-sp]").forEach(b=>b.onclick=()=>{SCP=b.dataset.sp;scout()});
  }catch(e){m.innerHTML=ERRV(e)}}
-async function boostLoad(){const el=$("#bxs");if(!el)return;
+async function boostLoad(){const el=$("#bxs");if(!el)return;if(!el.children.length)el.innerHTML=LOAD;
  try{const bs=(await sb.from("user_boosts").select("*").order("id")).data||[];if(!el.isConnected)return;
   const lk=RK&&new Date(RK)<=Date.now(),act=bs.filter(b=>b.used_round===RND),free=bs.filter(b=>b.used_round==null);
   const row=(b,a)=>`<div class="qr"><div class="bic">${BIC[b.kind]}</div><div><b>${BST[b.kind][0]}</b><small>${BST[b.kind][1]}${a&&b.player_id&&PL[b.player_id]?" · "+esc(PL[b.player_id].name):""}</small></div>${a?`<button class="g" data-bc="${b.id}" ${lk?"disabled":""}>Снять</button>`:`<button class="b" data-bu="${b.id}" data-k="${b.kind}" ${lk||act.length||!RND?"disabled":""}>Применить</button>`}</div>`;
@@ -1389,9 +1390,10 @@ async function teamLineup(n,x){
  const G=[["GK","Вратари"],["DEF","Защитники"],["MID","Полузащитники"],["FWD","Нападающие"]];
  const full=G.map(([q,l])=>{const a=all.filter(p=>p.position===q).sort((a,b)=>b.rating-a.rating);return a.length?`<div class="dl">${l}</div>${a.map(p=>`<div class="pl" data-pid="${p.id}"><b class="rb r${rar(p.rating)}">${p.rating}</b><div class="pi"><div>${esc(p.name)}</div><small>${p.position}</small></div></div>`).join("")}`:""}).join("");
  return`<div class="box tcard"><h3>Последний состав</h3>${mrow(x)}</div><div class="lpit">${pit}</div><div class="box tcard"><h3>Все игроки</h3>${full||"<small>Игроков пока нет</small>"}</div>`}
-async function teamPage(n){const pv=NAVB;TMN=n;
+async function teamPage(n){const pv=NAVB;TMN=n;const t0=performance.now();
  modal('<div class="mw tp na">'+LOAD+'</div>');
  if(!MT)await patchMT();
+ await MINL(t0);
  if(TMN!==n)return;
  if(!MT){modal('<div class="mw tp box"><small>Не удалось загрузить данные команды</small></div>');return}
  let pls=Object.values(PL).filter(p=>p.team===n);
@@ -1724,7 +1726,7 @@ function xrender(r,per){const D=r.data,e=esc,top=(D.top||[]).map(i=>`<div style=
  T=D.traits&&D.traits.items||[];let rad="";if(T.length>=3){const n=T.length,R=70,c=100,pt=(k,f)=>{const a=-Math.PI/2+k*2*Math.PI/n;return[(c+Math.cos(a)*R*f).toFixed(1),(c+Math.sin(a)*R*f).toFixed(1)]},poly=f=>T.map((_,k)=>pt(k,f).join(",")).join(" "),val=T.map((t,k)=>pt(k,Math.max(.04,t.v)).join(",")).join(" ");
   rad=`<h4 style="margin:16px 0 0;text-align:center">Особенности игрока</h4><svg viewBox="0 0 200 200" style="width:100%;max-width:320px;display:block;margin:0 auto;overflow:visible"><polygon points="${poly(1)}" fill="none" stroke="currentColor" opacity=".25"/><polygon points="${poly(.5)}" fill="none" stroke="currentColor" opacity=".2" stroke-dasharray="3"/><polygon points="${val}" fill="var(--ac)" fill-opacity=".45" stroke="var(--ac)"/>${T.map((t,k)=>{const[x,y]=pt(k,1.3);return`<text x="${x}" y="${y}" font-size="8" text-anchor="middle" fill="currentColor">${e(XL[t.id]||t.t)} ${Math.round(t.v*100)}%</text>`}).join("")}</svg>`}
  return`<div class="box fw"><h3>Статистика сезона${r.league?" · "+e(r.league)+" "+e(r.season||""):""}</h3><div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:8px 0 14px">${top}</div>${info}<div style="display:flex;gap:6px;justify-content:center;margin:14px 0 0">${[["Всего",0],["На 90",1]].map(([n,k])=>`<button data-xp="${k}" style="padding:6px 16px;border-radius:4px;border:1px solid var(--ln2);color:inherit;font-weight:${k===per?700:400};background:${k===per?"rgba(128,128,128,.28)":"none"}">${n}</button>`).join("")}</div>${gr}${rad}<small style="display:block;text-align:center;margin-top:10px;opacity:.6">Цвет полосы — процентиль среди игроков схожей позиции</small></div>`}
-async function xload(p){const h=$("#xps");if(!h)return;try{const q=await sb.from("player_season_stats").select("*").eq("player_id",p.id).limit(1),r=q.data&&q.data[0];if(!$("#xps"))return;if(!r){$("#xps").innerHTML='<div class="box"><small>Статистика сезона ещё загружается</small></div>';return}const draw=per=>{$("#xps").innerHTML=xrender(r,per);$("#xps").querySelectorAll("[data-xp]").forEach(b=>b.onclick=()=>draw(+b.dataset.xp))};draw(0)}catch(x){}}
+async function xload(p){const h=$("#xps");if(!h)return;const t0=performance.now();h.innerHTML='<div class="box">'+LOAD+'</div>';try{const q=await sb.from("player_season_stats").select("*").eq("player_id",p.id).limit(1),r=q.data&&q.data[0];await MINL(t0);if(!$("#xps"))return;if(!r){$("#xps").innerHTML='<div class="box"><small>Статистика сезона ещё загружается</small></div>';return}const draw=per=>{$("#xps").innerHTML=xrender(r,per);$("#xps").querySelectorAll("[data-xp]").forEach(b=>b.onclick=()=>draw(+b.dataset.xp))};draw(0)}catch(x){}}
 async function pinfo(id,name){modal('<div class="mw na">'+LOAD+'</div>');
  let q=sb.from("players").select("*");q=id?q.eq("id",id):q.eq("name",name);
  const{data}=await q.limit(1),p=data&&data[0]||PL[id];
@@ -1784,14 +1786,14 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-sti]");if(
 const plr=p=>`<div class="pl" data-pid="${p.id}"><b class="rb r${rar(p.rating)}">${p.rating}</b><div class="pi"><div>${esc(p.name)}</div><small>${p.position}</small></div>${p.last_change?`<span class="dp ${p.last_change>0?"up":"dw"}">${ico(p.last_change>0?"up":"dn")}${Math.abs(p.last_change)}</span>`:""}</div>`;
 async function teamAll(n,k){const pv=NAVB;TMN=n;
  const back=f=>{NAVB=()=>{LMID=null;unwatchMatch();NAVB=pv;teamAll(n,k)};f()};
- if(k==="m"){if(!MT)await patchMT();if(TMN!==n)return;
+ if(k==="m"){const t1=performance.now();modal('<div class="mw tp na">'+LOAD+'</div>');if(!MT)await patchMT();await MINL(t1);if(TMN!==n)return;
   const all=(MT||[]).filter(x=>x.home===n||x.away===n).sort((a,b)=>new Date(a.kickoff)-new Date(b.kickoff));
   const m=modal(`<div class="mw tp"><div class="box"><div class="th2"><h3>${esc(n)} · все матчи (${all.length})</h3></div>${all.map(x=>`<div class="dl">Тур ${x.round} · ${fmtD(x.kickoff)}</div>${mrow(x)}`).join("")||"<small>Матчей нет</small>"}</div></div>`);
   m.querySelectorAll(".mt").forEach(e=>e.onclick=()=>back(()=>lmatch(+e.dataset.id)));return}
- modal('<div class="mw tp na">'+LOAD+'</div>');
+ const t2=performance.now();modal('<div class="mw tp na">'+LOAD+'</div>');
  let pls=[];try{const{data}=await sb.from("players").select("id,name,team,position,rating,last_change,photo").eq("team",n).order("rating",{ascending:false}).limit(100);pls=data||[]}catch(e){}
  if(!pls.length)pls=Object.values(PL).filter(p=>p.team===n).sort((a,b)=>b.rating-a.rating);
- if(TMN!==n)return;pls.forEach(p=>{PL[p.id]=PL[p.id]||p});let pos="ALL";
+ await MINL(t2);if(TMN!==n)return;pls.forEach(p=>{PL[p.id]=PL[p.id]||p});let pos="ALL";
  const draw=()=>{const st=$("#md").scrollTop,L=pos==="ALL"?pls:pls.filter(p=>p.position===pos);
   const m=modal(`<div class="mw tp na"><div class="box"><div class="th2"><h3>${esc(n)} · все игроки (${pls.length})</h3></div><div class="tabs">${["ALL","GK","DEF","MID","FWD"].map(q=>`<button class="rc${q===pos?" on":""}" data-q="${q}">${q==="ALL"?"Все":q}</button>`).join("")}</div>${L.map(plr).join("")||"<small>Нет игроков</small>"}</div></div>`);
   m.scrollTop=st;

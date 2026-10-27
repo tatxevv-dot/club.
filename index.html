@@ -1730,7 +1730,7 @@ function xrender(r,per){const D=r.data,e=esc,top=(D.top||[]).map(i=>`<div style=
  T=D.traits&&D.traits.items||[];let rad="";if(T.length>=3){const n=T.length,R=70,c=100,pt=(k,f)=>{const a=-Math.PI/2+k*2*Math.PI/n;return[(c+Math.cos(a)*R*f).toFixed(1),(c+Math.sin(a)*R*f).toFixed(1)]},poly=f=>T.map((_,k)=>pt(k,f).join(",")).join(" "),val=T.map((t,k)=>pt(k,Math.max(.04,t.v)).join(",")).join(" ");
   rad=`<h4 style="margin:16px 0 0;text-align:center">Особенности игрока</h4><svg viewBox="0 0 200 200" style="width:100%;max-width:320px;display:block;margin:0 auto;overflow:visible"><polygon points="${poly(1)}" fill="none" stroke="currentColor" opacity=".25"/><polygon points="${poly(.5)}" fill="none" stroke="currentColor" opacity=".2" stroke-dasharray="3"/><polygon points="${val}" fill="var(--ac)" fill-opacity=".45" stroke="var(--ac)"/>${T.map((t,k)=>{const[x,y]=pt(k,1.3);return`<text x="${x}" y="${y}" font-size="8" text-anchor="middle" fill="currentColor">${e(XL[t.id]||t.t)} ${Math.round(t.v*100)}%</text>`}).join("")}</svg>`}
  return`<div class="box fw"><h3>Статистика сезона${r.league?" · "+e(r.league)+" "+e(r.season||""):""}</h3><div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:8px 0 14px">${top}</div>${info}<div style="display:flex;gap:6px;justify-content:center;margin:14px 0 0">${[["Всего",0],["На 90",1]].map(([n,k])=>`<button data-xp="${k}" style="padding:6px 16px;border-radius:4px;border:1px solid var(--ln2);color:inherit;font-weight:${k===per?700:400};background:${k===per?"rgba(128,128,128,.28)":"none"}">${n}</button>`).join("")}</div>${gr}${rad}<small style="display:block;text-align:center;margin-top:10px;opacity:.6">Цвет полосы — процентиль среди игроков схожей позиции</small></div>`}
-async function xload(p){const h=$("#xps");if(!h)return;const t0=performance.now();h.innerHTML='<div class="box">'+LOAD+'</div>';try{const q=await sb.from("player_season_stats").select("*").eq("player_id",p.id).limit(1),r=q.data&&q.data[0];await MINL(t0);if(!$("#xps"))return;if(!r){$("#xps").innerHTML='<div class="box"><small>Статистика сезона ещё загружается</small></div>';return}const draw=per=>{$("#xps").innerHTML=xrender(r,per);$("#xps").querySelectorAll("[data-xp]").forEach(b=>b.onclick=()=>draw(+b.dataset.xp))};draw(0)}catch(x){}}
+async function xload(p){const h=$("#xps");if(!h)return;const t0=performance.now();h.innerHTML='<div class="box">'+LOAD+'</div>';try{const q=await sb.from("player_season_stats").select("*").eq("player_id",p.id).limit(1),r=q.data&&q.data[0];if(!$("#xps"))return;if(!r){$("#xps").innerHTML='<div class="box"><small>Статистика сезона ещё загружается</small></div>';return}const draw=per=>{$("#xps").innerHTML=xrender(r,per);$("#xps").querySelectorAll("[data-xp]").forEach(b=>b.onclick=()=>draw(+b.dataset.xp))};draw(0)}catch(x){}}
 async function pinfo(id,name){modal('<div class="mw na">'+LOAD+'</div>');
  let q=sb.from("players").select("*");q=id?q.eq("id",id):q.eq("name",name);
  const{data}=await q.limit(1),p=data&&data[0]||PL[id];
@@ -2406,5 +2406,26 @@ new MutationObserver(ms=>ms.forEach(m=>m.addedNodes.forEach(tag))).observe(docum
 Object.defineProperty(md,"scrollTop",{configurable:true,get(){return document.body.classList.contains("mo")?(window.scrollY||0):d.get.call(this)},set(v){if(document.body.classList.contains("mo"))scrollTo(0,v);else d.set.call(this,v)}});
 new MutationObserver(()=>{const on=md.style.display==="flex",has=document.body.classList.contains("mo");
 if(on&&!has){y0=window.scrollY||0;document.body.classList.add("mo");scrollTo(0,0)}else if(!on&&has){document.body.classList.remove("mo");scrollTo(0,y0)}}).observe(md,{attributes:true,attributeFilter:["style"]})})();
+</script>
+<style>
+.rx{opacity:0;transform:translateY(18px)}
+.rx.in{opacity:1;transform:none;transition:opacity .5s ease var(--d,0ms),transform .55s cubic-bezier(.2,.8,.2,1) var(--d,0ms)}
+.rx.ra{opacity:1;transform:none;animation:aUp .5s cubic-bezier(.2,.8,.2,1) var(--d,0ms) both}
+.rx:not(.in):not(.ra) .xb{animation-play-state:paused}
+@media(prefers-reduced-motion:reduce){.rx{opacity:1;transform:none}.rx.in,.rx.ra{transition:none;animation:none}}
+</style>
+<script>
+(()=>{if(!("IntersectionObserver"in window))return;
+const SEL='.box,.st,.pl,.fr,.fms,.stat,.tsl,.sb,.rr,.mrow,tbody tr,[style*="64px 38%"]';
+const seen=new WeakSet();let batch=0,bt=0;
+const io=new IntersectionObserver(es=>{let k=0;es.filter(e=>e.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top).forEach(e=>{e.target.style.setProperty("--d",Math.min(k++,6)*55+"ms");e.target.classList.add("in");io.unobserve(e.target)})},{threshold:.06,rootMargin:"0px 0px -5% 0px"});
+let ink=0,it=0;
+function tag(n){if(!(n instanceof Element))return;const l=(n.matches(SEL)?[n]:[]).concat([...n.querySelectorAll(SEL)]);
+for(const el of l){if(seen.has(el)||el.closest(".cd,#bs,.bl"))continue;seen.add(el);if(el.classList.contains("rv")||el.classList.contains("rvl"))continue;
+const r=el.getBoundingClientRect();el.classList.add("rx");
+if(r.top<innerHeight*.95&&r.bottom>0){el.style.setProperty("--d",Math.min(ink++,8)*45+"ms");el.classList.add("ra");clearTimeout(it);it=setTimeout(()=>ink=0,120)}
+else io.observe(el)}}
+new MutationObserver(ms=>ms.forEach(m=>m.addedNodes.forEach(tag))).observe(document.body,{childList:true,subtree:true});
+tag(document.body)})();
 </script>
 </body></html>

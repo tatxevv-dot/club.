@@ -975,7 +975,7 @@ const MORE=[["lg","Лиги",'<path d="M8 4h8v5a4 4 0 01-8 0zM8 6H4v1a4 4 0 004 
 const setTitle=()=>{const b=document.querySelector('#nv button[data-t="'+tab+'"]'),mo=MORE.find(x=>x[0]===tab),t=$("#pt");if(t)t.textContent=b?b.textContent:mo?mo[1]:""};
 const CN='<i class="cn"></i>',TN=["БРОНЗА","СЕРЕБРО","ЗОЛОТО"];let LT,CV=0;
 document.documentElement.style.setProperty("--zz",(()=>{let t=[],b=[];for(let i=0;i<=10;i++){t.push(i*10+"% "+(i%2?0:3)+"%");b.push(i*10+"% "+(i%2?100:97)+"%")}return"polygon("+t.concat(b.reverse()).join(",")+")"})());
-const packEl=(t,x="")=>{pkSync();const n=(PKS[t]||["","" ])[0],r=(n.match(/(\d+)\+/)||[0,""])[1];return`<div class="pack t${t} L${LGI[pkl()]||0} ${x}"><svg class="pm" viewBox="0 0 100 140" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${PKM[(LGI[pkl()]||0)+""+t]||""}</svg><i></i><small>CLUB</small><em>${r}+</em><b>10 ИГРОКОВ</b></div>`};
+const packEl=(t,x="")=>{pkSync();const n=(PKS[t]||["","" ])[0],r=(n.match(/(\d+)\+/)||[0,""])[1];return`<div class="pack t${t} L${LGI[pkl()]||0} ${x}"><svg class="pm" viewBox="0 0 100 140" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${PKM[(LGI[pkl()]||0)+""+t]||""}</svg><i></i><small>CLUB</small><em>10</em><b>ИГРОКОВ</b></div>`};
 const coins=n=>{const e=$("#co"),a=CV,t=performance.now();CV=n;const f=x=>{const k=Math.min(1,(x-t)/600);e.innerHTML=CN+Math.round(a+(n-a)*(1-Math.pow(1-k,3))).toLocaleString("ru-RU")+'<span class="vh"> монет</span>';k<1&&requestAnimationFrame(f)};requestAnimationFrame(f)};
 const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const SL=["GK","DEF","DEF","DEF","DEF","MID","MID","MID","FWD","FWD","FWD"];

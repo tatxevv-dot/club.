@@ -2616,5 +2616,7 @@ html body .cd:not(.czt .cd):not(.lsc .cd):not(#lfan .cd):not(.fan .cd):not(.cres
 html body .cd:not(.bc) .n{border-top:0!important;border-image:none!important;padding-top:0!important}
 html body .cd:not(.bc) .o small[style*="--ok"]{color:#14a44d!important;opacity:1!important;text-shadow:none!important}
 html body .cd:not(.bc) .o small[style*="--bad"]{color:#e0342b!important;opacity:1!important;text-shadow:none!important}
+html body .cd:not(.bc) .n{display:block!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;-webkit-line-clamp:unset!important;-webkit-box-orient:initial!important;line-height:1.25!important}
 </style>
+<script>(()=>{let q=0;const fit=()=>{q=0;document.querySelectorAll(".cd:not(.bc) .n:not([data-f])").forEach(n=>{if(!n.clientWidth)return;n.dataset.f=1;let f=parseFloat(getComputedStyle(n).fontSize)||11;while(n.scrollWidth>n.clientWidth+.5&&f>7){f-=.5;n.style.setProperty("font-size",f+"px","important")}})};const sch=()=>{if(!q)q=requestAnimationFrame(fit)};new MutationObserver(sch).observe(document.body,{childList:true,subtree:true});addEventListener("resize",()=>{document.querySelectorAll(".cd .n[data-f]").forEach(n=>{n.removeAttribute("data-f");n.style.removeProperty("font-size")});sch()});sch()})();</script>
 </body></html>

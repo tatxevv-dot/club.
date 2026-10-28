@@ -2560,13 +2560,13 @@ function calView(){const m=$("#m");if(!CALD){CALD=new Date()}document.body.class
 const base=new Date();base.setHours(0,0,0,0);const days=[];for(let i=-4;i<=14;i++){const d=new Date(base.getTime()+i*864e5);days.push(d)}
 if(!days.some(d=>cdKey(d)===cdKey(CALD)))days.push(new Date(CALD.getFullYear(),CALD.getMonth(),CALD.getDate()));
 const wd=d=>d.toLocaleDateString("ru-RU",{weekday:"short"}),sel=cdKey(CALD);
-m.innerHTML=`<div class="fxw"><div id="fxl"><div class="box"><h3 style="margin:0 0 8px">Календарь</h3><div class="cdw" id="cdw">${days.map(d=>`<button class="cdd${cdKey(d)===sel?" on":""}" data-d="${cdKey(d)}"><small>${wd(d)}</small><b>${d.getDate()}</b><small>${d.toLocaleDateString("ru-RU",{month:"short"})}</small></button>`).join("")}</div><input type="date" id="cdi" value="${sel}" style="margin-top:6px"></div><div id="cdl">${LOAD}</div></div>${NWS}</div>`;
+m.innerHTML=`<div class="fxw"><div id="fxl"><div class="box"><h3 style="margin:0 0 8px">Календарь</h3><div class="cdw" id="cdw">${days.map(d=>`<button class="cdd${cdKey(d)===sel?" on":""}" data-d="${cdKey(d)}"><small>${wd(d)}</small><b>${d.getDate()}</b><small>${d.toLocaleDateString("ru-RU",{month:"short"})}</small></button>`).join("")}</div></div><div id="cdl">${LOAD}</div></div>${NWS}</div>`;
 const on=$("#cdw .on");if(on)on.scrollIntoView({inline:"center",block:"nearest"});
 const go=k=>{const[y,mo,da]=k.split("-").map(Number);CALD=new Date(y,mo-1,da);calView()};
-m.querySelectorAll(".cdd").forEach(b=>b.onclick=()=>go(b.dataset.d));$("#cdi").onchange=e=>e.target.value&&go(e.target.value);
+m.querySelectorAll(".cdd").forEach(b=>b.onclick=()=>go(b.dataset.d));
 const d0=CALD;Promise.all([calLogos(),calDay(d0)]).then(([,rs])=>{if(tab!=="fx"||CALD!==d0||!$("#cdl"))return;const e=$("#cdl");
 if(!rs.length){e.innerHTML='<div class="box"><small>В этот день матчей нет</small></div>';return}
-e.innerHTML=rs.map(({c,m:ms})=>`<div class="box cg" data-s="${c.slug}"><button class="cch" type="button"><b>${esc(c.name)}</b><i>${ms.length}</i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg></button><div class="cgb">${ms.map(x=>mrow(x).replace('class="mt"','class="mt" data-lg="'+c.slug+'"')).join("")}</div></div>`).join("");
+e.innerHTML=rs.map(({c,m:ms})=>`<div class="box cg" data-s="${c.slug}"><button class="cch" type="button"><img class="clg" src="${esc(c.logo||c.logo_url||('https://crests.football-data.org/'+({epl:'PL',laliga:'PD',seriea:'SA',bundesliga:'BL1',ligue1:'FL1',ucl:'CL'}[c.slug]||c.slug)+'.png'))}" alt="" onerror="this.style.display='none'"><b>${esc(c.name)}</b><i>${ms.length}</i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg></button><div class="cgb">${ms.map(x=>mrow(x).replace('class="mt"','class="mt" data-lg="'+c.slug+'"')).join("")}</div></div>`).join("");
 e.querySelectorAll(".cch").forEach(b=>b.onclick=()=>b.parentElement.classList.toggle("cl"));
 e.querySelectorAll(".mt").forEach(r=>r.onclick=()=>{const id=+r.dataset.id,lg=r.dataset.lg;if(lg===CLG){FXM=id;fixtures();return}const c=COMPS.find(x=>x.slug===lg);modal(`<div class="box"><h3>Открыть матч</h3><small>Матч из лиги «${esc(c.name)}». Переключим лигу, чтобы открыть его.</small><div style="display:grid;gap:8px;margin-top:12px"><button class="b" id="cgo">Открыть</button><button class="b g" id="cno">Отмена</button></div></div>`);$("#cno").onclick=closeM;$("#cgo").onclick=()=>{try{localStorage.setItem("club_lg",lg);sessionStorage.setItem("club_pm",id)}catch(x){}location.reload()}});
 }).catch(()=>{const e=$("#cdl");if(e)e.innerHTML='<div class="box"><small>Не удалось загрузить матчи</small></div>'});news()}
@@ -2597,4 +2597,23 @@ document.addEventListener("click",function(e){var b=e.target.closest&&e.target.c
 var q=0,sch=function(){if(q)return;q=requestAnimationFrame(function(){q=0;scan()})};
 new MutationObserver(sch).observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:["class"]});addEventListener("resize",sch);document.fonts&&document.fonts.ready&&document.fonts.ready.then(sch);sch();
 })()</script>
+<style id="glassfix">
+.clg{width:26px;height:26px;object-fit:contain;flex:none}
+html body header,html body #nv,
+html[data-theme=light] body header,html[data-theme=light] body #nv{background:rgba(var(--bk),.45)!important;-webkit-backdrop-filter:blur(28px) saturate(180%)!important;backdrop-filter:blur(28px) saturate(180%)!important;border:0!important;border-radius:0!important;box-shadow:none!important;left:0!important;right:0!important;width:100%!important;max-width:none!important;transform:none!important}
+html[data-theme=light] body header,html[data-theme=light] body #nv{background:rgba(244,244,246,.55)!important}
+html body #nv{border-bottom:1px solid rgba(128,128,128,.18)!important}
+</style>
+<style id="cardfix">
+html body .cd:not(.sk):not(.czt .cd):not(.fan .cd):not(#lfan .cd):not(.ctv .cd):not(.cres .cd):not(.lsc .cd){display:block!important;padding:0!important;border-radius:12px!important;overflow:hidden;box-shadow:0 5px 12px -6px rgba(0,0,0,.4)!important}
+html body .cd:not(.sk):not(.czt .cd):not(.fan .cd):not(#lfan .cd):not(.ctv .cd):not(.cres .cd):not(.lsc .cd) .ph{position:absolute!important;left:auto!important;right:3%!important;top:11%!important;width:66%!important;height:auto!important;aspect-ratio:1/1!important;border-radius:50%!important;object-fit:cover!important;object-position:50% 14%!important}
+html body .cd:not(.sk):not(.czt .cd):not(.fan .cd):not(#lfan .cd):not(.ctv .cd):not(.cres .cd):not(.lsc .cd) .o{position:absolute!important;top:6px;left:6px;z-index:3;margin:0!important;font-size:17px!important;line-height:1!important;font-weight:800;letter-spacing:-.04em;text-shadow:none!important}
+html body .cd:not(.sk):not(.czt .cd):not(.fan .cd):not(#lfan .cd):not(.ctv .cd):not(.cres .cd):not(.lsc .cd) .o small{display:block!important;margin-top:2px!important;font-size:8.5px!important;letter-spacing:0}
+html body .cd:not(.sk):not(.czt .cd):not(.fan .cd):not(#lfan .cd):not(.ctv .cd):not(.cres .cd):not(.lsc .cd) .c{position:absolute!important;left:5px;top:41%;z-index:3;width:24px;margin:0!important;display:flex!important;flex-direction:column!important;align-items:center!important;gap:3px!important;overflow:visible;text-shadow:none!important}
+html body .cd:not(.sk):not(.czt .cd):not(.fan .cd):not(#lfan .cd):not(.ctv .cd):not(.cres .cd):not(.lsc .cd) .c b{font-size:8px!important;font-weight:800;letter-spacing:.02em;line-height:1}
+html body .cd:not(.sk):not(.czt .cd):not(.fan .cd):not(#lfan .cd):not(.ctv .cd):not(.cres .cd):not(.lsc .cd) .c .tlg.s,html body .cd:not(.sk):not(.czt .cd):not(.fan .cd):not(#lfan .cd):not(.ctv .cd):not(.cres .cd):not(.lsc .cd) .c .tb{width:15px!important;height:15px!important}
+html body .cd:not(.sk):not(.czt .cd):not(.fan .cd):not(#lfan .cd):not(.ctv .cd):not(.cres .cd):not(.lsc .cd) .n{position:absolute!important;left:4px;right:4px;bottom:6px;margin:0!important;display:block!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;-webkit-line-clamp:unset!important;text-align:center;font-size:9.5px!important;font-weight:700;letter-spacing:-.01em;line-height:1.25!important;padding-top:3px!important;border-top:1px solid rgba(128,128,128,.3)!important;text-shadow:none!important}
+html body .cd:not(.sk):not(.czt .cd):not(.fan .cd):not(#lfan .cd):not(.ctv .cd):not(.cres .cd):not(.lsc .cd) .qt{top:3px!important;right:4px!important;left:auto!important;padding:2px 4px;border-radius:6px;background:rgba(0,0,0,.55);color:#fff!important;font-size:8px!important;line-height:1;text-shadow:none!important}
+html body .cd:not(.sk):not(.czt .cd):not(.fan .cd):not(#lfan .cd):not(.ctv .cd):not(.cres .cd):not(.lsc .cd).sel .qt{right:4px!important}
+</style>
 </body></html>

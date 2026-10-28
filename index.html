@@ -879,6 +879,7 @@ html[data-theme=light] body input,html[data-theme=light] body select{background:
 html[data-theme=light] body .modal,html[data-theme=light] body #au{background:rgba(244,244,246,.98)}
 html[data-theme=light] body .ac{background:#fff;border-radius:24px}
 html[data-theme=light] body #co,html[data-theme=light] body #hp,html[data-theme=light] body #hl{border-radius:999px;background:#fff;border:0;color:#111}
+html,body{max-width:100%;overflow-x:hidden}html[data-theme=light] body #nv{box-sizing:border-box}@media(max-width:899px){html[data-theme=light] body #nv{max-width:calc(100% - 20px)}}
 html[data-theme=light] body .ok,html[data-theme=light] body .pos{color:#34C759}
 </style>
 </head><body><noscript><style>#bs{display:none}</style><main style="position:static;padding:32px 20px;max-width:560px;margin:0 auto"><h1>Club</h1><p>Fantasy-футбол по топ-5 лигам и Лиге чемпионов: собери клуб из реальных игроков, открывай паки и соревнуйся с друзьями в лигах.</p><p>Для игры нужен включённый JavaScript.</p></main></noscript><div id="bs"><div class="bl" role="status" aria-label="Загрузка"><i class="mk"></i></div></div><script>setTimeout(function(){var e=document.getElementById("bs");e&&e.remove()},12000)</script>
@@ -2516,4 +2517,13 @@ const XSCH=["public","lg_laliga","lg_seriea","lg_bundesliga","lg_ligue1","lg_ucl
 async function xpl(ids){try{await calLogos()}catch(e){}const g={};ids.filter(i=>i>0&&!PL[i]).forEach(i=>{const x=Math.floor(i/1e9);(g[x]=g[x]||[]).push(i%1e9)});
 await Promise.all(Object.keys(g).map(x=>sb0.schema(XSCH[x]).from("players").select("id,name,team,position,rating,last_change,photo,updated_at").in("id",g[x]).then(r=>(r.data||[]).forEach(p=>{const c=x*1e9+p.id;PL[c]=Object.assign({},p,{id:c,_lg:+x})}),()=>{})))}
 </script>
+<script id="slide">(function(){
+var order=function(){return [].map.call(document.querySelectorAll("#nv button[data-t]"),function(b){return b.dataset.t})};
+var slide=function(el,d){if(!el||!el.animate||!d)return;try{el.animate([{transform:"translateX("+d*44+"px)",opacity:0},{transform:"none",opacity:1}],{duration:300,easing:"cubic-bezier(.2,.8,.2,1)"})}catch(e){}};
+var PT=null;
+if(typeof view==="function"){var ov=view;view=function(){var r=ov.apply(this,arguments);try{if(PT!==null&&tab!==PT){var o=order(),d=o.indexOf(tab)>o.indexOf(PT)?1:-1;slide(document.getElementById("m"),d)}PT=tab}catch(e){}return r}}
+var pend=null;
+document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest(".tabs button,.rc,.dtb button");if(!b||!b.parentElement)return;var sib=[].slice.call(b.parentElement.children),i=sib.indexOf(b),cur=sib.findIndex(function(x){return x.classList.contains("on")});if(cur<0||cur===i)return;pend={d:i>cur?1:-1,c:b.parentElement.parentElement||b.parentElement,t:Date.now()}},true);
+var q=0;new MutationObserver(function(){if(!pend||q)return;q=requestAnimationFrame(function(){q=0;if(!pend)return;if(Date.now()-pend.t>700){pend=null;return}var c=pend.c,d=pend.d;pend=null;if(!c.isConnected)c=document.getElementById("m");[].forEach.call(c.children,function(k){if(!k.classList.contains("tabs")&&!k.querySelector(".tabs")&&k.tagName!=="STYLE")slide(k,d)})})}).observe(document.body,{childList:true,subtree:true});
+})()</script>
 </body></html>

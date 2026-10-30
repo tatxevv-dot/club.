@@ -9,17 +9,17 @@
 .tmw .tmh{display:flex;justify-content:space-between;align-items:center;gap:8px;font-weight:700;font-size:.92em;margin:8px 2px 0}
 .tmw .tmh span{display:flex;align-items:center;gap:7px;min-width:0}
 .tmw .tmh i{width:10px;height:10px;border-radius:50%;flex:none}
-.tmw .tg{margin:12px 0;padding:12px 14px 6px;border-radius:18px;background:rgba(128,128,128,.08);border:1px solid rgba(128,128,128,.12)}
-.tmw .tg h4{margin:0 0 6px;text-align:left;font-size:.74em;font-weight:800;letter-spacing:.09em;text-transform:uppercase;opacity:.55}
-.tmw .tr{display:grid;grid-template-columns:minmax(52px,auto) 1fr minmax(52px,auto);align-items:center;column-gap:8px;padding:8px 0 10px}
-.tmw .tr+.tr{border-top:1px solid rgba(128,128,128,.1)}
-.tmw .tl{text-align:center;font-size:.84em;opacity:.7;line-height:1.25}
-.tmw .tv{font-variant-numeric:tabular-nums;font-size:1.02em;font-weight:500;opacity:.8;white-space:nowrap}
-.tmw .tv.l{text-align:left}.tmw .tv.r{text-align:right}
-.tmw .tv.w{font-weight:800;opacity:1}
-.tmw .tb{grid-column:1/-1;display:flex;gap:3px;height:6px;margin-top:7px}
-.tmw .tb i{display:block;height:100%;min-width:0;border-radius:99px;transition:width .5s;animation:tmG .7s cubic-bezier(.2,.8,.2,1) both}
-.tmw .tb i:first-child{transform-origin:left}.tmw .tb i:last-child{transform-origin:right}
+.tmw .xgrp{margin:12px 0;padding:12px 14px 6px;border-radius:18px;background:rgba(128,128,128,.08);border:1px solid rgba(128,128,128,.12)}
+.tmw .xgrp h4{margin:0 0 6px;text-align:left;font-size:.74em;font-weight:800;letter-spacing:.09em;text-transform:uppercase;opacity:.55}
+.tmw .xrow{display:grid;grid-template-columns:minmax(52px,auto) 1fr minmax(52px,auto);align-items:center;column-gap:8px;padding:8px 0 10px}
+.tmw .xrow+.tr{border-top:1px solid rgba(128,128,128,.1)}
+.tmw .xlab{text-align:center;font-size:.84em;opacity:.7;line-height:1.25}
+.tmw .xval{font-variant-numeric:tabular-nums;font-size:1.02em;font-weight:500;opacity:.8;white-space:nowrap}
+.tmw .xval.l{text-align:left}.tmw .xval.r{text-align:right}
+.tmw .xval.w{font-weight:800;opacity:1}
+.tmw .xbar{grid-column:1/-1;display:flex;gap:3px;height:6px;margin-top:7px}
+.tmw .xbar i{display:block;height:100%;min-width:0;border-radius:99px;transition:width .5s;animation:tmG .7s cubic-bezier(.2,.8,.2,1) both}
+.tmw .xbar i:first-child{transform-origin:left}.tmw .xbar i:last-child{transform-origin:right}
 @keyframes tmG{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 </style><script>(function(){var r=document.documentElement,f=function(){if(r.getAttribute("data-theme")!=="light")r.setAttribute("data-theme","light")};f();try{new MutationObserver(f).observe(r,{attributes:true,attributeFilter:["data-theme"]})}catch(e){}})()</script>
 <meta name="viewport" content="width=device-width, initial-scale=0.75, minimum-scale=0.75, maximum-scale=0.75, user-scalable=no">
@@ -1446,11 +1446,11 @@ function tmVal(v){return v==null?"-":(typeof v==="number"&&!Number.isInteger(v)?
 function tmNum(v){const n=parseFloat(String(v));return isNaN(n)?0:n}
 function tmGrp(P,CL){return((P&&P.stats)||[]).map(g=>{const rows=(g.stats||[]).filter(x=>x&&x.stats&&x.stats.length>1&&x.type!=="title").map(x=>{const a=x.stats[0],b=x.stats[1],A=tmNum(a),B=tmNum(b),pc=x.key==="BallPossesion"||/Ball possession/i.test(x.title||"");
  const fmt=v=>String(tmVal(v))+(pc?"%":""),tot=A+B,pa=tot>0?A/tot*100:50,pb=tot>0?100-pa:50;
- return`<div class="tr"><span class="tv l${A>B?" w":""}">${fmt(a)}</span><span class="tl">${esc(tru(x.title||x.key))}</span><span class="tv r${B>A?" w":""}">${fmt(b)}</span><div class="tb"><i style="width:${pa}%;background:${tot>0?CL[0]:"rgba(128,128,128,.35)"};opacity:${A>=B?1:.45}"></i><i style="width:${pb}%;background:${tot>0?CL[1]:"rgba(128,128,128,.35)"};opacity:${B>=A?1:.45}"></i></div></div>`});
+ return`<div class="xrow"><span class="xval l${A>B?" w":""}">${fmt(a)}</span><span class="xlab">${esc(tru(x.title||x.key))}</span><span class="xval r${B>A?" w":""}">${fmt(b)}</span><div class="xbar"><i style="width:${pa}%;background:${tot>0?CL[0]:"rgba(128,128,128,.35)"};opacity:${A>=B?1:.45}"></i><i style="width:${pb}%;background:${tot>0?CL[1]:"rgba(128,128,128,.35)"};opacity:${B>=A?1:.45}"></i></div></div>`});
  return rows.length?[g.title,rows]:null}).filter(Boolean)}
 function tmSw(b,k){const w=b.closest(".tmw");w.querySelectorAll("[data-pp]").forEach(e=>e.style.display=e.dataset.pp===k?"":"none");w.querySelectorAll(".tpb").forEach(e=>e.classList.toggle("on",e.dataset.k===k))}
 function tmFull(T,x){const CL=tmCol(x),P=T&&T.stats;if(!P)return"";const K=[["All","Все"],["FirstHalf","1-й тайм"],["SecondHalf","2-й тайм"]].filter(([k])=>P[k]&&P[k].stats);if(!K.length)return"";
- const body=K.map(([k],i)=>`<div data-pp="${k}"${i?' style="display:none"':""}>${tmGrp(P[k],CL).map(g=>`<div class="tg"><h4>${esc(tru(g[0]))}</h4>${g[1].join("")}</div>`).join("")}</div>`).join("");
+ const body=K.map(([k],i)=>`<div data-pp="${k}"${i?' style="display:none"':""}>${tmGrp(P[k],CL).map(g=>`<div class="xgrp"><h4>${esc(tru(g[0]))}</h4>${g[1].join("")}</div>`).join("")}</div>`).join("");
  return`<div class="box fmb tmw"><h3 style="text-align:center">Статистика матча</h3><div class="tmh"><span><i style="background:${CL[0]}"></i>${esc(x&&x.home||"")}</span><span>${esc(x&&x.away||"")}<i style="background:${CL[1]}"></i></span></div><div class="tseg">${K.map(([k,n],i)=>`<button class="tpb${i?"":" on"}" data-k="${k}" onclick="tmSw(this,'${k}')">${n}</button>`).join("")}</div>${body}</div>`}
 function tmTop(T,x){const CL=tmCol(x),P=T&&T.stats&&T.stats.All,g=tmGrp(P,CL).find(q=>q[0]==="Top stats");return g?`<div class="box"><h3 style="text-align:center">Главное</h3>${g[1].join("")}</div>`:""}
 function mtStand(mode){const T={};(MT||[]).forEach(m=>{if(!(m.finished||m.ft)||m.home_goals==null||m.away_goals==null)return;[[m.home,m.home_goals,m.away_goals,"home"],[m.away,m.away_goals,m.home_goals,"away"]].forEach(([t,f,a,sd])=>{if(mode!=="all"&&mode!==sd)return;const s=T[t]??={n:t,p:0,w:0,d:0,l:0,gf:0,ga:0,pts:0};s.p++;s.gf+=f;s.ga+=a;if(f>a){s.w++;s.pts+=3}else if(f===a){s.d++;s.pts++}else s.l++})});return Object.values(T).sort((a,b)=>b.pts-a.pts||(b.gf-b.ga)-(a.gf-a.ga)||b.gf-a.gf)}

@@ -2,6 +2,25 @@
 <html lang="ru" data-theme="light" style="color-scheme:light;background:#eceef1"><head><meta charset="utf-8"><style>#th{display:none!important}.shm{width:100%;max-width:340px;display:block;margin:10px auto 4px}.shl{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;font-size:12px;color:var(--mu)}.shl i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:-1px}.shl i.blk{background:none!important;border:1px solid var(--mu);box-sizing:border-box}.shl i{flex:none;min-width:9px;max-height:9px}
 .fmb{padding:18px 18px 8px}.fmh{display:grid;grid-template-columns:1fr;max-width:200px;margin-left:auto!important;margin-right:auto!important;gap:8px;margin:14px 0 4px}.fmt{background:rgba(var(--wh),.05);border:1px solid var(--ln);border-radius:12px;padding:10px 4px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:72px}.fmt small{font-size:11px;color:var(--mu)}.fmt>b:not(.rt){font-size:19px;font-variant-numeric:tabular-nums}
 .fms h4{font:800 21px/1.2 var(--f);margin:28px 0 4px;letter-spacing:-.01em}.fr{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:11px 0;border-bottom:1px solid var(--ln);flex-wrap:wrap}.fr:last-child{border-bottom:0}.fr span{color:var(--tx2);font-size:15px}.fr b{font-size:15px;font-weight:600;font-variant-numeric:tabular-nums}.fr b em{font-style:normal;color:var(--mu);font-weight:500}.fr .bar{flex-basis:100%;height:4px;border-radius:2px;background:rgba(var(--wh),.1);overflow:hidden;margin-top:-1px}.fr .bar u{display:block;height:100%;background:var(--ok);border-radius:2px}
+
+.tmw .tseg{display:flex;gap:4px;padding:4px;border-radius:14px;background:rgba(128,128,128,.14);margin:10px auto 6px;max-width:420px}
+.tmw .tpb{flex:1;border:0;background:none;color:inherit;font:inherit;font-weight:500;font-size:.9em;padding:8px 6px;border-radius:10px;opacity:.65;cursor:pointer;white-space:nowrap;transition:background .2s,opacity .2s,box-shadow .2s}
+.tmw .tpb.on{background:var(--card,#fff);color:inherit;opacity:1;font-weight:700;box-shadow:0 1px 4px rgba(0,0,0,.18)}
+.tmw .tmh{display:flex;justify-content:space-between;align-items:center;gap:8px;font-weight:700;font-size:.92em;margin:8px 2px 0}
+.tmw .tmh span{display:flex;align-items:center;gap:7px;min-width:0}
+.tmw .tmh i{width:10px;height:10px;border-radius:50%;flex:none}
+.tmw .tg{margin:12px 0;padding:12px 14px 6px;border-radius:18px;background:rgba(128,128,128,.08);border:1px solid rgba(128,128,128,.12)}
+.tmw .tg h4{margin:0 0 6px;text-align:left;font-size:.74em;font-weight:800;letter-spacing:.09em;text-transform:uppercase;opacity:.55}
+.tmw .tr{display:grid;grid-template-columns:minmax(52px,auto) 1fr minmax(52px,auto);align-items:center;column-gap:8px;padding:8px 0 10px}
+.tmw .tr+.tr{border-top:1px solid rgba(128,128,128,.1)}
+.tmw .tl{text-align:center;font-size:.84em;opacity:.7;line-height:1.25}
+.tmw .tv{font-variant-numeric:tabular-nums;font-size:1.02em;font-weight:500;opacity:.8;white-space:nowrap}
+.tmw .tv.l{text-align:left}.tmw .tv.r{text-align:right}
+.tmw .tv.w{font-weight:800;opacity:1}
+.tmw .tb{grid-column:1/-1;display:flex;gap:3px;height:6px;margin-top:7px}
+.tmw .tb i{display:block;height:100%;min-width:0;border-radius:99px;transition:width .5s;animation:tmG .7s cubic-bezier(.2,.8,.2,1) both}
+.tmw .tb i:first-child{transform-origin:left}.tmw .tb i:last-child{transform-origin:right}
+@keyframes tmG{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 </style><script>(function(){var r=document.documentElement,f=function(){if(r.getAttribute("data-theme")!=="light")r.setAttribute("data-theme","light")};f();try{new MutationObserver(f).observe(r,{attributes:true,attributeFilter:["data-theme"]})}catch(e){}})()</script>
 <meta name="viewport" content="width=device-width, initial-scale=0.75, minimum-scale=0.75, maximum-scale=0.75, user-scalable=no">
 <title>Club | Fantasy-футбол по топ-5 лигам и Лиге чемпионов</title>
@@ -1426,14 +1445,13 @@ const tru=k=>TRU[k]||k;
 function tmVal(v){return v==null?"-":(typeof v==="number"&&!Number.isInteger(v)?v.toFixed(2):esc(String(v).replace(/ km$/," км")))}
 function tmNum(v){const n=parseFloat(String(v));return isNaN(n)?0:n}
 function tmGrp(P,CL){return((P&&P.stats)||[]).map(g=>{const rows=(g.stats||[]).filter(x=>x&&x.stats&&x.stats.length>1&&x.type!=="title").map(x=>{const a=x.stats[0],b=x.stats[1],A=tmNum(a),B=tmNum(b),pc=x.key==="BallPossesion"||/Ball possession/i.test(x.title||"");
- const pill=(v,w,c)=>{const t=String(tmVal(v))+(pc?"%":""),lg=t.replace(/<[^>]*>/g,"").length>6;return`<b style="display:inline-block;white-space:nowrap;min-width:54px;text-align:center;padding:4px ${lg?7:10}px;border-radius:4px;font-size:${lg?".8em":"1em"};${w?"background:"+c+";color:"+tct(c):""}">${t}</b>`};
- return`<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr) minmax(0,1fr);align-items:center;gap:4px;padding:6px 0;text-align:center"><span style="text-align:left">${pill(a,A>B,CL[0])}</span><span>${esc(tru(x.title||x.key))}</span><span style="text-align:right">${pill(b,B>A,CL[1])}</span></div>`});
+ const fmt=v=>String(tmVal(v))+(pc?"%":""),tot=A+B,pa=tot>0?A/tot*100:50,pb=tot>0?100-pa:50;
+ return`<div class="tr"><span class="tv l${A>B?" w":""}">${fmt(a)}</span><span class="tl">${esc(tru(x.title||x.key))}</span><span class="tv r${B>A?" w":""}">${fmt(b)}</span><div class="tb"><i style="width:${pa}%;background:${tot>0?CL[0]:"rgba(128,128,128,.35)"};opacity:${A>=B?1:.45}"></i><i style="width:${pb}%;background:${tot>0?CL[1]:"rgba(128,128,128,.35)"};opacity:${B>=A?1:.45}"></i></div></div>`});
  return rows.length?[g.title,rows]:null}).filter(Boolean)}
-function tmSw(b,k){const w=b.closest(".tmw");w.querySelectorAll("[data-pp]").forEach(e=>e.style.display=e.dataset.pp===k?"":"none");w.querySelectorAll(".tpb").forEach(e=>{const on=e.dataset.k===k;e.style.fontWeight=on?"700":"400";e.style.background=on?"rgba(128,128,128,.28)":"none"})}
+function tmSw(b,k){const w=b.closest(".tmw");w.querySelectorAll("[data-pp]").forEach(e=>e.style.display=e.dataset.pp===k?"":"none");w.querySelectorAll(".tpb").forEach(e=>e.classList.toggle("on",e.dataset.k===k))}
 function tmFull(T,x){const CL=tmCol(x),P=T&&T.stats;if(!P)return"";const K=[["All","Все"],["FirstHalf","1-й тайм"],["SecondHalf","2-й тайм"]].filter(([k])=>P[k]&&P[k].stats);if(!K.length)return"";
- const btn="padding:6px 14px;border-radius:4px;border:1px solid var(--ln2);color:inherit;white-space:nowrap;flex:none";
- const body=K.map(([k],i)=>`<div data-pp="${k}"${i?' style="display:none"':""}>${tmGrp(P[k],CL).map(g=>`<div style="margin:14px 0 4px"><h4 style="text-align:center;margin:0 0 4px">${esc(tru(g[0]))}</h4>${g[1].join("")}</div>`).join("")}</div>`).join("");
- return`<div class="box fmb tmw"><h3 style="text-align:center">Статистика матча</h3><div style="display:flex;gap:6px;justify-content:center;margin:8px 0">${K.map(([k,n],i)=>`<button class="tpb" data-k="${k}" onclick="tmSw(this,'${k}')" style="${btn};font-weight:${i?400:700};background:${i?"none":"rgba(128,128,128,.28)"}">${n}</button>`).join("")}</div>${body}</div>`}
+ const body=K.map(([k],i)=>`<div data-pp="${k}"${i?' style="display:none"':""}>${tmGrp(P[k],CL).map(g=>`<div class="tg"><h4>${esc(tru(g[0]))}</h4>${g[1].join("")}</div>`).join("")}</div>`).join("");
+ return`<div class="box fmb tmw"><h3 style="text-align:center">Статистика матча</h3><div class="tmh"><span><i style="background:${CL[0]}"></i>${esc(x&&x.home||"")}</span><span>${esc(x&&x.away||"")}<i style="background:${CL[1]}"></i></span></div><div class="tseg">${K.map(([k,n],i)=>`<button class="tpb${i?"":" on"}" data-k="${k}" onclick="tmSw(this,'${k}')">${n}</button>`).join("")}</div>${body}</div>`}
 function tmTop(T,x){const CL=tmCol(x),P=T&&T.stats&&T.stats.All,g=tmGrp(P,CL).find(q=>q[0]==="Top stats");return g?`<div class="box"><h3 style="text-align:center">Главное</h3>${g[1].join("")}</div>`:""}
 function mtStand(mode){const T={};(MT||[]).forEach(m=>{if(!(m.finished||m.ft)||m.home_goals==null||m.away_goals==null)return;[[m.home,m.home_goals,m.away_goals,"home"],[m.away,m.away_goals,m.home_goals,"away"]].forEach(([t,f,a,sd])=>{if(mode!=="all"&&mode!==sd)return;const s=T[t]??={n:t,p:0,w:0,d:0,l:0,gf:0,ga:0,pts:0};s.p++;s.gf+=f;s.ga+=a;if(f>a){s.w++;s.pts+=3}else if(f===a){s.d++;s.pts++}else s.l++})});return Object.values(T).sort((a,b)=>b.pts-a.pts||(b.gf-b.ga)-(a.gf-a.ga)||b.gf-a.gf)}
 const MTG="display:grid;grid-template-columns:26px 1fr repeat(5,30px) 34px;gap:4px;align-items:center;padding:7px 4px;";

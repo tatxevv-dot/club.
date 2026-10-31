@@ -2534,6 +2534,22 @@ if(on&&!has){y0=window.scrollY||0;document.body.classList.add("mo");scrollTo(0,0
 .pc .pcf .rt{position:absolute!important;left:50%;bottom:-9px;transform:translateX(-50%);min-width:28px!important;height:18px!important;padding:0 5px!important;font-size:11px!important;border-radius:7px!important;box-shadow:0 1px 4px rgba(0,0,0,.35)}
 .pc .pe{width:38px!important;height:38px!important;margin-left:-19px!important}
 .sb[data-mp],details.box .sb,details.box .box{animation:none!important;opacity:1!important;transform:none!important}
+.pl,.sb{animation:none!important}
+.pl .mfc{width:38px;height:38px}
+.pl .mfc.mfn{font-size:15px}
+#fxl>.box:first-child{padding:16px 16px 8px}
+#fxl>.box:first-child>div:first-child{min-height:40px;margin:0 0 10px!important}
+#cdt,#cdp{height:38px!important;box-sizing:border-box;border-radius:12px!important;font-size:13px!important;line-height:1}
+#cdt{padding:0 14px!important;font-weight:600}
+#cdp{padding:0 10px!important;min-width:128px}
+.cdw{gap:8px;padding:4px 2px 12px;scroll-snap-type:x proximity}
+.cdd{min-width:56px;padding:10px 6px;border-radius:16px;scroll-snap-align:center}
+.cdd b{display:block;margin:1px 0}
+#cdl>.box{padding:14px 16px 16px;margin-top:12px}
+#cdl .cch{padding:2px 0 12px}
+#cdl .cg.cl .cch{padding-bottom:2px}
+#cdl .cgb .mt+.mt{margin-top:8px}
+#cdl .clg{width:28px;height:28px}
 .shs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0 10px}
 .shc{background:rgba(var(--wh),.05);border:1px solid var(--ln);border-radius:14px;padding:10px 4px;text-align:center;display:flex;flex-direction:column;gap:2px}
 .shc b{font-size:20px;font-weight:800;font-variant-numeric:tabular-nums}
@@ -2559,7 +2575,7 @@ const seen=new WeakSet();let batch=0,bt=0;
 const io=new IntersectionObserver(es=>{let k=0;es.filter(e=>e.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top).forEach(e=>{e.target.style.setProperty("--d",Math.min(k++,6)*55+"ms");e.target.classList.add("in");io.unobserve(e.target)})},{threshold:.04,rootMargin:"0px 0px 0px 0px"});
 let ink=0,it=0;
 function tag(n){if(!(n instanceof Element))return;const l=(n.matches(SEL)?[n]:[]).concat([...n.querySelectorAll(SEL)]);
-for(const el of l){if(seen.has(el)||el.closest(".cd,#bs,.bl,details.box")||el.matches(".sb[data-mp]"))continue;seen.add(el);if(el.classList.contains("rv")||el.classList.contains("rvl"))continue;
+for(const el of l){if(seen.has(el)||el.closest(".cd,#bs,.bl,details.box")||el.matches(".sb,.pl,.sb[data-mp]"))continue;seen.add(el);if(el.classList.contains("rv")||el.classList.contains("rvl"))continue;
 const r=el.getBoundingClientRect();el.classList.add("rx");
 if(r.top<innerHeight*1.6&&r.bottom>0){el.style.setProperty("--d",Math.min(ink++,7)*40+"ms");el.classList.add("ra");clearTimeout(it);it=setTimeout(()=>ink=0,120)}
 else io.observe(el)}}
@@ -2673,4 +2689,12 @@ html body .cd:not(.bc) .o small[style*="--bad"]{color:#e0342b!important;opacity:
 html body .cd:not(.bc) .n{display:block!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;-webkit-line-clamp:unset!important;-webkit-box-orient:initial!important;line-height:1.25!important}
 </style>
 <script>(()=>{let q=0;const fit=()=>{q=0;document.querySelectorAll(".cd:not(.bc) .n:not([data-f])").forEach(n=>{if(!n.clientWidth)return;n.dataset.f=1;let f=parseFloat(getComputedStyle(n).fontSize)||11;while(n.scrollWidth>n.clientWidth+.5&&f>7){f-=.5;n.style.setProperty("font-size",f+"px","important")}})};const sch=()=>{if(!q)q=requestAnimationFrame(fit)};new MutationObserver(sch).observe(document.body,{childList:true,subtree:true});addEventListener("resize",()=>{document.querySelectorAll(".cd .n[data-f]").forEach(n=>{n.removeAttribute("data-f");n.style.removeProperty("font-size")});sch()});sch()})();</script>
+<script>
+(()=>{const NI=()=>{const m=new Map;try{Object.values(PL).forEach(p=>{if(p&&p.name){const k=nnm(p.name);if(!m.has(k))m.set(k,p)}})}catch(e){}return m};
+let IDX=null,IN=0;
+const find=el=>{const d=el.dataset;let q=null;try{const id=d.pid||d.id;if(id!=null&&id!==""&&PL[id])q=PL[id];if(!q&&d.n){if(!IDX||IN!==Object.keys(PL).length){IDX=NI();IN=Object.keys(PL).length}q=IDX.get(nnm(d.n))||null}if(!q){const nm=el.querySelector(".pi>div");if(nm&&nm.textContent){if(!IDX||IN!==Object.keys(PL).length){IDX=NI();IN=Object.keys(PL).length}q=IDX.get(nnm(nm.textContent))||null}}}catch(e){}return q};
+const enh=el=>{if(el.dataset.fz||el.querySelector(".mfc,.rp,.av2,.ph"))return;const nm=el.querySelector(".pi>div");if(!nm)return;el.dataset.fz="1";const q=find(el);const nmt=(q&&q.name)||nm.textContent||"?";const h=q&&q.photo?phImg(q).replace('class="ph"','class="mfc"'):`<span class="mfc mfn">${esc(String(nmt).trim().charAt(0))}</span>`;const t=document.createElement("template");t.innerHTML=h.trim();const f=t.content.firstChild;if(!f)return;const rb=el.querySelector(":scope>.rb");if(rb)rb.after(f);else el.prepend(f)};
+const run=n=>{if(!(n instanceof Element))return;if(n.matches&&n.matches(".pl"))enh(n);n.querySelectorAll&&n.querySelectorAll(".pl").forEach(enh)};
+new MutationObserver(ms=>ms.forEach(m=>m.addedNodes.forEach(run))).observe(document.body,{childList:true,subtree:true});run(document.body)})();
+</script>
 </body></html>

@@ -975,7 +975,12 @@ const sb0=supabase.createClient(SB_URL,SB_KEY);
 let CLG="epl";try{CLG=localStorage.getItem("club_lg")||"epl"}catch(e){}
 let COMPS=[{slug:"epl",short:"АПЛ",name:"Английская Премьер-лига",schema_name:"public"}],LOGO={};
 const SCH_OF=s=>(COMPS.find(c=>c.slug===s)||{schema_name:"public"}).schema_name;
-const sb=new Proxy(sb0,{get(o,k){if(k==="from")return t=>o.schema(["pending_packs","pack_daily"].includes(t)?"public":SCH_OF(CLG)).from(t);if(k==="rpc")return(f,a,opt)=>o.schema(["open_pack","open_pack6","claim_pack","pack_status"].includes(f)?"public":SCH_OF(CLG)).rpc(f,a,opt);const v=o[k];return typeof v==="function"?v.bind(o):v}});
+// ---------- полные имена игроков (players.full_name) ----------
+const FN={};
+function fnRows(r){const a=r&&r.data;if(Array.isArray(a))a.forEach(x=>{if(x&&x.full_name){FN[x.id]=x.full_name;x.sname=x.name;x.name=x.full_name}});else if(a&&a.full_name){FN[a.id]=a.full_name;a.sname=a.name;a.name=a.full_name}return r}
+function fnRpc(r){const w=x=>{if(Array.isArray(x))x.forEach(w);else if(x&&typeof x==="object"){if(x.pl_id!=null&&x.pl_name&&FN[x.pl_id])x.pl_name=FN[x.pl_id];for(const k in x)if(x[k]&&typeof x[k]==="object")w(x[k])}};if(r&&r.data)w(r.data);return r}
+function fnb(b,f){f=f||fnRows;const pr=new Proxy(b,{get(o,k){if(k==="then")return(res,rej)=>o.then(r=>f(r)).then(res,rej);const v=o[k];if(typeof v!=="function")return v;return(...a)=>{const x=v.apply(o,a);return x&&typeof x.then==="function"?fnb(x,f):x}}});return pr}
+const sb=new Proxy(sb0,{get(o,k){if(k==="from")return t=>{const b=o.schema(["pending_packs","pack_daily"].includes(t)?"public":SCH_OF(CLG)).from(t);return t==="players"?fnb(b):b};if(k==="rpc")return(f,a,opt)=>fnb(o.schema(["open_pack","open_pack6","claim_pack","pack_status"].includes(f)?"public":SCH_OF(CLG)).rpc(f,a,opt),fnRpc);const v=o[k];return typeof v==="function"?v.bind(o):v}});
 const lgSel=()=>`<button type="button" class="lgsel" aria-label="Сменить лигу">${(COMPS.find(c=>c.slug===CLG)||COMPS[0]).short}</button>`;
 document.addEventListener("click",e=>{const s=e.target.closest&&e.target.closest(".lgsel");if(!s)return;modal(`<div class="box"><h3>Выбери лигу</h3><div style="display:grid;gap:8px;margin-top:12px">${COMPS.map(c=>`<button class="b${c.slug===CLG?"":" g"}" data-lg="${c.slug}">${c.name}</button>`).join("")}</div></div>`);document.querySelectorAll("#md [data-lg]").forEach(x=>x.onclick=()=>{if(x.dataset.lg===CLG){closeM();return}try{localStorage.setItem("club_lg",x.dataset.lg)}catch(z){}location.reload()})});
 async function loadComps(){try{const {data}=await sb0.from("competitions").select("*").eq("active",true).order("sort");if(data&&data.length)COMPS=data;if(!COMPS.find(c=>c.slug===CLG))CLG=COMPS[0].slug;const c=COMPS.find(c=>c.slug===CLG);document.title="Club | "+c.name;document.querySelectorAll("header .lgsel").forEach(e=>e.remove());const h=document.querySelector("header .hr");if(h)h.insertAdjacentHTML("afterbegin",lgSel());const {data:ti}=await sb.from("team_info").select("team,logo");LOGO={};(ti||[]).forEach(r=>{if(r.logo)LOGO[r.team]=r.logo})}catch(e){}}
@@ -1078,7 +1083,7 @@ async function boot0(){
  const {data:{session}}=await sb.auth.getSession();if(!session){landing();return}$("#lp").style.display="none";
  $("#m").innerHTML=LOAD.replace("class=\"bl\"","class=\"bl full\"");
  try{
-  await loadComps();if(!Object.keys(PL).length){for(let f=0;;f+=1000){const {data,error}=await sb.from("players").select("id,name,team,position,rating,last_change,photo,updated_at").order("id").range(f,f+999);if(error)throw error;data.forEach(p=>PL[p.id]=p);if(data.length<1000)break}}
+  await loadComps();if(!Object.keys(PL).length){for(let f=0;;f+=1000){const {data,error}=await sb.from("players").select("id,name,team,position,rating,last_change,photo,updated_at,full_name").order("id").range(f,f+999);if(error)throw error;data.forEach(p=>PL[p.id]=p);if(data.length<1000)break}}
   const {data:pf}=await sb.from("profiles").select("*").maybeSingle();
   if(!pf){onboard();return}
   PF=pf;await refresh();$("#nv").style.display="flex";document.body.classList.add("app");if(INV()){tab="lg";LGS="l"}else if(duInv()&&!sessionStorage.getItem("club_dugo")){try{sessionStorage.setItem("club_dugo","1")}catch(e){}tab="du"}view();tourAuto();liveInit();scoreInit()
@@ -1509,7 +1514,7 @@ async function teamLineup(n,x){
  const rows=R.filter(p=>p.pl_team===n).sort((a,b)=>b.mins-a.mins),k=rows.find(p=>p.pl_pos==="GK"),st=k?[k,...rows.filter(p=>p!==k).slice(0,10)]:rows.slice(0,11);
  const pp=p=>{const o=C[lt(p.pl_name)]||{},ph=PL[p.pl_id]||{};return`<div class="lpp" data-pid="${p.pl_id}"><div class="lav">${phImg(ph)}<b class="lrt ${rg(p.rate)}">${rf(p.rate)}</b></div><div class="lev">${o.a?`<i>${EVA}${o.a}</i>`:""}${o.g?`<i>${EVG}${o.g}</i>`:""}</div><span>${esc(p.pl_name)}</span></div>`};
  const pit=["FWD","MID","DEF","GK"].map(q=>{const a=st.filter(p=>p.pl_pos===q);return a.length?`<div class="lnr">${a.map(pp).join("")}</div>`:""}).join("");
- let all=Object.values(PL).filter(p=>p.team===n);if(!all.length){try{const{data}=await sb.from("players").select("id,name,team,position,rating,last_change,photo").eq("team",n).limit(60);all=data||[]}catch(e){}}
+ let all=Object.values(PL).filter(p=>p.team===n);if(!all.length){try{const{data}=await sb.from("players").select("id,name,team,position,rating,last_change,photo,full_name").eq("team",n).limit(60);all=data||[]}catch(e){}}
  const G=[["GK","Вратари"],["DEF","Защитники"],["MID","Полузащитники"],["FWD","Нападающие"]];
  const full=G.map(([q,l])=>{const a=all.filter(p=>p.position===q).sort((a,b)=>b.rating-a.rating);return a.length?`<div class="dl">${l}</div>${a.map(p=>`<div class="pl" data-pid="${p.id}"><b class="rb r${rar(p.rating)}">${p.rating}</b><div class="pi"><div>${esc(p.name)}</div><small>${p.position}</small></div></div>`).join("")}`:""}).join("");
  return`<div class="box tcard"><h3>Последний состав</h3>${mrow(x)}</div><div class="lpit">${pit}</div><div class="box tcard"><h3>Все игроки</h3>${full||"<small>Игроков пока нет</small>"}</div>`}
@@ -1520,7 +1525,7 @@ async function teamPage(n){const pv=NAVB;TMN=n;const t0=performance.now();
  if(TMN!==n)return;
  if(!MT){modal('<div class="mw tp box"><small>Не удалось загрузить данные команды</small></div>');return}
  let pls=Object.values(PL).filter(p=>p.team===n);
- if(!pls.length){try{const{data}=await sb.from("players").select("id,name,team,position,rating,last_change,photo").eq("team",n).order("rating",{ascending:false}).limit(30);pls=data||[]}catch(e){}}
+ if(!pls.length){try{const{data}=await sb.from("players").select("id,name,team,position,rating,last_change,photo,full_name").eq("team",n).order("rating",{ascending:false}).limit(30);pls=data||[]}catch(e){}}
  if(TMN!==n)return;
  pls=[...pls].sort((a,b)=>b.rating-a.rating).slice(0,12);
  const all=MT.filter(x=>x.home===n||x.away===n).sort((a,b)=>new Date(a.kickoff)-new Date(b.kickoff)),
@@ -1562,7 +1567,7 @@ const IC={us:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 3-6 6.5-6s6.
 const ico=n=>`<svg class="i" viewBox="0 0 24 24">${IC[n]}</svg>`;
 let LD,STB="scorers",LTOP,PM={};
 const zcard=(p,x="")=>`<div class="cd zc r${rar(p.rating)}" ${x} role="button" tabindex="0" aria-label="Увеличить карточку: ${esc(p.name)}">${phImg(p)}<div class="o">${p.rating}</div><div class="n">${esc(p.name)}</div><div class="c"><b>${p.position}</b>${bdg(p.team,1)||tchip(p.team)}</div></div>`;
-async function ltop(){if(LTOP)return LTOP;try{const{data}=await sb.from("players").select("id,name,team,position,rating,last_change,photo").order("rating",{ascending:false}).limit(40);LTOP=(data||[]).filter(p=>p.photo);LTOP.forEach(p=>{PM[p.id]=p;PM[p.name]=p})}catch(e){LTOP=[]}return LTOP}
+async function ltop(){if(LTOP)return LTOP;try{const{data}=await sb.from("players").select("id,name,team,position,rating,last_change,photo,full_name").order("rating",{ascending:false}).limit(40);LTOP=(data||[]).filter(p=>p.photo);LTOP.forEach(p=>{PM[p.id]=p;PM[p.name]=p})}catch(e){LTOP=[]}return LTOP}
 function scatter(L){L.querySelectorAll(".pk,.pkh").forEach(e=>e.remove());
  const hero=new Set(((LD&&LD.stars)||[]).slice(0,1).map(p=>p.id)),seen=new Set(),pool=[].concat(LTOP||[],(LD&&LD.risers)||[],(LD&&LD.fallers)||[],(LD&&LD.stars)||[]).map(p=>p.photo?p:Object.assign({},p,{photo:(PM[p.id]||PM[p.name]||{}).photo})).filter(p=>p&&p.id!=null&&p.name&&!hero.has(p.id)&&!seen.has(p.id)&&seen.add(p.id));if(!pool.length)return;let k=0;const nx=()=>pool[(k++)%pool.length];
  const ct=L.querySelector(".ctas");if(ct){const d=document.createElement("div");d.className="lsc pkh";d.style.setProperty("--r","9deg");d.innerHTML=zcard(nx());ct.appendChild(d)}
@@ -1899,7 +1904,7 @@ function fmPage(d,r,rate){const S=(d&&d.stats&&d.stats.stats)||[];if(!S.length)r
 async function pmatch(mid,pid){SVI.p=0;SVI.f=0;const md=$("#md"),open=md.style.display==="flex",pv=NAVB;
  if(open&&LMID){const id=LMID;LMID=null;unwatchMatch();SCRS.push($("#md").scrollTop);TOPF=1;NAVB=()=>{NAVB=pv;lmatch(id)}}
  modal('<div class="mw na">'+LOAD+'</div>');
- try{const[a,b,c]=await Promise.all([sb.from("player_match_ratings").select("*").eq("match_id",mid).eq("player_id",pid).maybeSingle(),sb.from("players").select("id,name,team,position,rating,photo").eq("id",pid).maybeSingle(),sb.from("player_match_stats").select("stats,shots,rating").eq("match_id",mid).eq("player_id",pid).maybeSingle()]);
+ try{const[a,b,c]=await Promise.all([sb.from("player_match_ratings").select("*").eq("match_id",mid).eq("player_id",pid).maybeSingle(),sb.from("players").select("id,name,team,position,rating,photo,full_name").eq("id",pid).maybeSingle(),sb.from("player_match_stats").select("stats,shots,rating").eq("match_id",mid).eq("player_id",pid).maybeSingle()]);
   if(a.error)throw a.error;const r=a.data,p=b.data||PL[pid],x=MT&&MT.find(v=>v.id===mid);
   if(!p||!r){modal('<div class="mw box"><small>Нет данных за этот матч</small></div>');return}
   const fin=x&&(x.finished||x.ft),rate=(c.data&&c.data.rating!=null)?+c.data.rating:(fin?r.rating:(r.live_rating??r.rating)),gk=p.position==="GK",v=k=>k==="rating"?rate:r[k],
@@ -1920,7 +1925,7 @@ async function teamAll(n,k){const pv=NAVB;TMN=n;
   const m=modal(`<div class="mw tp"><div class="box"><div class="th2"><h3>${esc(n)} · все матчи (${all.length})</h3></div>${all.map(x=>`<div class="dl">Тур ${x.round} · ${fmtD(x.kickoff)}</div>${mrow(x)}`).join("")||"<small>Матчей нет</small>"}</div></div>`);
   m.querySelectorAll(".mt").forEach(e=>e.onclick=()=>back(()=>lmatch(+e.dataset.id)));return}
  const t2=performance.now();modal('<div class="mw tp na">'+LOAD+'</div>');
- let pls=[];try{const{data}=await sb.from("players").select("id,name,team,position,rating,last_change,photo").eq("team",n).order("rating",{ascending:false}).limit(100);pls=data||[]}catch(e){}
+ let pls=[];try{const{data}=await sb.from("players").select("id,name,team,position,rating,last_change,photo,full_name").eq("team",n).order("rating",{ascending:false}).limit(100);pls=data||[]}catch(e){}
  if(!pls.length)pls=Object.values(PL).filter(p=>p.team===n).sort((a,b)=>b.rating-a.rating);
  await MINL(t2);if(TMN!==n)return;pls.forEach(p=>{PL[p.id]=PL[p.id]||p});let pos="ALL";
  const draw=()=>{const st=$("#md").scrollTop,L=pos==="ALL"?pls:pls.filter(p=>p.position===pos);
@@ -2071,7 +2076,7 @@ const b=document.createElement("button");b.textContent="СКАЧАТЬ ФОТО 
 const st=document.createElement("div");st.style.cssText="position:fixed;z-index:99999;top:80px;left:10px;right:10px;padding:10px;background:#000;color:#fff;font-size:14px;border-radius:8px";
 document.body.append(b,st);
 b.onclick=async()=>{b.disabled=true;
-let all=[];for(const c of COMPS){let f=0;for(;;){const{data,error}=await sb0.schema(c.schema_name).from("players").select("*").range(f,f+999);if(error){st.textContent="Ошибка "+c.slug+": "+error.message;return}data.forEach(p=>p._lg=c.slug);all.push(...data);st.textContent="Загружено игроков: "+all.length+" ("+c.slug+")";if(data.length<1000)break;f+=1000}}
+let all=[];for(const c of COMPS){let f=0;for(;;){const{data,error}=await fnb(sb0.schema(c.schema_name).from("players")).select("*").range(f,f+999);if(error){st.textContent="Ошибка "+c.slug+": "+error.message;return}data.forEach(p=>p._lg=c.slug);all.push(...data);st.textContent="Загружено игроков: "+all.length+" ("+c.slug+")";if(data.length<1000)break;f+=1000}}
 const PH=["premierleague26","premierleague25","premierleague"];
 const urls=p=>/^http/.test(p.photo)?[p.photo]:PH.map((s,i)=>`https://resources.premierleague.com/${s}/photos/players/110x140/${i==2?"p":""}${p.photo}.png`);
 const L=p=>p._lg;
@@ -2120,7 +2125,7 @@ async function pick(slug){
  const ld='<div class="ld"></div>';["#lup","#ldw","#lst"].forEach(q=>{const e=document.querySelector(q);if(e)e.style.opacity=".4"});
  try{
   const sch=SCH_OF(slug);
-  const [a,b]=await Promise.all([sb0.schema(sch).rpc("landing_data"),sb0.schema(sch).from("players").select("id,name,team,position,rating,last_change,photo").order("rating",{ascending:false}).limit(60)]);
+  const [a,b]=await Promise.all([sb0.schema(sch).rpc("landing_data"),fnb(sb0.schema(sch).from("players")).select("id,name,team,position,rating,last_change,photo,full_name").order("rating",{ascending:false}).limit(60)]);
   if(a.error)throw a.error;
   (b.data||[]).forEach(p=>{PM[p.id]=p;PM[p.name]=p});
   if(SEL!==slug)return;
@@ -2137,7 +2142,7 @@ ltop=async function(){
  if(LTOP)return LTOP;
  try{
   if(COMPS.length<2)await loadComps();
-  const rs=await Promise.all(COMPS.map(c=>sb0.schema(c.schema_name).from("players").select(cols).not("photo","is",null).order("rating",{ascending:false}).limit(16).then(r=>(r.data||[]).filter(p=>p.photo&&p.rating>=75),()=>[])));
+  const rs=await Promise.all(COMPS.map(c=>fnb(sb0.schema(c.schema_name).from("players")).select(cols).not("photo","is",null).order("rating",{ascending:false}).limit(16).then(r=>(r.data||[]).filter(p=>p.photo&&p.rating>=75),()=>[])));
   const ls=rs.filter(l=>l.length).sort(()=>Math.random()-.5),out=[],seen=new Set();
   for(let i=0;i<16;i++)for(const l of ls){const p=l[i];if(p&&!seen.has(p.name)){seen.add(p.name);out.push(p)}}
   LTOP=out;out.forEach(p=>{PM[p.id]=p;PM[p.name]=p});
@@ -2662,7 +2667,7 @@ e.querySelectorAll(".mt").forEach(r=>r.onclick=()=>{const id=+r.dataset.id,lg=r.
 <script>
 const XSCH=["public","lg_laliga","lg_seriea","lg_bundesliga","lg_ligue1","lg_ucl"];
 async function xpl(ids){try{await calLogos()}catch(e){}const g={};ids.filter(i=>i>0&&!PL[i]).forEach(i=>{const x=Math.floor(i/1e9);(g[x]=g[x]||[]).push(i%1e9)});
-await Promise.all(Object.keys(g).map(x=>sb0.schema(XSCH[x]).from("players").select("id,name,team,position,rating,last_change,photo,updated_at").in("id",g[x]).then(r=>(r.data||[]).forEach(p=>{const c=x*1e9+p.id;PL[c]=Object.assign({},p,{id:c,_lg:+x})}),()=>{})))}
+await Promise.all(Object.keys(g).map(x=>fnb(sb0.schema(XSCH[x]).from("players")).select("id,name,team,position,rating,last_change,photo,updated_at,full_name").in("id",g[x]).then(r=>(r.data||[]).forEach(p=>{const c=x*1e9+p.id;PL[c]=Object.assign({},p,{id:c,_lg:+x})}),()=>{})))}
 </script>
 <script id="slide">(function(){
 var order=function(){return [].map.call(document.querySelectorAll("#nv button[data-t]"),function(b){return b.dataset.t})};

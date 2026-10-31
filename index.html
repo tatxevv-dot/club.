@@ -2533,6 +2533,7 @@ if(on&&!has){y0=window.scrollY||0;document.body.classList.add("mo");scrollTo(0,0
 .pc .pcf .mfc{width:38px;height:38px;box-shadow:0 0 0 2px rgba(255,255,255,.85),0 2px 6px rgba(0,0,0,.35)}
 .pc .pcf .rt{position:absolute!important;left:50%;bottom:-9px;transform:translateX(-50%);min-width:28px!important;height:18px!important;padding:0 5px!important;font-size:11px!important;border-radius:7px!important;box-shadow:0 1px 4px rgba(0,0,0,.35)}
 .pc .pe{width:38px!important;height:38px!important;margin-left:-19px!important}
+.sb[data-mp],details.box .sb,details.box .box{animation:none!important;opacity:1!important;transform:none!important}
 .shs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0 10px}
 .shc{background:rgba(var(--wh),.05);border:1px solid var(--ln);border-radius:14px;padding:10px 4px;text-align:center;display:flex;flex-direction:column;gap:2px}
 .shc b{font-size:20px;font-weight:800;font-variant-numeric:tabular-nums}
@@ -2558,7 +2559,7 @@ const seen=new WeakSet();let batch=0,bt=0;
 const io=new IntersectionObserver(es=>{let k=0;es.filter(e=>e.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top).forEach(e=>{e.target.style.setProperty("--d",Math.min(k++,6)*55+"ms");e.target.classList.add("in");io.unobserve(e.target)})},{threshold:.04,rootMargin:"0px 0px 0px 0px"});
 let ink=0,it=0;
 function tag(n){if(!(n instanceof Element))return;const l=(n.matches(SEL)?[n]:[]).concat([...n.querySelectorAll(SEL)]);
-for(const el of l){if(seen.has(el)||el.closest(".cd,#bs,.bl"))continue;seen.add(el);if(el.classList.contains("rv")||el.classList.contains("rvl"))continue;
+for(const el of l){if(seen.has(el)||el.closest(".cd,#bs,.bl,details.box")||el.matches(".sb[data-mp]"))continue;seen.add(el);if(el.classList.contains("rv")||el.classList.contains("rvl"))continue;
 const r=el.getBoundingClientRect();el.classList.add("rx");
 if(r.top<innerHeight*1.6&&r.bottom>0){el.style.setProperty("--d",Math.min(ink++,7)*40+"ms");el.classList.add("ra");clearTimeout(it);it=setTimeout(()=>ink=0,120)}
 else io.observe(el)}}
@@ -2611,13 +2612,13 @@ async function calDay(d){const k=cdKey(d);if(CALC[k]&&k!==cdKey(new Date()))retu
 const rs=await Promise.all(COMPS.map(c=>sb0.schema(c.schema_name).from("matches").select(MC).gte("kickoff",a.toISOString()).lt("kickoff",b.toISOString()).order("kickoff").then(r=>({c,m:r.data||[]}),()=>({c,m:[]}))));
 return CALC[k]=rs.filter(x=>x.m.length)}
 function calView(){const m=$("#m");if(!CALD){CALD=new Date()}document.body.classList.remove("mdt");
-const base=new Date();base.setHours(0,0,0,0);const days=[];for(let i=-4;i<=14;i++){const d=new Date(base.getTime()+i*864e5);days.push(d)}
+const base=new Date();base.setHours(0,0,0,0);const days=[];for(let i=-60;i<=60;i++){const d=new Date(base.getTime()+i*864e5);days.push(d)}
 if(!days.some(d=>cdKey(d)===cdKey(CALD)))days.push(new Date(CALD.getFullYear(),CALD.getMonth(),CALD.getDate()));
 const wd=d=>d.toLocaleDateString("ru-RU",{weekday:"short"}),sel=cdKey(CALD);
-m.innerHTML=`<div class="fxw"><div id="fxl"><div class="box"><h3 style="margin:0 0 8px">Календарь</h3><div class="cdw" id="cdw">${days.map(d=>`<button class="cdd${cdKey(d)===sel?" on":""}" data-d="${cdKey(d)}"><small>${wd(d)}</small><b>${d.getDate()}</b><small>${d.toLocaleDateString("ru-RU",{month:"short"})}</small></button>`).join("")}</div></div><div id="cdl">${LOAD}</div></div>${NWS}</div>`;
+m.innerHTML=`<div class="fxw"><div id="fxl"><div class="box"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin:0 0 8px"><h3 style="margin:0">Календарь</h3><div style="display:flex;gap:6px;align-items:center"><button class="cdd" id="cdt" type="button" style="min-width:0;padding:8px 12px">Сегодня</button><input type="date" id="cdp" value="${sel}" style="border:1px solid var(--ln);background:var(--sf);color:inherit;border-radius:12px;padding:7px 8px;font:inherit;font-size:13px"></div></div><div class="cdw" id="cdw">${days.map(d=>`<button class="cdd${cdKey(d)===sel?" on":""}" data-d="${cdKey(d)}"><small>${wd(d)}</small><b>${d.getDate()}</b><small>${d.toLocaleDateString("ru-RU",{month:"short"})}</small></button>`).join("")}</div></div><div id="cdl">${LOAD}</div></div>${NWS}</div>`;
 const on=$("#cdw .on");if(on)on.scrollIntoView({inline:"center",block:"nearest"});
 const go=k=>{const[y,mo,da]=k.split("-").map(Number);CALD=new Date(y,mo-1,da);calView()};
-m.querySelectorAll(".cdd").forEach(b=>b.onclick=()=>go(b.dataset.d));
+m.querySelectorAll(".cdd[data-d]").forEach(b=>b.onclick=()=>go(b.dataset.d));const ct=$("#cdt"),cp=$("#cdp");if(ct)ct.onclick=()=>go(cdKey(new Date()));if(cp)cp.onchange=()=>{if(cp.value)go(cp.value)};
 const d0=CALD;Promise.all([calLogos(),calDay(d0)]).then(([,rs])=>{if(tab!=="fx"||CALD!==d0||!$("#cdl"))return;const e=$("#cdl");
 if(!rs.length){e.innerHTML='<div class="box"><small>В этот день матчей нет</small></div>';return}
 e.innerHTML=rs.map(({c,m:ms})=>`<div class="box cg" data-s="${c.slug}"><button class="cch" type="button"><img class="clg" src="${esc(c.logo||c.logo_url||('https://crests.football-data.org/'+({epl:'PL',laliga:'PD',seriea:'SA',bundesliga:'BL1',ligue1:'FL1',ucl:'CL'}[c.slug]||c.slug)+'.png'))}" alt="" onerror="this.style.display='none'"><b>${esc(c.name)}</b><i>${ms.length}</i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg></button><div class="cgb">${ms.map(x=>mrow(x).replace('class="mt"','class="mt" data-lg="'+c.slug+'"')).join("")}</div></div>`).join("");

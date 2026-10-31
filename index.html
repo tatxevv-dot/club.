@@ -1960,17 +1960,17 @@ function lvStrip(h){const a=(MT||[]).filter(x=>mst(x)==="live"&&x.round!==FXR);r
 function liveDot(){const b=document.querySelector('nav button[data-t="fx"]');b&&b.classList.toggle("lvd",!!(MT&&MT.some(x=>mst(x)==="live")))}
 function scheduleDetail(ms){clearTimeout(RDB);RDB=setTimeout(refreshDetail,ms)}
 function refreshDetail(){const id=curOpen();if(!id||!MT)return;if(LMID===id)lmatch(id,1);else mdetail(id,1)}
-function watchMatch(id){unwatchMatch();RCH=sb.channel("mr"+id).on("postgres_changes",{event:"*",schema:SCH_OF(CLG),table:"player_match_ratings",filter:"match_id=eq."+id},()=>scheduleDetail(1200)).on("postgres_changes",{event:"*",schema:SCH_OF(CLG),table:"match_timeline",filter:"match_id=eq."+id},()=>scheduleDetail(1200)).on("postgres_changes",{event:"*",schema:SCH_OF(CLG),table:"match_team_stats",filter:"match_id=eq."+id},()=>scheduleDetail(1200)).subscribe()}
+function watchMatch(id){unwatchMatch();RCH=sb.channel("mr"+id).on("postgres_changes",{event:"*",schema:SCH_OF(CLG),table:"player_match_ratings",filter:"match_id=eq."+id},()=>scheduleDetail(150)).on("postgres_changes",{event:"*",schema:SCH_OF(CLG),table:"match_timeline",filter:"match_id=eq."+id},()=>scheduleDetail(150)).on("postgres_changes",{event:"*",schema:SCH_OF(CLG),table:"match_team_stats",filter:"match_id=eq."+id},()=>scheduleDetail(150)).subscribe()}
 function unwatchMatch(){clearTimeout(RDB);if(RCH){sb.removeChannel(RCH);RCH=null}}
-function paint(o,x){if(mst(o)!==mst(x)){for(const d of [...FXD])d()}else document.querySelectorAll('.mt[data-id="'+x.id+'"] .sc').forEach(e=>e.outerHTML=scr(x));liveDot();if(curOpen()===x.id)scheduleDetail(2500)}
+function paint(o,x){if(mst(o)!==mst(x)){for(const d of [...FXD])d()}else document.querySelectorAll('.mt[data-id="'+x.id+'"] .sc').forEach(e=>e.outerHTML=scr(x));liveDot();if(curOpen()===x.id)scheduleDetail(200)}
 function onMatch(r){if(!MT||!r)return;const i=MT.findIndex(v=>v.id===r.id);if(i<0)return;const o=MT[i],n={...o};MK.forEach(k=>{if(k in r)n[k]=r[k]});MT[i]=n;
- if(!sameM(o,n)){paint(o,n);if(!dnM(mst(o))&&dnM(mst(n)))setTimeout(checkScores,6000)}else if(curOpen()===n.id)scheduleDetail(2500)}
+ if(!sameM(o,n)){paint(o,n);if(!dnM(mst(o))&&dnM(mst(n)))setTimeout(checkScores,6000)}else if(curOpen()===n.id)scheduleDetail(200)}
 async function loadMT(){try{const {data,error}=await sb.from("matches").select(MC).order("kickoff");if(!error&&data){MT=data;liveDot()}}catch(e){}}
 async function patchMT(){try{const {data,error}=await sb.from("matches").select(MC).order("kickoff");if(error||!data)return;const old=MT;MT=data;if(old){const om=new Map(old.map(x=>[x.id,x]));for(const x of data){const o=om.get(x.id);if(o&&!sameM(o,x))paint(o,x)}}liveDot()}catch(e){}}
 async function poll(){if(document.hidden||!MT)return;const now=Date.now();
  if(!MT.some(x=>x.status==="live"||x.ft||(!x.finished&&+new Date(x.kickoff)<=now+6e4&&now-new Date(x.kickoff)<5*36e5)))return;
  await patchMT();if(PF)checkScores();if(curOpen())scheduleDetail(300)}
-function liveInit(){if(!POLL){POLL=setInterval(poll,30000);document.addEventListener("visibilitychange",()=>{if(!document.hidden)poll()})}
+function liveInit(){if(!POLL){POLL=setInterval(poll,8000);document.addEventListener("visibilitychange",()=>{if(!document.hidden)poll()})}
  if(LCH)return;LCH=sb.channel("live-matches").on("postgres_changes",{event:"UPDATE",schema:SCH_OF(CLG),table:"matches"},p=>onMatch(p.new)).subscribe()}
 function scoreInit(){if(SCH||!PF)return;SCH=sb.channel("my-scores").on("postgres_changes",{event:"*",schema:SCH_OF(CLG),table:"match_scores",filter:"user_id=eq."+PF.id},()=>checkScores()).subscribe();checkScores()}
 function scoreStop(){if(SCH){sb.removeChannel(SCH);SCH=null}SEEN=null;unwatchMatch()}
@@ -1995,7 +1995,7 @@ async function syncRatings(){if(RUB||!PF||document.hidden||!Object.keys(PL).leng
  for(const r of data){const p=PL[r.id];if(p&&(p.rating!==r.rating||p.last_change!==r.last_change)){p.rating=r.rating;p.last_change=r.last_change;chg++}if(r.updated_at>RU)RU=r.updated_at}
  if(chg&&["st","pk","lg"].includes(tab)&&$("#md").style.display!=="flex"&&$("#au").style.display!=="flex"&&!$("#tov"))view()
 }catch(e){}finally{RUB=false}}
-setInterval(syncRatings,60000);
+setInterval(syncRatings,20000);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)syncRatings()});
 sb.auth.onAuthStateChange(ev=>{if(ev==="SIGNED_OUT"){scoreStop();landing()}});
 boot();
@@ -2698,4 +2698,20 @@ const enh=el=>{if(el.dataset.fz||el.querySelector(".mfc,.rp,.av2,.ph"))return;co
 const run=n=>{if(!(n instanceof Element))return;if(n.matches&&n.matches(".pl"))enh(n);n.querySelectorAll&&n.querySelectorAll(".pl").forEach(enh)};
 new MutationObserver(ms=>ms.forEach(m=>m.addedNodes.forEach(run))).observe(document.body,{childList:true,subtree:true});run(document.body)})();
 </script>
-</body></html>
+<style id="dsk-fix">@media(min-width:900px){
+main{align-items:stretch!important;gap:16px!important;grid-auto-flow:row dense}
+main>.box{margin-bottom:0!important;height:auto}
+main>*{margin-bottom:0}
+main>.box.dsk-full{grid-column:1/-1!important}
+main>.box.dsk-full:not(.fw){max-width:none}
+.pitch{margin:0 auto!important}
+}</style><script id="dsk-fix-js">(()=>{let t;const fix=()=>{if(innerWidth<900)return;const m=document.querySelector("main");if(!m)return;let run=[];const flush=()=>{if(run.length%2===1)run[run.length-1].classList.add("dsk-full");run=[]};[...m.children].forEach(c=>{c.classList&&c.classList.remove("dsk-full");if(c.classList&&c.classList.contains("box")&&!c.classList.contains("fw")&&getComputedStyle(c).display!=="none")run.push(c);else flush()});flush()};const go=()=>{clearTimeout(t);t=setTimeout(fix,60)};new MutationObserver(go).observe(document.documentElement,{childList:true,subtree:true});addEventListener("resize",go);go()})()</script><style id="dsk-fix2">.thero{border-radius:0 0 28px 28px}
+@media(min-width:900px){
+:root{--w:4000px}
+main{padding-left:28px!important;padding-right:28px!important}
+header{padding-left:28px!important;padding-right:28px!important}
+.modal{padding:64px 28px 28px!important;align-items:stretch!important}
+.mw,.mw.tp,.mw.box{max-width:none!important;width:100%!important}
+.thero{margin:0 0 16px!important;padding:32px 28px 12px!important;border-radius:28px!important}
+.mw.tp{padding-top:0!important}
+}</style></body></html>

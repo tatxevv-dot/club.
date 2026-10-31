@@ -2671,9 +2671,10 @@ new MutationObserver(sch).observe(document.body,{childList:true,subtree:true,att
 <style id="glassfix">
 .clg{width:26px;height:26px;object-fit:contain;flex:none}
 html body header,html body #nv,
-html[data-theme=light] body header,html[data-theme=light] body #nv{background:rgba(var(--bk),.45)!important;-webkit-backdrop-filter:blur(28px) saturate(180%)!important;backdrop-filter:blur(28px) saturate(180%)!important;border:0!important;border-radius:0!important;box-shadow:none!important;left:0!important;right:0!important;width:100%!important;max-width:none!important;transform:none!important}
+html[data-theme=light] body header,html[data-theme=light] body #nv{background:rgba(var(--bk),.45)!important;-webkit-backdrop-filter:blur(28px) saturate(180%)!important;backdrop-filter:blur(28px) saturate(180%)!important;border:0!important;border-radius:0!important;box-shadow:none!important;}
 html[data-theme=light] body header,html[data-theme=light] body #nv{background:rgba(244,244,246,.55)!important}
-html body #nv{border-bottom:1px solid rgba(128,128,128,.18)!important}
+@media(max-width:899px){html body header,html body #nv{left:0!important;right:0!important;width:100%!important;max-width:none!important;transform:none!important}html body #nv{border-bottom:1px solid rgba(128,128,128,.18)!important}}
+@media(min-width:900px){html body header{left:var(--sb)!important;right:0!important;width:auto!important;max-width:none!important;transform:none!important}html body #nv{left:0!important;right:auto!important;top:0!important;bottom:0!important;width:var(--sb)!important;max-width:none!important;height:auto!important;transform:none!important;border-right:1px solid rgba(128,128,128,.18)!important}}
 </style>
 <style id="cardfix">.mt>span{min-width:0}.mt b{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}html body .cd:not(.czt .cd):not(.lsc .cd):not(#lfan .cd):not(.fan .cd):not(.cres .cd):not(.ctv .cd):not(.bc) .o{position:absolute!important;top:6px;left:7px;margin:0!important;font-size:16px!important;line-height:1!important;font-weight:800}
 html body .cd:not(.czt .cd):not(.lsc .cd):not(#lfan .cd):not(.fan .cd):not(.cres .cd):not(.ctv .cd):not(.bc) .o small{font-size:9px!important;margin-top:2px!important}
